@@ -60,3 +60,19 @@ applyTo: "**"
   ├ types // 型定義関連
   └ utils // アプリ全体で共通して使用する関数関連
 ```
+
+## コミットルール
+
+- コミットは、以下のルールに従うこと。
+  |タイプ|フォーマット|
+  |:-|:-|
+  |最初のコミット（Initial Commit） |🎉 [Initial Commit]:|
+  |新機能（New Feature） |✨ [New Feature]:|
+  |バグ修正（Bugfix） |🐛 [Bug fix]: |
+  |リファクタリング(Refactoring) |♻️ [Refactaoring]:|
+  |デザイン UI/UX(Accessibility) |🎨 [Accessibility]:|
+  |パフォーマンス（Performance） |🐎 [Performance]:|
+  |テスト（Tests） |🚨 [Tests]:|
+  |削除（Removal） |🗑️ [Remove]:|
+  |チャットログやドキュメントの更新(Doc)|📖 [Doc]:|
+  |WIP(Work In Progress) |🚧 [WIP]:|
