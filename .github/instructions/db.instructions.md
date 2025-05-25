@@ -6,6 +6,19 @@ applyTo: "**"
 
 - 外部キー制約は使わないこと。
 
+## データベース情報
+
+- データベース名: `seasoning_management_db`
+- キャラクターセット: `utf8mb4`
+- コレーション: `utf8mb4_unicode_ci`
+
+## SQLファイル構成
+
+- `01_create_database.sql`: データベース作成スクリプト
+- `02_create_seasoning_type_table.sql`: 調味料種類管理テーブル作成スクリプト
+- `03_create_seasoning_image_table.sql`: 調味料画像管理テーブル作成スクリプト
+- `04_create_seasoning_table.sql`: 調味料管理テーブル作成スクリプト
+
 ## 調味料管理テーブル
 
 ### 基本情報
