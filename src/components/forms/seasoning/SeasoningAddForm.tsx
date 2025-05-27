@@ -1,5 +1,9 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { ErrorMessage } from '../../elements/errors/ErrorMessage';
+import { TextInput } from '../../elements/inputs/TextInput';
+import { SelectInput } from '../../elements/inputs/SelectInput';
+import { FileInput } from '../../elements/inputs/FileInput';
+import { SubmitButton } from '../../elements/buttons/SubmitButton';
 
 // Define seasoning types - this would typically come from an API
 const SEASONING_TYPES = [
@@ -209,71 +213,51 @@ export const SeasoningAddForm: React.FC<SeasoningAddFormProps> = ({ onSubmit }) 
       {errors.general && <ErrorMessage message={errors.general} />}
       
       {/* Name field */}
-      <div>
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-          調味料 <span className="text-red-500">*</span>
-        </label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="調味料名を入力"
-          maxLength={20}
-        />
-        <ErrorMessage message={errors.name} />
-      </div>
+      <TextInput 
+        id="name"
+        name="name"
+        label="調味料"
+        value={formData.name}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        placeholder="調味料名を入力"
+        maxLength={20}
+        required={true}
+        errorMessage={errors.name}
+      />
       
       {/* Type field */}
-      <div>
-        <label htmlFor="type" className="block text-sm font-medium text-gray-700">
-          調味料の種類 <span className="text-red-500">*</span>
-        </label>
-        <select
-          id="type"
-          name="type"
-          value={formData.type}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        >
-          <option value="" disabled>選択してください</option>
-          {SEASONING_TYPES.map(type => (
-            <option key={type.id} value={type.id}>{type.name}</option>
-          ))}
-        </select>
-        <ErrorMessage message={errors.type} />
-      </div>
+      <SelectInput 
+        id="type"
+        name="type"
+        label="調味料の種類"
+        value={formData.type}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        options={SEASONING_TYPES}
+        required={true}
+        errorMessage={errors.type}
+      />
       
       {/* Image field */}
-      <div>
-        <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-          調味料の画像
-        </label>
-        <input
-          type="file"
-          id="image"
-          name="image"
-          accept="image/jpeg,image/png"
-          onChange={handleFileChange}
-          className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-        />
-        <p className="mt-1 text-sm text-gray-500">JPEG または PNG 形式、5MB以下</p>
-        <ErrorMessage message={errors.image} />
-      </div>
+      <FileInput 
+        id="image"
+        name="image"
+        label="調味料の画像"
+        onChange={handleFileChange}
+        accept="image/jpeg,image/png"
+        errorMessage={errors.image}
+        helperText="JPEG または PNG 形式、5MB以下"
+      />
       
       {/* Submit button */}
       <div className="pt-4">
-        <button
-          type="submit"
-          disabled={!isFormValid || isSubmitting}
-          className="w-full font-medium rounded focus:outline-none transition-colors bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 text-base"
-        >
-          {isSubmitting ? '追加中...' : '追加'}
-        </button>
+        <SubmitButton 
+          label="追加"
+          loadingLabel="追加中..."
+          isSubmitting={isSubmitting}
+          disabled={!isFormValid}
+        />
       </div>
     </form>
   );
