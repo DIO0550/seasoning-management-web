@@ -12,7 +12,7 @@ applyTo: "**"
 - キャラクターセット: `utf8mb4`
 - コレーション: `utf8mb4_unicode_ci`
 
-## SQLファイル構成
+## SQL ファイル構成
 
 - `01_create_database.sql`: データベース作成スクリプト
 - `02_create_seasoning_type_table.sql`: 調味料種類管理テーブル作成スクリプト
@@ -83,3 +83,21 @@ applyTo: "**"
 |  filename   | VARCHAR(50) |        |                |    ◯     |                   |  固定ファイル名  | 'image.jpg'など |
 | created_at  |  TIMESTAMP  |        |                |    ◯     | CURRENT_TIMESTAMP |     登録日時     |                 |
 | updated_at  |  TIMESTAMP  |        |                |    ◯     | CURRENT_TIMESTAMP |     更新日時     |                 |
+
+## 調味料テンプレート管理テーブル
+
+### 名前
+
+- seasoning_template
+
+### 説明
+
+- 調味料テンプレート管理テーブル
+  | カラム名 | 型 | 主キー | auto increment | NOT NULL | デフォルト | 説明 | 備考 |
+  | :---------: | :---------: | :----: | :------------: | :------: | :---------------: | :--------------: | :-------------: |
+  | id | int | ◯ | ◯ | ◯ | | テーブルの主キー | |
+  | name | VARCHAR(256) | | | ◯ | | 調味料種類名 | |
+  | type_id | INT | | | ◯ | | 調味料の種類。調味料管理テーブルの ID。 | |
+  | image_id | INT | | | | | 調味料の画像。調味料画像テーブルの ID | |
+  | created_at | TIMESTAMP | | | ◯ | CURRENT_TIMESTAMP | 登録日時 | |
+  | updated_at | TIMESTAMP | | | ◯ | CURRENT_TIMESTAMP | 更新日時 |
