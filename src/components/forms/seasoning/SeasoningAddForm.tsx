@@ -32,7 +32,7 @@ interface FormErrors {
   general: string;
 }
 
-export const SeasoningAddForm: React.FC<SeasoningAddFormProps> = ({ onSubmit }) => {
+export const SeasoningAddForm = ({ onSubmit }: SeasoningAddFormProps): React.JSX.Element => {
   // Form data state
   const [formData, setFormData] = useState<FormData>({
     name: '',
@@ -55,7 +55,7 @@ export const SeasoningAddForm: React.FC<SeasoningAddFormProps> = ({ onSubmit }) 
   // Update form validity whenever form data or errors change
   useEffect(() => {
     // Form is valid if required fields are filled and there are no errors
-    const requiredFieldsValid = formData.name && formData.type;
+    const requiredFieldsValid = Boolean(formData.name && formData.type);
     const noErrors = !errors.name && !errors.type && !errors.image && !errors.general;
     
     setIsFormValid(requiredFieldsValid && noErrors);

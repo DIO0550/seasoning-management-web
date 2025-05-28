@@ -7,7 +7,7 @@ interface FormData {
   image: File | null;
 }
 
-export const SeasoningAddFormExample: React.FC = () => {
+export const SeasoningAddFormExample = (): React.JSX.Element => {
   const handleSubmit = async (data: FormData) => {
     // This would typically call an API
     console.log('Form submitted with data:', data);

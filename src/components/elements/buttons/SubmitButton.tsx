@@ -14,7 +14,7 @@ export const SubmitButton = ({
   isSubmitting = false,
   disabled = false,
   className = '',
-}: SubmitButtonProps): JSX.Element => {
+}: SubmitButtonProps): React.JSX.Element => {
   const baseClassName = "w-full font-medium rounded focus:outline-none transition-colors bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 text-base";
   
   return (
