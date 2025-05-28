@@ -14,7 +14,7 @@ interface TextInputProps {
   errorMessage?: string;
 }
 
-export const TextInput: React.FC<TextInputProps> = ({
+export const TextInput = ({
   id,
   name,
   label,
@@ -25,7 +25,7 @@ export const TextInput: React.FC<TextInputProps> = ({
   maxLength,
   required = false,
   errorMessage = '',
-}) => {
+}: TextInputProps): JSX.Element => {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">

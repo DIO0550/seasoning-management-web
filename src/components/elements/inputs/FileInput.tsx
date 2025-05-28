@@ -12,7 +12,7 @@ interface FileInputProps {
   helperText?: string;
 }
 
-export const FileInput: React.FC<FileInputProps> = ({
+export const FileInput = ({
   id,
   name,
   label,
@@ -21,7 +21,7 @@ export const FileInput: React.FC<FileInputProps> = ({
   required = false,
   errorMessage = '',
   helperText = '',
-}) => {
+}: FileInputProps): JSX.Element => {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">
