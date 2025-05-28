@@ -30,7 +30,7 @@ export const SelectInput = ({
   placeholder = '選択してください',
   required = false,
   errorMessage = '',
-}: SelectInputProps): JSX.Element => {
+}: SelectInputProps): React.JSX.Element => {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">

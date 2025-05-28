@@ -21,7 +21,7 @@ export const FileInput = ({
   required = false,
   errorMessage = '',
   helperText = '',
-}: FileInputProps): JSX.Element => {
+}: FileInputProps): React.JSX.Element => {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">

@@ -25,7 +25,7 @@ export const TextInput = ({
   maxLength,
   required = false,
   errorMessage = '',
-}: TextInputProps): JSX.Element => {
+}: TextInputProps): React.JSX.Element => {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">
