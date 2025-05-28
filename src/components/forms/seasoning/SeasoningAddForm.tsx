@@ -197,9 +197,10 @@ export const SeasoningAddForm: React.FC<SeasoningAddFormProps> = ({ onSubmit }) 
           image: null
         });
       } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : '調味料の登録に失敗しました。入力内容を確認してください';
         setErrors(prev => ({
           ...prev,
-          general: '調味料の登録に失敗しました。入力内容を確認してください'
+          general: errorMessage
         }));
       } finally {
         setIsSubmitting(false);
