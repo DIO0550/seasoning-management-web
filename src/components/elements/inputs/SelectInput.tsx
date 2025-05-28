@@ -19,7 +19,7 @@ interface SelectInputProps {
   errorMessage?: string;
 }
 
-export const SelectInput: React.FC<SelectInputProps> = ({
+export const SelectInput = ({
   id,
   name,
   label,
@@ -30,7 +30,7 @@ export const SelectInput: React.FC<SelectInputProps> = ({
   placeholder = '選択してください',
   required = false,
   errorMessage = '',
-}) => {
+}: SelectInputProps): React.JSX.Element => {
   return (
     <div>
       <label htmlFor={id} className="block text-sm font-medium text-gray-700">
