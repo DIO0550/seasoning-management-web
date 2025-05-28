@@ -8,13 +8,13 @@ interface SubmitButtonProps {
   className?: string;
 }
 
-export const SubmitButton: React.FC<SubmitButtonProps> = ({
+export const SubmitButton = ({
   label,
   loadingLabel,
   isSubmitting = false,
   disabled = false,
   className = '',
-}) => {
+}: SubmitButtonProps): React.JSX.Element => {
   const baseClassName = "w-full font-medium rounded focus:outline-none transition-colors bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 text-base";
   
   return (

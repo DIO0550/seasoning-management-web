@@ -7,7 +7,7 @@ describe('SeasoningAddForm', () => {
     render(<SeasoningAddForm />);
     
     // Check if all form elements are present
-    expect(screen.getByLabelText(/調味料/)).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /調味料/ })).toBeInTheDocument();
     expect(screen.getByLabelText(/調味料の種類/)).toBeInTheDocument();
     expect(screen.getByLabelText(/調味料の画像/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /追加/ })).toBeInTheDocument();
@@ -25,7 +25,7 @@ describe('SeasoningAddForm', () => {
     render(<SeasoningAddForm />);
     
     // Fill in required fields
-    fireEvent.change(screen.getByLabelText(/調味料/), { target: { value: 'salt' } });
+    fireEvent.change(screen.getByRole('textbox', { name: /調味料/ }), { target: { value: 'salt' } });
     fireEvent.change(screen.getByLabelText(/調味料の種類/), { target: { value: 'salt' } });
     
     // Submit button should become enabled
@@ -38,7 +38,7 @@ describe('SeasoningAddForm', () => {
     render(<SeasoningAddForm />);
     
     // Focus on name input, then blur without entering value
-    const nameInput = screen.getByLabelText(/調味料/);
+    const nameInput = screen.getByRole('textbox', { name: /調味料/ });
     fireEvent.focus(nameInput);
     fireEvent.blur(nameInput);
     
@@ -67,7 +67,7 @@ describe('SeasoningAddForm', () => {
     render(<SeasoningAddForm onSubmit={mockOnSubmit} />);
     
     // Fill in required fields
-    fireEvent.change(screen.getByLabelText(/調味料/), { target: { value: 'salt' } });
+    fireEvent.change(screen.getByRole('textbox', { name: /調味料/ }), { target: { value: 'salt' } });
     fireEvent.change(screen.getByLabelText(/調味料の種類/), { target: { value: 'salt' } });
     
     // Wait for button to be enabled
