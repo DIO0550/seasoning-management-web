@@ -9,14 +9,14 @@ export interface UseSeasoningNameInputReturn {
 }
 
 /**
- * Custom hook for managing seasoning name input field
- * Handles validation, state management, and event handlers
+ * 調味料名入力フィールドを管理するカスタムフック
+ * バリデーション、状態管理、イベントハンドラーを処理する
  */
 export const useSeasoningNameInput = (): UseSeasoningNameInputReturn => {
   const [value, setValue] = useState('');
   const [error, setError] = useState('');
 
-  // Validate name field - extracted from SeasoningAddForm
+  // 名前フィールドのバリデーション - SeasoningAddFormから抽出
   const validateName = (name: string): string => {
     if (!name) {
       return '調味料名は必須です';
@@ -24,38 +24,38 @@ export const useSeasoningNameInput = (): UseSeasoningNameInputReturn => {
     if (name.length > 20) {
       return '調味料名は 20 文字以内で入力してください';
     }
-    // Check if name contains only alphanumeric characters (半角英数字)
+    // 名前が半角英数字のみかチェック
     if (!/^[a-zA-Z0-9]*$/.test(name)) {
       return '調味料名は半角英数字で入力してください';
     }
     
-    // For duplicated check, you would typically check against an API
-    // This is a placeholder for that functionality
-    // In a real implementation, this would be an async call to the API
+    // 重複チェックについては、通常はAPIに対してチェックする
+    // これはその機能のプレースホルダー
+    // 実際の実装では、これはAPIへの非同期呼び出しになる
     
     return '';
   };
 
-  // Handle input changes
+  // 入力変更の処理
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setValue(newValue);
 
-    // Validate the field on change
+    // 変更時にフィールドをバリデーション
     const validationError = validateName(newValue);
     setError(validationError);
   };
 
-  // Handle blur events for validation
+  // バリデーションのためのブラーイベントの処理
   const onBlur = (e: FocusEvent<HTMLInputElement>) => {
     const currentValue = e.target.value;
     
-    // Validate the field on blur
+    // ブラー時にフィールドをバリデーション
     const validationError = validateName(currentValue);
     setError(validationError);
   };
 
-  // Reset function to clear value and error
+  // 値とエラーをクリアするリセット関数
   const reset = () => {
     setValue('');
     setError('');
