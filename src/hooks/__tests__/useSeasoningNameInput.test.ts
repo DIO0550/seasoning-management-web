@@ -2,14 +2,14 @@ import { renderHook, act } from '@testing-library/react';
 import { useSeasoningNameInput } from '../useSeasoningNameInput';
 
 describe('useSeasoningNameInput', () => {
-  test('should initialize with empty value and no error', () => {
+  test('初期値が空文字でエラーがないこと', () => {
     const { result } = renderHook(() => useSeasoningNameInput());
     
     expect(result.current.value).toBe('');
     expect(result.current.error).toBe('');
   });
 
-  test('should update value when onChange is called', () => {
+  test('onChangeが呼ばれた時に値が更新されること', () => {
     const { result } = renderHook(() => useSeasoningNameInput());
     
     act(() => {
@@ -21,7 +21,7 @@ describe('useSeasoningNameInput', () => {
     expect(result.current.value).toBe('salt');
   });
 
-  test('should validate name is required on blur with empty value', () => {
+  test('空の値でブラーした時に必須バリデーションが動作すること', () => {
     const { result } = renderHook(() => useSeasoningNameInput());
     
     act(() => {
@@ -33,10 +33,10 @@ describe('useSeasoningNameInput', () => {
     expect(result.current.error).toBe('調味料名は必須です');
   });
 
-  test('should validate name length on blur when too long', () => {
+  test('長すぎる名前でブラーした時に長さバリデーションが動作すること', () => {
     const { result } = renderHook(() => useSeasoningNameInput());
     
-    const longName = 'a'.repeat(21); // 21 characters, exceeds limit of 20
+    const longName = 'a'.repeat(21); // 21文字、20文字の制限を超過
     
     act(() => {
       result.current.onChange({
@@ -53,7 +53,7 @@ describe('useSeasoningNameInput', () => {
     expect(result.current.error).toBe('調味料名は 20 文字以内で入力してください');
   });
 
-  test('should validate alphanumeric characters on blur with invalid characters', () => {
+  test('無効な文字でブラーした時に英数字バリデーションが動作すること', () => {
     const { result } = renderHook(() => useSeasoningNameInput());
     
     act(() => {
@@ -71,7 +71,7 @@ describe('useSeasoningNameInput', () => {
     expect(result.current.error).toBe('調味料名は半角英数字で入力してください');
   });
 
-  test('should not show error for valid alphanumeric name', () => {
+  test('有効な英数字の名前ではエラーが表示されないこと', () => {
     const { result } = renderHook(() => useSeasoningNameInput());
     
     act(() => {
@@ -89,7 +89,7 @@ describe('useSeasoningNameInput', () => {
     expect(result.current.error).toBe('');
   });
 
-  test('should validate on change as well as on blur', () => {
+  test('ブラーだけでなく入力時にもバリデーションが動作すること', () => {
     const { result } = renderHook(() => useSeasoningNameInput());
     
     act(() => {
@@ -101,10 +101,10 @@ describe('useSeasoningNameInput', () => {
     expect(result.current.error).toBe('調味料名は半角英数字で入力してください');
   });
 
-  test('should clear error when valid value is entered after invalid', () => {
+  test('無効な値の後に有効な値を入力した時にエラーがクリアされること', () => {
     const { result } = renderHook(() => useSeasoningNameInput());
     
-    // Enter invalid value
+    // 無効な値を入力
     act(() => {
       result.current.onChange({
         target: { value: 'salt-1' }
@@ -113,7 +113,7 @@ describe('useSeasoningNameInput', () => {
     
     expect(result.current.error).toBe('調味料名は半角英数字で入力してください');
     
-    // Enter valid value
+    // 有効な値を入力
     act(() => {
       result.current.onChange({
         target: { value: 'salt' }
@@ -123,10 +123,10 @@ describe('useSeasoningNameInput', () => {
     expect(result.current.error).toBe('');
   });
 
-  test('should reset value and error when reset is called', () => {
+  test('resetが呼ばれた時に値とエラーがリセットされること', () => {
     const { result } = renderHook(() => useSeasoningNameInput());
     
-    // Set some value and error
+    // 値とエラーを設定
     act(() => {
       result.current.onChange({
         target: { value: 'salt-1' }
@@ -136,7 +136,7 @@ describe('useSeasoningNameInput', () => {
     expect(result.current.value).toBe('salt-1');
     expect(result.current.error).toBe('調味料名は半角英数字で入力してください');
     
-    // Reset
+    // リセット
     act(() => {
       result.current.reset();
     });
@@ -145,7 +145,7 @@ describe('useSeasoningNameInput', () => {
     expect(result.current.error).toBe('');
   });
 
-  test('should handle exactly 20 characters without error', () => {
+  test('ちょうど20文字でエラーが出ないこと', () => {
     const { result } = renderHook(() => useSeasoningNameInput());
     
     const exactlyTwentyChars = 'a'.repeat(20);
