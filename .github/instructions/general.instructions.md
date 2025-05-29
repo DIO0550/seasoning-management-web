@@ -83,22 +83,6 @@ applyTo: "**"
    └ utils/                # 共有ユーティリティ関数
 ```
 
-## コミットルール
-
-- コミットは、以下のルールに従うこと。
-  |タイプ|フォーマット|
-  |:-|:-|
-  |最初のコミット（Initial Commit） |🎉 [Initial Commit]:|
-  |新機能（New Feature） |✨ [New Feature]:|
-  |バグ修正（Bugfix） |🐛 [Bug fix]: |
-  |リファクタリング(Refactoring) |♻️ [Refactaoring]:|
-  |デザイン UI/UX(Accessibility) |🎨 [Accessibility]:|
-  |パフォーマンス（Performance） |🐎 [Performance]:|
-  |テスト（Tests） |🚨 [Tests]:|
-  |削除（Removal） |🗑️ [Remove]:|
-  |チャットログやドキュメントの更新(Doc)|📖 [Doc]:|
-  |WIP(Work In Progress) |🚧 [WIP]:|
-
 ## アプリケーションの詳細
 
 - Specification フォルダ内のファイルを参照してください。
