@@ -42,6 +42,21 @@ npm run dev
 
 4. ブラウザで http://localhost:3000 にアクセス
 
+### テストの実行
+
+テストには Vitest を使用しています。
+
+```bash
+# すべてのテストを実行
+npm test
+
+# テストをウォッチモードで実行
+npm run test:watch
+
+# テストカバレッジレポートの生成
+npm run test:coverage
+```
+
 ## 機能
 
 - 調味料の一覧表示、追加、編集、削除
