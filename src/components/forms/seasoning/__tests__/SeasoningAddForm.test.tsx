@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { SeasoningAddForm } from '../SeasoningAddForm';
+import { vi } from 'vitest';
 
 describe('SeasoningAddForm', () => {
   test('renders the form with all required fields', () => {
@@ -63,7 +64,7 @@ describe('SeasoningAddForm', () => {
   });
   
   test('calls onSubmit when form is submitted', async () => {
-    const mockOnSubmit = jest.fn().mockResolvedValue(undefined);
+    const mockOnSubmit = vi.fn().mockResolvedValue(undefined);
     render(<SeasoningAddForm onSubmit={mockOnSubmit} />);
     
     // Fill in required fields
