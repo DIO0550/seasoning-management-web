@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import { ErrorMessage } from '../../elements/errors/ErrorMessage';
 import { TextInput } from '../../elements/inputs/TextInput';
 import { SelectInput } from '../../elements/inputs/SelectInput';
@@ -6,6 +6,7 @@ import { FileInput } from '../../elements/inputs/FileInput';
 import { SubmitButton } from '../../elements/buttons/SubmitButton';
 import { useSeasoningNameInput } from '../../../hooks/useSeasoningNameInput';
 import { useSeasoningTypeInput } from '../../../hooks/useSeasoningTypeInput';
+import { useSeasoningSubmit, FormData } from '../../../hooks/useSeasoningSubmit';
 
 // 調味料の種類を定義 - 通常はAPIから取得する
 const SEASONING_TYPES = [
@@ -21,17 +22,6 @@ interface SeasoningAddFormProps {
   onSubmit?: (data: FormData) => Promise<void>;
 }
 
-interface FormData {
-  name: string;
-  type: string;
-  image: File | null;
-}
-
-interface FormErrors {
-  image: string;
-  general: string;
-}
-
 export const SeasoningAddForm = ({ onSubmit }: SeasoningAddFormProps): React.JSX.Element => {
   // 調味料名入力用のカスタムフックを使用
   const seasoningName = useSeasoningNameInput();
@@ -39,31 +29,10 @@ export const SeasoningAddForm = ({ onSubmit }: SeasoningAddFormProps): React.JSX
   // 調味料の種類選択用のカスタムフックを使用
   const seasoningType = useSeasoningTypeInput();
 
-  // フォームデータの状態（名前と種類はフックで処理されるため除外）
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    type: '',
+  // フォームデータの状態（画像のみ）
+  const [formData, setFormData] = useState<{image: File | null}>({
     image: null,
   });
-
-  // フォームエラーの状態（名前と種類はフックで処理されるため除外）
-  const [errors, setErrors] = useState<FormErrors>({
-    image: '',
-    general: '',
-  });
-
-  // フォーム送信状態
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isFormValid, setIsFormValid] = useState(false);
-
-  // フォームデータ、エラー、名前、種類の状態が変更された時にフォームの有効性を更新
-  useEffect(() => {
-    // 必須フィールドが入力され、エラーがない場合にフォームが有効
-    const requiredFieldsValid = Boolean(seasoningName.value && seasoningType.value);
-    const noErrors = !seasoningName.error && !seasoningType.error && !errors.image && !errors.general;
-    
-    setIsFormValid(requiredFieldsValid && noErrors);
-  }, [seasoningName.value, seasoningName.error, seasoningType.value, seasoningType.error, errors]);
 
   // 画像フィールドのバリデーション
   const validateImage = (file: File | null): string => {
@@ -82,6 +51,15 @@ export const SeasoningAddForm = ({ onSubmit }: SeasoningAddFormProps): React.JSX
     return '';
   };
 
+  // フォーム送信用のカスタムフック
+  const { submit, isSubmitting, errors, isFormValid, setImageError } = useSeasoningSubmit(
+    seasoningName,
+    seasoningType,
+    formData,
+    onSubmit,
+    () => setFormData({ image: null }) // リセット時にフォームデータをクリア
+  );
+
   // ファイル入力変更の処理
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -90,67 +68,14 @@ export const SeasoningAddForm = ({ onSubmit }: SeasoningAddFormProps): React.JSX
       ...prev,
       image: file
     }));
-    
-    const validationError = validateImage(file);
-    setErrors(prev => ({
-      ...prev,
-      image: validationError
-    }));
-  };
 
-  // フォーム送信の処理
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    // 送信前にすべてのフィールドをバリデーション
-    const nameError = seasoningName.error;
-    const typeError = seasoningType.error;
-    const imageError = validateImage(formData.image);
-    
-    const newErrors = {
-      image: imageError,
-      general: ''
-    };
-    
-    setErrors(newErrors);
-    
-    // バリデーションエラーがあるかチェック
-    if (nameError || typeError || imageError) {
-      return;
-    }
-    
-    if (onSubmit) {
-      try {
-        setIsSubmitting(true);
-        // フックから名前と種類を含むフォームデータオブジェクトを作成
-        const submitData = {
-          name: seasoningName.value,
-          type: seasoningType.value,
-          image: formData.image
-        };
-        await onSubmit(submitData);
-        // 送信成功後にフォームをリセット
-        seasoningName.reset();
-        seasoningType.reset();
-        setFormData({
-          name: '',
-          type: '',
-          image: null
-        });
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : '調味料の登録に失敗しました。入力内容を確認してください';
-        setErrors(prev => ({
-          ...prev,
-          general: errorMessage
-        }));
-      } finally {
-        setIsSubmitting(false);
-      }
-    }
+    // 画像のバリデーションとエラー設定
+    const validationError = validateImage(file);
+    setImageError(validationError);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="space-y-4">
       {/* 全般的なエラーメッセージ */}
       {errors.general && <ErrorMessage message={errors.general} />}
       
@@ -199,8 +124,9 @@ export const SeasoningAddForm = ({ onSubmit }: SeasoningAddFormProps): React.JSX
           loadingLabel="追加中..."
           isSubmitting={isSubmitting}
           disabled={!isFormValid}
+          onClick={submit}
         />
       </div>
-    </form>
+    </div>
   );
 };
