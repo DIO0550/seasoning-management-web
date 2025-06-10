@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { SeasoningAddForm } from '../SeasoningAddForm';
+import { SeasoningAddForm } from './SeasoningAddForm';
 import { vi } from 'vitest';
 
 describe('SeasoningAddForm', () => {

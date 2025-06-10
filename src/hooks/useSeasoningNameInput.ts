@@ -1,4 +1,5 @@
-import { useState, ChangeEvent, FocusEvent } from 'react';
+import { useState, ChangeEvent, FocusEvent } from "react";
+import { VALIDATION_CONSTANTS } from "../constants/validation";
 
 export interface UseSeasoningNameInputReturn {
   value: string;
@@ -13,27 +14,27 @@ export interface UseSeasoningNameInputReturn {
  * バリデーション、状態管理、イベントハンドラーを処理する
  */
 export const useSeasoningNameInput = (): UseSeasoningNameInputReturn => {
-  const [value, setValue] = useState('');
-  const [error, setError] = useState('');
+  const [value, setValue] = useState("");
+  const [error, setError] = useState("");
 
   // 名前フィールドのバリデーション - SeasoningAddFormから抽出
   const validateName = (name: string): string => {
     if (!name) {
-      return '調味料名は必須です';
+      return "調味料名は必須です";
     }
-    if (name.length > 20) {
-      return '調味料名は 20 文字以内で入力してください';
+    if (name.length > VALIDATION_CONSTANTS.NAME_MAX_LENGTH) {
+      return `調味料名は ${VALIDATION_CONSTANTS.NAME_MAX_LENGTH} 文字以内で入力してください`;
     }
     // 名前が半角英数字のみかチェック
     if (!/^[a-zA-Z0-9]*$/.test(name)) {
-      return '調味料名は半角英数字で入力してください';
+      return "調味料名は半角英数字で入力してください";
     }
-    
+
     // 重複チェックについては、通常はAPIに対してチェックする
     // これはその機能のプレースホルダー
     // 実際の実装では、これはAPIへの非同期呼び出しになる
-    
-    return '';
+
+    return "";
   };
 
   // 入力変更の処理
@@ -49,7 +50,7 @@ export const useSeasoningNameInput = (): UseSeasoningNameInputReturn => {
   // バリデーションのためのブラーイベントの処理
   const onBlur = (e: FocusEvent<HTMLInputElement>) => {
     const currentValue = e.target.value;
-    
+
     // ブラー時にフィールドをバリデーション
     const validationError = validateName(currentValue);
     setError(validationError);
@@ -57,8 +58,8 @@ export const useSeasoningNameInput = (): UseSeasoningNameInputReturn => {
 
   // 値とエラーをクリアするリセット関数
   const reset = () => {
-    setValue('');
-    setError('');
+    setValue("");
+    setError("");
   };
 
   return {
