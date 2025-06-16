@@ -9,7 +9,7 @@ body:
         ## TypeScript Object Issue テンプレート
 
         TypeScriptオブジェクト（型定義、インターフェース、クラス等）の作成・改修に関するIssueです。
-        実装前に必ず **[standard.prompt.md](../../../react/standard.prompt.md)** を参照してルールに従って開発してください。
+        実装前に必ず **[standard.prompt.md](../../prompt/react/standard.prompt.md)** を参照してルールに従って開発してください。
 
   - type: textarea
     id: main-content
@@ -35,5 +35,5 @@ body:
         ---
 
         **参考ドキュメント:**
-        - [基本ルール](../../../react/standard.prompt.md)
-        - [コメントルール](../../../react/comment.prompt.md)
+        - [基本ルール](../../prompt/react/standard.prompt.md)
+        - [コメントルール](../../prompt/react/comment.prompt.md)
