@@ -9,7 +9,7 @@ body:
         ## Custom Hook Issue テンプレート
 
         Custom Hook の作成・改修に関するIssueです。
-        実装前に必ず **[custom-hook.prompt.md](../../../react/custom-hook.prompt.md)** を参照してルールに従って開発してください。
+        実装前に必ず **[custom-hook.prompt.md](../../prompt/react/custom-hook.prompt.md)** を参照してルールに従って開発してください。
 
   - type: textarea
     id: main-content
@@ -29,8 +29,8 @@ body:
         ---
 
         **参考ドキュメント:**
-        - [Custom Hooks ルール](../../../react/custom-hook.prompt.md)
-        - [TDD ルール](../../../react/tdd.prompt.md)
-        - [Vitest テストルール](../../../react/vitest.prompt.md)
-        - [コメントルール](../../../react/comment.prompt.md)
-        - [基本ルール](../../../react/standard.prompt.md)
+        - [Custom Hooks ルール](../../prompt/react/custom-hook.prompt.md)
+        - [TDD ルール](../../prompt/react/tdd.prompt.md)
+        - [Vitest テストルール](../../prompt/react/vitest.prompt.md)
+        - [コメントルール](../../prompt/react/comment.prompt.md)
+        - [基本ルール](../../prompt/react/standard.prompt.md)
