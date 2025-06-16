@@ -9,7 +9,7 @@ body:
         ## Component Issue テンプレート
 
         コンポーネントの作成・改修に関するIssueです。
-        実装前に必ず **[component.prompt.md](../../../react/component.prompt.md)** を参照してルールに従って開発してください。
+        実装前に必ず **[component.prompt.md](../../prompt/react/component.prompt.md)** を参照してルールに従って開発してください。
 
   - type: textarea
     id: main-content
@@ -35,8 +35,8 @@ body:
         ---
 
         **参考ドキュメント:**
-        - [コンポーネントルール](../../../react/component.prompt.md)
-        - [Custom Hooks ルール](../../../react/custom-hook.prompt.md)
-        - [Vitest テストルール](../../../react/vitest.prompt.md)
-        - [コメントルール](../../../react/comment.prompt.md)
-        - [基本ルール](../../../react/standard.prompt.md)
+        - [コンポーネントルール](../../prompt/react/component.prompt.md)
+        - [Custom Hooks ルール](../../prompt/react/custom-hook.prompt.md)
+        - [Vitest テストルール](../../prompt/react/vitest.prompt.md)
+        - [コメントルール](../../prompt/react/comment.prompt.md)
+        - [基本ルール](../../prompt/react/standard.prompt.md)
