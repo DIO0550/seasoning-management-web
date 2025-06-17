@@ -3,7 +3,6 @@ import { SeasoningAddForm } from './SeasoningAddForm';
 import { FormData } from '../../../hooks/useSeasoningSubmit';
 
 const meta: Meta<typeof SeasoningAddForm> = {
-  title: 'Forms/SeasoningAddForm',
   component: SeasoningAddForm,
   tags: ['autodocs'],
   parameters: {
