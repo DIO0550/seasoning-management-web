@@ -9,14 +9,14 @@ body:
         ## TypeScript Object Issue テンプレート
 
         TypeScriptオブジェクト（型定義、インターフェース、クラス等）の作成・改修に関するIssueです。
-        実装前に必ず **[standard.prompt.md](../../prompt/react/standard.prompt.md)** を参照してルールに従って開発してください。
+        実装前に必ず **[standard.prompt.md](../../../react/standard.prompt.md)** を参照してルールに従って開発してください。
 
   - type: textarea
     id: main-content
     attributes:
       label: "Issue内容"
       description: "TypeScriptオブジェクトの内容を以下の形式で記載してください"
-      placeholder: |
+      value: |
         ## 概要・目的
         このオブジェクト（型定義・インターフェース・クラス等）の目的や機能について詳しく説明してください
 
@@ -25,15 +25,11 @@ body:
         - 種類: (interface / type / class / enum 等)
         - プロパティ: 
         - メソッド: (必要な場合)
-        - 使用場面:
-    validations:
-      required: true
+        - 使用場面: 
 
-  - type: markdown
-    attributes:
-      value: |
         ---
 
         **参考ドキュメント:**
-        - [基本ルール](../../prompt/react/standard.prompt.md)
-        - [コメントルール](../../prompt/react/comment.prompt.md)
+        - [コメントルール](https://github.com/DIO0550/seasoning-management-web/tree/master/prompt/react/comment.prompt.md)
+        - [基本ルール](https://github.com/DIO0550/seasoning-management-web/tree/master/prompt/react/standard.prompt.md)
+        - [コミットルール](https://github.com/DIO0550/seasoning-management-web/tree/master/.github/instructions/commit.instructions.md)
