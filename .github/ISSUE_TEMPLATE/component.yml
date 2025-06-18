@@ -9,14 +9,14 @@ body:
         ## Component Issue テンプレート
 
         コンポーネントの作成・改修に関するIssueです。
-        実装前に必ず **[component.prompt.md](../../prompt/react/component.prompt.md)** を参照してルールに従って開発してください。
+        実装前に必ず **[component.prompt.md](../../../react/component.prompt.md)** を参照してルールに従って開発してください。
 
   - type: textarea
     id: main-content
     attributes:
       label: "Issue内容"
       description: "コンポーネントの内容を以下の形式で記載してください"
-      placeholder: |
+      value: |
         ## 概要・目的
         このコンポーネントの目的や機能について詳しく説明してください
 
@@ -25,18 +25,17 @@ body:
         - Props: 
         - 機能: 
         - デザイン要件: 
-        - アクセシビリティ要件:
-    validations:
-      required: true
+        - アクセシビリティ要件: 
 
-  - type: markdown
-    attributes:
-      value: |
         ---
 
-        **参考ドキュメント:**
-        - [コンポーネントルール](../../prompt/react/component.prompt.md)
-        - [Custom Hooks ルール](../../prompt/react/custom-hook.prompt.md)
-        - [Vitest テストルール](../../prompt/react/vitest.prompt.md)
-        - [コメントルール](../../prompt/react/comment.prompt.md)
-        - [基本ルール](../../prompt/react/standard.prompt.md)
+        ##  **参考ドキュメント:**
+        - [コンポーネントルール](https://github.com/DIO0550/seasoning-management-web/tree/master//prompt/react/component.prompt.md)
+        - [Custom Hooks ルール](https://github.com/DIO0550/seasoning-management-web/tree/master//prompt/react/custom-hook.prompt.md)
+        - [Vitest テストルール](https://github.com/DIO0550/seasoning-management-web/tree/master/prompt/react/vitest.prompt.md)
+        - [コメントルール](https://github.com/DIO0550/seasoning-management-web/tree/master/prompt/react/comment.prompt.md)
+        - [基本ルール](https://github.com/DIO0550/seasoning-management-web/tree/master/prompt/react/standard.prompt.md)
+        - [コミットルール](https://github.com/DIO0550/seasoning-management-web/tree/master/.github/instructions/commit.instructions.md)
+        
+      validations:
+        required: true
