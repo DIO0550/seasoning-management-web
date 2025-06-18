@@ -14,6 +14,7 @@ body:
   - type: textarea
     id: main-content
     attributes:
+      label: "Issuesの内容"
       description: "コンポーネントの内容を以下の形式で記載してください"
       value: |
         ## 概要・目的
@@ -35,6 +36,3 @@ body:
         - [コメントルール](https://github.com/DIO0550/seasoning-management-web/tree/master/prompt/react/comment.prompt.md)
         - [基本ルール](https://github.com/DIO0550/seasoning-management-web/tree/master/prompt/react/standard.prompt.md)
         - [コミットルール](https://github.com/DIO0550/seasoning-management-web/tree/master/.github/instructions/commit.instructions.md)
-        
-      validations:
-        required: true
