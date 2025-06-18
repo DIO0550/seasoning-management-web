@@ -14,7 +14,6 @@ body:
   - type: textarea
     id: main-content
     attributes:
-      label: "Issue内容"
       description: "コンポーネントの内容を以下の形式で記載してください"
       value: |
         ## 概要・目的
