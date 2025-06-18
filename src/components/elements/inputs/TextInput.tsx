@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorMessage } from '../errors/ErrorMessage';
+import { ErrorMessage } from '@/components/elements/errors/ErrorMessage';
 
 interface TextInputProps {
   id: string;
