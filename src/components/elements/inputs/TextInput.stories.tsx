@@ -15,7 +15,7 @@ export default meta;
 type Story = StoryObj<typeof TextInput>;
 
 // Create a wrapper component to handle state
-const TextInputWithState = (args) => {
+const TextInputWithState = (args: Parameters<typeof TextInput>[0]) => {
   const [value, setValue] = useState(args.value || '');
   return (
     <TextInput
