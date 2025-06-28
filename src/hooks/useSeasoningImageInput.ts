@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { VALIDATION_CONSTANTS } from "../constants/validation";
+import { validateImage } from "../utils/imageValidation";
+import { imageValidationErrorMessage } from "../features/seasoning/utils/imageValidationMessage";
 
 export interface UseSeasoningImageInputReturn {
   value: File | null;
@@ -18,30 +19,6 @@ export const useSeasoningImageInput = (): UseSeasoningImageInputReturn => {
   const [error, setError] = useState("");
 
   /**
-   * 画像ファイルのバリデーション
-   *
-   * @param file - 検証するファイル
-   * @returns エラーメッセージ（エラーがない場合は空文字）
-   */
-  const validateImage = (file: File | null): string => {
-    if (!file) return "";
-
-    if (
-      !(VALIDATION_CONSTANTS.IMAGE_VALID_TYPES as readonly string[]).includes(
-        file.type
-      )
-    ) {
-      return "JPEG、PNG 形式のファイルを選択してください";
-    }
-
-    if (file.size > VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_BYTES) {
-      return `ファイルサイズは ${VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_MB}MB 以下にしてください`;
-    }
-
-    return "";
-  };
-
-  /**
    * ファイル変更時のハンドラー
    *
    * @param file - 設定するファイル
@@ -49,7 +26,8 @@ export const useSeasoningImageInput = (): UseSeasoningImageInputReturn => {
   const onChange = (file: File | null) => {
     setValue(file);
     const validationError = validateImage(file);
-    setError(validationError);
+    const errorMessage = imageValidationErrorMessage(validationError);
+    setError(errorMessage);
   };
 
   /**
