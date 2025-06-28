@@ -11,3 +11,12 @@ export const VALIDATION_CONSTANTS = {
   /** 許可される画像ファイル形式 */
   IMAGE_VALID_TYPES: ["image/jpeg", "image/png"] as const,
 } as const;
+
+/**
+ * バリデーションエラーメッセージ
+ */
+export const VALIDATION_ERROR_MESSAGES = {
+  IMAGE_INVALID_TYPE: "JPEG、PNG 形式のファイルを選択してください",
+  IMAGE_SIZE_EXCEEDED: (maxSizeMB: number) =>
+    `ファイルサイズは ${maxSizeMB}MB 以下にしてください`,
+} as const;
