@@ -464,35 +464,29 @@ describe("useSeasoningSubmit", () => {
       expect(result.current.isFormValid).toBe(false);
     });
 
-    test("一般エラーがある場合、フォームが無効になること", () => {
+    test("送信エラー時にフォームが無効になること", async () => {
       const mockSeasoningName = createMockSeasoningNameInput("salt", "");
       const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
+      const mockOnSubmit = vi.fn().mockRejectedValue(new Error("送信エラー"));
 
       const { result } = renderHook(() =>
-        useSeasoningSubmit(mockSeasoningName, mockSeasoningType, mockFormData)
-      );
-
-      // 一般エラーを直接設定（送信エラーをシミュレート）
-      act(() => {
-        result.current.errors.general = "送信エラー";
-      });
-
-      // 再計算をトリガーするため、フィールドを変更
-      const updatedMockSeasoningName = createMockSeasoningNameInput(
-        "salt2",
-        ""
-      );
-
-      const { result: updatedResult } = renderHook(() =>
         useSeasoningSubmit(
-          updatedMockSeasoningName,
+          mockSeasoningName,
           mockSeasoningType,
-          mockFormData
+          mockFormData,
+          mockOnSubmit
         )
       );
 
-      expect(updatedResult.current.isFormValid).toBe(true); // 新しいフックではエラーがないので有効
+      // 送信処理を実行してエラーを発生させる
+      await act(async () => {
+        await result.current.submit();
+      });
+
+      // 送信エラーが発生した後はフォームが無効になる
+      expect(result.current.errors.general).toBe("送信エラー");
+      expect(result.current.isFormValid).toBe(false);
     });
   });
 
