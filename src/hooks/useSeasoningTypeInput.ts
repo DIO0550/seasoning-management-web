@@ -1,4 +1,6 @@
-import { useState, ChangeEvent, FocusEvent } from 'react';
+import { useState, ChangeEvent, FocusEvent } from "react";
+import { validateType } from "../utils/typeValidation";
+import { typeValidationErrorMessage } from "../features/seasoning/utils/typeValidationMessage";
 
 export interface UseSeasoningTypeInputReturn {
   value: string;
@@ -13,16 +15,8 @@ export interface UseSeasoningTypeInputReturn {
  * バリデーション、状態管理、イベントハンドラーを処理する
  */
 export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
-  const [value, setValue] = useState('');
-  const [error, setError] = useState('');
-
-  // 種類フィールドのバリデーション - SeasoningAddFormから抽出
-  const validateType = (type: string): string => {
-    if (!type) {
-      return '調味料の種類を選択してください';
-    }
-    return '';
-  };
+  const [value, setValue] = useState("");
+  const [error, setError] = useState("");
 
   // 入力変更の処理
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -31,22 +25,24 @@ export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
 
     // 変更時にフィールドをバリデーション
     const validationError = validateType(newValue);
-    setError(validationError);
+    const errorMessage = typeValidationErrorMessage(validationError);
+    setError(errorMessage);
   };
 
   // バリデーションのためのブラーイベントの処理
   const onBlur = (e: FocusEvent<HTMLSelectElement>) => {
     const currentValue = e.target.value;
-    
+
     // ブラー時にフィールドをバリデーション
     const validationError = validateType(currentValue);
-    setError(validationError);
+    const errorMessage = typeValidationErrorMessage(validationError);
+    setError(errorMessage);
   };
 
   // 値とエラーをクリアするリセット関数
   const reset = () => {
-    setValue('');
-    setError('');
+    setValue("");
+    setError("");
   };
 
   return {
