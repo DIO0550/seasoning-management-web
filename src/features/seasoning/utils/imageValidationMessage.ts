@@ -13,9 +13,9 @@ export const imageValidationErrorMessage = (
 ): string => {
   switch (error) {
     case "INVALID_TYPE":
-      return VALIDATION_ERROR_MESSAGES.IMAGE_INVALID_TYPE;
+      return VALIDATION_ERROR_MESSAGES.IMAGE.INVALID_TYPE;
     case "SIZE_EXCEEDED":
-      return VALIDATION_ERROR_MESSAGES.IMAGE_SIZE_EXCEEDED(
+      return VALIDATION_ERROR_MESSAGES.IMAGE.SIZE_EXCEEDED(
         VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_MB
       );
     case "NONE":
