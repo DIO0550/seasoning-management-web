@@ -1,6 +1,10 @@
-import { useState, useEffect } from 'react';
-import { UseSeasoningNameInputReturn } from './useSeasoningNameInput';
-import { UseSeasoningTypeInputReturn } from './useSeasoningTypeInput';
+import { useState, useEffect, useCallback } from "react";
+import { UseSeasoningNameInputReturn } from "./useSeasoningNameInput";
+import { UseSeasoningTypeInputReturn } from "./useSeasoningTypeInput";
+import { validateImage } from "../utils/imageValidation";
+import { imageValidationErrorMessage } from "../features/seasoning/utils/imageValidationMessage";
+import { VALIDATION_ERROR_MESSAGES } from "../constants/validation";
+import { canSubmit } from "../utils/formValidation";
 
 export interface FormData {
   name: string;
@@ -34,62 +38,93 @@ export const useSeasoningSubmit = (
 ): UseSeasoningSubmitReturn => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({
-    image: '',
-    general: '',
+    image: "",
+    general: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
 
-  // 画像フィールドのバリデーション
-  const validateImage = (file: File | null): string => {
-    if (!file) return '';
-
-    const validTypes = ['image/jpeg', 'image/png'];
-    if (!validTypes.includes(file.type)) {
-      return 'JPEG、PNG 形式のファイルを選択してください';
-    }
-
-    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-    if (file.size > maxSizeInBytes) {
-      return 'ファイルサイズは 5MB 以下にしてください';
-    }
-
-    return '';
-  };
-
   // 画像エラーを設定する関数
   const setImageError = (error: string) => {
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      image: error
+      image: error,
     }));
   };
 
+  // フォーム状態をリセットする内部関数
+  const resetFormState = () => {
+    seasoningName.reset();
+    seasoningType.reset();
+    onReset?.();
+    setErrors({
+      image: "",
+      general: "",
+    });
+  };
+
+  // 送信エラーを処理する内部関数
+  const handleSubmitError = (error: unknown) => {
+    const errorMessage =
+      error instanceof Error && error.message
+        ? error.message
+        : VALIDATION_ERROR_MESSAGES.SEASONING.SUBMIT_ERROR;
+    setErrors((prev) => ({
+      ...prev,
+      general: errorMessage,
+    }));
+  };
+
+  // バリデーションエラーをチェックする内部関数
+  const validateFormFields = (): { hasErrors: boolean; errors: FormErrors } => {
+    const nameError = seasoningName.error;
+    const typeError = seasoningType.error;
+    const imageValidationResult = validateImage(formData.image);
+    const imageError = imageValidationErrorMessage(imageValidationResult);
+
+    const errors = {
+      image: imageError,
+      general: "",
+    };
+
+    return {
+      hasErrors: Boolean(nameError || typeError || imageError),
+      errors,
+    };
+  };
+
+  // フォーム有効性をチェックする内部関数
+  const canSubmitForm = useCallback((): boolean => {
+    const fields = [
+      { value: seasoningName.value, error: seasoningName.error },
+      { value: seasoningType.value, error: seasoningType.error },
+    ];
+
+    return canSubmit(fields, errors);
+  }, [
+    seasoningName.value,
+    seasoningName.error,
+    seasoningType.value,
+    seasoningType.error,
+    errors,
+  ]);
+
   // フォームの有効性を計算
   useEffect(() => {
-    const requiredFieldsValid = Boolean(seasoningName.value && seasoningType.value);
-    const noErrors = !seasoningName.error && !seasoningType.error && !errors.image && !errors.general;
-    setIsFormValid(requiredFieldsValid && noErrors);
-  }, [seasoningName.value, seasoningName.error, seasoningType.value, seasoningType.error, errors]);
+    setIsFormValid(canSubmitForm());
+  }, [canSubmitForm]);
 
   // フォーム送信の処理
   const submit = async (): Promise<void> => {
     // 送信前にすべてのフィールドをバリデーション
-    const nameError = seasoningName.error;
-    const typeError = seasoningType.error;
-    const imageError = validateImage(formData.image);
-    
-    const newErrors = {
-      image: imageError,
-      general: ''
-    };
-    
-    setErrors(newErrors);
-    
+    const { hasErrors, errors: validationErrors } = validateFormFields();
+
+    setErrors(validationErrors);
+
     // バリデーションエラーがあるかチェック
-    if (nameError || typeError || imageError) {
+    if (hasErrors) {
       return;
     }
-    
+
     if (onSubmit) {
       try {
         setIsSubmitting(true);
@@ -97,23 +132,13 @@ export const useSeasoningSubmit = (
         const submitData = {
           name: seasoningName.value,
           type: seasoningType.value,
-          image: formData.image
+          image: formData.image,
         };
         await onSubmit(submitData);
         // 送信成功後にフォームをリセット
-        seasoningName.reset();
-        seasoningType.reset();
-        onReset?.();
-        setErrors({
-          image: '',
-          general: '',
-        });
+        resetFormState();
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : '調味料の登録に失敗しました。入力内容を確認してください';
-        setErrors(prev => ({
-          ...prev,
-          general: errorMessage
-        }));
+        handleSubmitError(error);
       } finally {
         setIsSubmitting(false);
       }
