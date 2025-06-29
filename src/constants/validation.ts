@@ -19,4 +19,8 @@ export const VALIDATION_ERROR_MESSAGES = {
   IMAGE_INVALID_TYPE: "JPEG、PNG 形式のファイルを選択してください",
   IMAGE_SIZE_EXCEEDED: (maxSizeMB: number) =>
     `ファイルサイズは ${maxSizeMB}MB 以下にしてください`,
+  NAME_REQUIRED: "調味料名は必須です",
+  NAME_LENGTH_EXCEEDED: (maxLength: number) =>
+    `調味料名は ${maxLength} 文字以内で入力してください`,
+  NAME_INVALID_FORMAT: "調味料名は半角英数字で入力してください",
 } as const;
