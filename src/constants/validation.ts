@@ -13,14 +13,21 @@ export const VALIDATION_CONSTANTS = {
 } as const;
 
 /**
- * バリデーションエラーメッセージ
+ * バリデーションエラーメッセージ（ネストされた構造）
  */
 export const VALIDATION_ERROR_MESSAGES = {
-  IMAGE_INVALID_TYPE: "JPEG、PNG 形式のファイルを選択してください",
-  IMAGE_SIZE_EXCEEDED: (maxSizeMB: number) =>
-    `ファイルサイズは ${maxSizeMB}MB 以下にしてください`,
-  NAME_REQUIRED: "調味料名は必須です",
-  NAME_LENGTH_EXCEEDED: (maxLength: number) =>
-    `調味料名は ${maxLength} 文字以内で入力してください`,
-  NAME_INVALID_FORMAT: "調味料名は半角英数字で入力してください",
+  IMAGE: {
+    INVALID_TYPE: "JPEG、PNG 形式のファイルを選択してください",
+    SIZE_EXCEEDED: (maxSizeMB: number): string =>
+      `ファイルサイズは ${maxSizeMB}MB 以下にしてください`,
+  },
+  NAME: {
+    REQUIRED: "調味料名は必須です",
+    INVALID_FORMAT: "調味料名は半角英数字で入力してください",
+    LENGTH_EXCEEDED: (maxLength: number): string =>
+      `調味料名は ${maxLength} 文字以内で入力してください`,
+  },
+  SEASONING: {
+    SUBMIT_ERROR: "調味料の登録に失敗しました。入力内容を確認してください",
+  },
 } as const;
