@@ -1,4 +1,4 @@
-import { validateSeasoningName } from "./nameValidation.js";
+import { validateSeasoningName } from "./nameValidation";
 
 describe("validateSeasoningName", () => {
   test("空の文字列の場合、REQUIRED エラーを返す", () => {

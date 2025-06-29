@@ -1,4 +1,4 @@
-import { nameValidationErrorMessage } from "./nameValidationMessage.js";
+import { nameValidationErrorMessage } from "./nameValidationMessage";
 
 describe("nameValidationErrorMessage", () => {
   test("REQUIRED エラーの場合、必須メッセージを返す", () => {
