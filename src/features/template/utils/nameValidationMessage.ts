@@ -1,4 +1,4 @@
-import { validateTemplateName } from '../../../utils/templateNameValidation';
+import { validateTemplateName } from "../../../utils/templateNameValidation";
 
 /**
  * テンプレート名のバリデーションメッセージを取得する
@@ -6,7 +6,7 @@ import { validateTemplateName } from '../../../utils/templateNameValidation';
  * @returns バリデーションメッセージ（エラーがない場合は空文字）
  */
 export const getTemplateNameValidationMessage = (name: string): string => {
-  if (name === '') return 'テンプレート名は必須です。';
-  if (name.length > 20) return 'テンプレート名は20文字以内で入力してください。';
-  return '';
+  if (name === "") return "テンプレート名は必須です。";
+  if (name.length > 20) return "テンプレート名は20文字以内で入力してください。";
+  return "";
 };

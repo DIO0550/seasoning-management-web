@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 /**
  * テンプレート送信フォームデータの型定義
@@ -12,20 +12,22 @@ export interface TemplateFormData {
 /**
  * テンプレート送信のカスタムフック
  */
-export const useTemplateSubmit = (onSubmit?: (data: TemplateFormData) => Promise<void>) => {
+export const useTemplateSubmit = (
+  onSubmit?: (data: TemplateFormData) => Promise<void>
+) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleSubmit = async (formData: TemplateFormData) => {
     if (!onSubmit) return;
 
     setIsSubmitting(true);
-    setError('');
+    setError("");
 
     try {
       await onSubmit(formData);
     } catch (err) {
-      setError(err instanceof Error ? err.message : '送信に失敗しました。');
+      setError(err instanceof Error ? err.message : "送信に失敗しました。");
     } finally {
       setIsSubmitting(false);
     }

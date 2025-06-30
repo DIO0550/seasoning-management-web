@@ -1,8 +1,8 @@
 "use client";
 
-import React from 'react';
-import { TemplateAddForm } from '../../../components/forms/template/TemplateAddForm';
-import { TemplateFormData } from '../../../hooks/useTemplateSubmit';
+import React from "react";
+import { TemplateAddForm } from "../../../components/forms/template/TemplateAddForm";
+import { TemplateFormData } from "../../../hooks/useTemplateSubmit";
 
 /**
  * テンプレート追加ページコンポーネント
@@ -15,7 +15,7 @@ import { TemplateFormData } from '../../../hooks/useTemplateSubmit';
 export default function TemplateAddPage(): React.JSX.Element {
   const handleSubmit = async (data: TemplateFormData) => {
     // TODO: GraphQL API呼び出しを実装
-    console.log('テンプレート追加:', data);
+    console.log("テンプレート追加:", data);
   };
 
   return (
