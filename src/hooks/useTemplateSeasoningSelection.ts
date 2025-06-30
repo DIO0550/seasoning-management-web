@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 /**
  * テンプレート調味料選択のカスタムフック
  */
 export const useTemplateSeasoningSelection = () => {
-  const [selectedSeasoningIds, setSelectedSeasoningIds] = useState<string[]>([]);
+  const [selectedSeasoningIds, setSelectedSeasoningIds] = useState<string[]>(
+    []
+  );
 
   const handleSeasoningToggle = (seasoningId: string) => {
-    setSelectedSeasoningIds(prev => {
+    setSelectedSeasoningIds((prev) => {
       if (prev.includes(seasoningId)) {
-        return prev.filter(id => id !== seasoningId);
+        return prev.filter((id) => id !== seasoningId);
       } else {
         return [...prev, seasoningId];
       }

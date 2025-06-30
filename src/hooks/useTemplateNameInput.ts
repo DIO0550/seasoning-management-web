@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { validateTemplateName } from '../utils/templateNameValidation';
-import { getTemplateNameValidationMessage } from '../features/template/utils/nameValidationMessage';
+import { useState } from "react";
+import { validateTemplateName } from "../utils/templateNameValidation";
+import { getTemplateNameValidationMessage } from "../features/template/utils/nameValidationMessage";
 
 /**
  * テンプレート名入力のカスタムフック
  */
 export const useTemplateNameInput = () => {
-  const [value, setValue] = useState('');
-  const [error, setError] = useState('');
+  const [value, setValue] = useState("");
+  const [error, setError] = useState("");
 
   const handleChange = (newValue: string) => {
     setValue(newValue);
