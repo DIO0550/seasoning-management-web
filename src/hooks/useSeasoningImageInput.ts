@@ -1,13 +1,17 @@
 import { useState } from "react";
-import { validateImage } from "../utils/imageValidation";
-import { imageValidationErrorMessage } from "../features/seasoning/utils/imageValidationMessage";
+import {
+  validateImage,
+  type ImageValidationError,
+} from "../utils/imageValidation";
+import type { ValidationErrorState } from "../types/validationErrorState";
+import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
 
 export interface UseSeasoningImageInputReturn {
   value: File | null;
-  error: string;
+  error: ValidationErrorState;
   onChange: (file: File | null) => void;
   reset: () => void;
-  setError: (error: string) => void;
+  setError: (error: ValidationErrorState) => void;
 }
 
 /**
@@ -16,7 +20,24 @@ export interface UseSeasoningImageInputReturn {
  */
 export const useSeasoningImageInput = (): UseSeasoningImageInputReturn => {
   const [value, setValue] = useState<File | null>(null);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ValidationErrorState>(
+    VALIDATION_ERROR_STATES.NONE
+  );
+
+  // バリデーション結果をValidationErrorStateに変換
+  const convertValidationError = (
+    validationError: ImageValidationError
+  ): ValidationErrorState => {
+    switch (validationError) {
+      case "INVALID_TYPE":
+        return VALIDATION_ERROR_STATES.INVALID_FILE_TYPE;
+      case "SIZE_EXCEEDED":
+        return VALIDATION_ERROR_STATES.FILE_TOO_LARGE;
+      case "NONE":
+      default:
+        return VALIDATION_ERROR_STATES.NONE;
+    }
+  };
 
   /**
    * ファイル変更時のハンドラー
@@ -26,8 +47,8 @@ export const useSeasoningImageInput = (): UseSeasoningImageInputReturn => {
   const onChange = (file: File | null) => {
     setValue(file);
     const validationError = validateImage(file);
-    const errorMessage = imageValidationErrorMessage(validationError);
-    setError(errorMessage);
+    const errorState = convertValidationError(validationError);
+    setError(errorState);
   };
 
   /**
@@ -35,7 +56,7 @@ export const useSeasoningImageInput = (): UseSeasoningImageInputReturn => {
    */
   const reset = () => {
     setValue(null);
-    setError("");
+    setError(VALIDATION_ERROR_STATES.NONE);
   };
 
   return {

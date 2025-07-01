@@ -1,10 +1,14 @@
 import { useState, ChangeEvent, FocusEvent } from "react";
-import { validateType } from "../utils/typeValidation";
-import { typeValidationErrorMessage } from "../features/seasoning/utils/typeValidationMessage";
+import {
+  validateType,
+  type TypeValidationError,
+} from "../utils/typeValidation";
+import type { ValidationErrorState } from "../types/validationErrorState";
+import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
 
 export interface UseSeasoningTypeInputReturn {
   value: string;
-  error: string;
+  error: ValidationErrorState;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   onBlur: (e: FocusEvent<HTMLSelectElement>) => void;
   reset: () => void;
@@ -16,7 +20,22 @@ export interface UseSeasoningTypeInputReturn {
  */
 export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
   const [value, setValue] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<ValidationErrorState>(
+    VALIDATION_ERROR_STATES.NONE
+  );
+
+  // バリデーション結果をValidationErrorStateに変換
+  const convertValidationError = (
+    validationError: TypeValidationError
+  ): ValidationErrorState => {
+    switch (validationError) {
+      case "REQUIRED":
+        return VALIDATION_ERROR_STATES.REQUIRED;
+      case "NONE":
+      default:
+        return VALIDATION_ERROR_STATES.NONE;
+    }
+  };
 
   // 入力変更の処理
   const onChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -25,8 +44,8 @@ export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
 
     // 変更時にフィールドをバリデーション
     const validationError = validateType(newValue);
-    const errorMessage = typeValidationErrorMessage(validationError);
-    setError(errorMessage);
+    const errorState = convertValidationError(validationError);
+    setError(errorState);
   };
 
   // バリデーションのためのブラーイベントの処理
@@ -35,14 +54,14 @@ export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
 
     // ブラー時にフィールドをバリデーション
     const validationError = validateType(currentValue);
-    const errorMessage = typeValidationErrorMessage(validationError);
-    setError(errorMessage);
+    const errorState = convertValidationError(validationError);
+    setError(errorState);
   };
 
   // 値とエラーをクリアするリセット関数
   const reset = () => {
     setValue("");
-    setError("");
+    setError(VALIDATION_ERROR_STATES.NONE);
   };
 
   return {
