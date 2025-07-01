@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
+import type { SubmitErrorState } from "../types/submitErrorState";
+import type { ValidationErrorState } from "../types/validationErrorState";
+import { SUBMIT_ERROR_STATES } from "../types/submitErrorState";
+import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
 import { UseSeasoningNameInputReturn } from "./useSeasoningNameInput";
 import { UseSeasoningTypeInputReturn } from "./useSeasoningTypeInput";
 import { validateImage } from "../utils/imageValidation";
-import { imageValidationErrorMessage } from "../features/seasoning/utils/imageValidationMessage";
-import { VALIDATION_ERROR_MESSAGES } from "../constants/validation";
-import { canSubmit } from "../utils/formValidation";
 
 export interface FormData {
   name: string;
@@ -13,8 +14,8 @@ export interface FormData {
 }
 
 export interface FormErrors {
-  image: string;
-  general: string;
+  image: ValidationErrorState;
+  general: SubmitErrorState;
 }
 
 export interface UseSeasoningSubmitReturn {
@@ -22,7 +23,7 @@ export interface UseSeasoningSubmitReturn {
   isSubmitting: boolean;
   errors: FormErrors;
   isFormValid: boolean;
-  setImageError: (error: string) => void;
+  setImageError: (error: ValidationErrorState) => void;
 }
 
 /**
@@ -38,13 +39,13 @@ export const useSeasoningSubmit = (
 ): UseSeasoningSubmitReturn => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({
-    image: "",
-    general: "",
+    image: VALIDATION_ERROR_STATES.NONE,
+    general: SUBMIT_ERROR_STATES.NONE,
   });
   const [isFormValid, setIsFormValid] = useState(false);
 
   // 画像エラーを設定する関数
-  const setImageError = (error: string) => {
+  const setImageError = (error: ValidationErrorState) => {
     setErrors((prev) => ({
       ...prev,
       image: error,
@@ -57,20 +58,28 @@ export const useSeasoningSubmit = (
     seasoningType.reset();
     onReset?.();
     setErrors({
-      image: "",
-      general: "",
+      image: VALIDATION_ERROR_STATES.NONE,
+      general: SUBMIT_ERROR_STATES.NONE,
     });
   };
 
   // 送信エラーを処理する内部関数
   const handleSubmitError = (error: unknown) => {
-    const errorMessage =
-      error instanceof Error && error.message
-        ? error.message
-        : VALIDATION_ERROR_MESSAGES.SEASONING.SUBMIT_ERROR;
+    let errorType: SubmitErrorState = SUBMIT_ERROR_STATES.UNKNOWN_ERROR;
+
+    if (error instanceof Error) {
+      if (error.name === "NetworkError") {
+        errorType = SUBMIT_ERROR_STATES.NETWORK_ERROR;
+      } else if (error.name === "ValidationError") {
+        errorType = SUBMIT_ERROR_STATES.VALIDATION_ERROR;
+      } else if (error.message?.includes("Server Error")) {
+        errorType = SUBMIT_ERROR_STATES.SERVER_ERROR;
+      }
+    }
+
     setErrors((prev) => ({
       ...prev,
-      general: errorMessage,
+      general: errorType,
     }));
   };
 
@@ -79,15 +88,26 @@ export const useSeasoningSubmit = (
     const nameError = seasoningName.error;
     const typeError = seasoningType.error;
     const imageValidationResult = validateImage(formData.image);
-    const imageError = imageValidationErrorMessage(imageValidationResult);
 
-    const errors = {
+    // 画像バリデーション結果をValidationErrorStateに変換
+    let imageError: ValidationErrorState = VALIDATION_ERROR_STATES.NONE;
+    if (imageValidationResult === "INVALID_TYPE") {
+      imageError = VALIDATION_ERROR_STATES.INVALID_FILE_TYPE;
+    } else if (imageValidationResult === "SIZE_EXCEEDED") {
+      imageError = VALIDATION_ERROR_STATES.FILE_TOO_LARGE;
+    }
+
+    const errors: FormErrors = {
       image: imageError,
-      general: "",
+      general: SUBMIT_ERROR_STATES.NONE,
     };
 
     return {
-      hasErrors: Boolean(nameError || typeError || imageError),
+      hasErrors: Boolean(
+        nameError !== VALIDATION_ERROR_STATES.NONE ||
+          typeError !== VALIDATION_ERROR_STATES.NONE ||
+          imageError !== VALIDATION_ERROR_STATES.NONE
+      ),
       errors,
     };
   };
@@ -99,7 +119,14 @@ export const useSeasoningSubmit = (
       { value: seasoningType.value, error: seasoningType.error },
     ];
 
-    return canSubmit(fields, errors);
+    // すべてのフィールドが入力され、エラーがないかチェック
+    const hasAllValues = fields.every((field) => field.value.trim() !== "");
+    const hasNoErrors =
+      fields.every((field) => field.error === VALIDATION_ERROR_STATES.NONE) &&
+      errors.image === VALIDATION_ERROR_STATES.NONE &&
+      errors.general === SUBMIT_ERROR_STATES.NONE;
+
+    return hasAllValues && hasNoErrors;
   }, [
     seasoningName.value,
     seasoningName.error,
