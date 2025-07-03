@@ -1,4 +1,5 @@
 import { useRouter } from "next/navigation";
+import { SEASONING_PAGE_PATHS } from "../constants/pagePaths";
 
 /**
  * 調味料関連の画面遷移を管理するカスタムフック
@@ -20,7 +21,7 @@ export const useSeasoningNavigation = (): UseSeasoningNavigationReturn => {
 
   const navigateToAdd = (): void => {
     try {
-      router.push("/seasoning/add");
+      router.push(SEASONING_PAGE_PATHS.ADD);
     } catch (error) {
       // ナビゲーションエラーは静かに処理
       console.warn("Navigation to add page failed:", error);
@@ -29,7 +30,7 @@ export const useSeasoningNavigation = (): UseSeasoningNavigationReturn => {
 
   const navigateToList = (): void => {
     try {
-      router.push("/seasoning/list");
+      router.push(SEASONING_PAGE_PATHS.LIST);
     } catch (error) {
       // ナビゲーションエラーは静かに処理
       console.warn("Navigation to list page failed:", error);
