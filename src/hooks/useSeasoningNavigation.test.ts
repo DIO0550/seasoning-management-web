@@ -2,6 +2,7 @@ import { renderHook, act } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { useRouter } from "next/navigation";
 import { useSeasoningNavigation } from "./useSeasoningNavigation";
+import { SEASONING_PAGE_PATHS } from "../constants/pagePaths";
 
 // Next.jsのuseRouterをモック化
 vi.mock("next/navigation", () => ({
@@ -32,7 +33,7 @@ describe("useSeasoningNavigation", () => {
         result.current.navigateToAdd();
       });
 
-      expect(mockPush).toHaveBeenCalledWith("/seasoning/add");
+      expect(mockPush).toHaveBeenCalledWith(SEASONING_PAGE_PATHS.ADD);
       expect(mockPush).toHaveBeenCalledTimes(1);
     });
   });
@@ -45,7 +46,7 @@ describe("useSeasoningNavigation", () => {
         result.current.navigateToList();
       });
 
-      expect(mockPush).toHaveBeenCalledWith("/seasoning/list");
+      expect(mockPush).toHaveBeenCalledWith(SEASONING_PAGE_PATHS.LIST);
       expect(mockPush).toHaveBeenCalledTimes(1);
     });
   });
