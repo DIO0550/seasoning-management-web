@@ -4,6 +4,7 @@ import React from "react";
 import { SeasoningAddForm } from "../../../components/forms/seasoning/SeasoningAddForm";
 import { FormData } from "../../../hooks/useSeasoningSubmit";
 import { useSeasoningNavigation } from "../../../hooks/useSeasoningNavigation";
+import { Button } from "../../../components/elements/buttons/button";
 
 /**
  * 調味料追加ページコンポーネント
@@ -13,6 +14,13 @@ import { useSeasoningNavigation } from "../../../hooks/useSeasoningNavigation";
  */
 export default function SeasoningAddPage(): React.JSX.Element {
   const { navigateToList } = useSeasoningNavigation();
+
+  /**
+   * 一覧画面への戻る処理
+   */
+  const handleBackToList = (): void => {
+    navigateToList();
+  };
   /**
    * フォーム送信時の処理
    *
@@ -35,7 +43,17 @@ export default function SeasoningAddPage(): React.JSX.Element {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-md mx-auto">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">調味料を追加</h1>
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-2xl font-bold text-gray-900">調味料を追加</h1>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleBackToList}
+              className="text-gray-600 hover:text-gray-800"
+            >
+              ← 一覧に戻る
+            </Button>
+          </div>
           <p className="text-sm text-gray-600 mt-2">
             新しい調味料の情報を入力してください。
           </p>
