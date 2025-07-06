@@ -1,8 +1,5 @@
-import { z } from 'zod';
-import { 
-  templateAddRequestSchema,
-  templateAddResponseSchema 
-} from './schemas';
+import { z } from "zod";
+import { templateAddRequestSchema, templateAddResponseSchema } from "./schemas";
 
 /**
  * テンプレート追加リクエストの型

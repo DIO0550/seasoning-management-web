@@ -43,14 +43,14 @@ export async function POST(request: NextRequest) {
     const validationResult = seasoningAddRequestSchema.safeParse({
       name: body.name,
       seasoningTypeId: Number(body.seasoningTypeId) || body.seasoningTypeId,
-      image: body.image || null
+      image: body.image || null,
     });
 
     if (!validationResult.success) {
       const errorResponse: ErrorResponse = {
         error: true,
         message: "バリデーションエラーが発生しました",
-        code: "VALIDATION_ERROR"
+        code: "VALIDATION_ERROR",
       };
 
       return NextResponse.json(errorResponse, { status: 400 });
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
       const errorResponse: ErrorResponse = {
         error: true,
         message: "この調味料名は既に登録されています",
-        code: "DUPLICATE_NAME"
+        code: "DUPLICATE_NAME",
       };
 
       return NextResponse.json(errorResponse, { status: 400 });
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
       const errorResponse: ErrorResponse = {
         error: true,
         message: "リクエストの形式が正しくありません",
-        code: "INVALID_JSON"
+        code: "INVALID_JSON",
       };
       return NextResponse.json(errorResponse, { status: 400 });
     }
@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
     const errorResponse: ErrorResponse = {
       error: true,
       message: "システムエラーが発生しました",
-      code: "INTERNAL_ERROR"
+      code: "INTERNAL_ERROR",
     };
     return NextResponse.json(errorResponse, { status: 500 });
   }
