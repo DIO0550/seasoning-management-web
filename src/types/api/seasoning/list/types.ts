@@ -1,8 +1,8 @@
-import { z } from 'zod';
-import { 
+import { z } from "zod";
+import {
   seasoningListQuerySchema,
-  seasoningListResponseSchema 
-} from './schemas';
+  seasoningListResponseSchema,
+} from "./schemas";
 
 /**
  * 調味料一覧クエリパラメータの型
