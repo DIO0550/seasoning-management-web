@@ -7,6 +7,7 @@ export const errorResponseSchema = z.object({
   error: z.literal(true),
   message: z.string().min(1, "エラーメッセージは必須です"),
   code: z.string(),
+  details: z.record(z.string()).optional(),
 });
 
 /**
