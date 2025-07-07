@@ -12,7 +12,7 @@ export async function GET() {
     },
     paths: {
       // Placeholder paths will be added here
-      "/api/seasoning": {
+      "/api/seasonings": {
         get: {
           summary: "Get all seasonings",
           responses: {
