@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { seasoningAddRequestSchema } from "../../../types/api/seasoning/add/schemas";
-import { errorResponseSchema } from "../../../types/api/common/schemas";
-import type { SeasoningAddRequest } from "../../../types/api/seasoning/add/types";
 import type { ErrorResponse } from "../../../types/api/common/types";
 
-// 調味料の型定義（既存のものを一時的に残す）
+// 調味料の型定義（新しい形式）
 interface Seasoning {
   id: string;
   name: string;
-  type: string;
+  seasoningTypeId: number;
   image?: string;
   createdAt: string;
 }
@@ -18,7 +15,7 @@ interface Seasoning {
 export const seasonings: Seasoning[] = [];
 
 /**
- * GET /api/seasoning - 調味料一覧を取得
+ * GET /api/seasonings - 調味料一覧を取得
  */
 export async function GET() {
   try {
@@ -33,24 +30,28 @@ export async function GET() {
 }
 
 /**
- * POST /api/seasoning - 新しい調味料を追加
+ * POST /api/seasonings - 新しい調味料を追加
  */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
     // zodスキーマでバリデーション
-    const validationResult = seasoningAddRequestSchema.safeParse({
-      name: body.name,
-      seasoningTypeId: Number(body.seasoningTypeId) || body.seasoningTypeId,
-      image: body.image || null,
-    });
+    const validationResult = seasoningAddRequestSchema.safeParse(body);
 
     if (!validationResult.success) {
+      // 詳細なバリデーションエラーを生成
+      const details: Record<string, string> = {};
+      validationResult.error.issues.forEach((issue) => {
+        const path = issue.path.join(".");
+        details[path] = issue.message;
+      });
+
       const errorResponse: ErrorResponse = {
         error: true,
         message: "バリデーションエラーが発生しました",
         code: "VALIDATION_ERROR",
+        details,
       };
 
       return NextResponse.json(errorResponse, { status: 400 });
@@ -70,11 +71,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(errorResponse, { status: 400 });
     }
 
-    // 新しい調味料を作成（一時的に既存の型を使用）
+    // 新しい調味料を作成
     const newSeasoning: Seasoning = {
       id: `seasoning_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       name: name,
-      type: `type_${seasoningTypeId}`, // 一時的な実装
+      seasoningTypeId: seasoningTypeId,
       image: image || undefined,
       createdAt: new Date().toISOString(),
     };

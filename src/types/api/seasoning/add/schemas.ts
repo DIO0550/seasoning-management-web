@@ -8,11 +8,14 @@ export const seasoningAddRequestSchema = z.object({
   name: z
     .string()
     .min(1, "調味料名は必須です")
-    .max(50, "調味料名は50文字以内で入力してください"),
+    .max(20, "調味料名は20文字以内で入力してください")
+    .refine((val) => val === "" || /^[a-zA-Z0-9]+$/.test(val), {
+      message: "調味料名は半角英数字で入力してください",
+    }),
   seasoningTypeId: z
-    .number()
+    .number({ message: "調味料の種類を選択してください" })
     .int()
-    .min(1, "調味料タイプIDは正の整数である必要があります"),
+    .min(1, "調味料の種類を選択してください"),
   image: z.string().nullable(),
 });
 
