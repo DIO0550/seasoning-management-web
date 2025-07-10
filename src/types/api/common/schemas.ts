@@ -1,23 +1,40 @@
 import { z } from "zod";
 
 /**
- * エラーレスポンスのスキーマ
- */
-export const errorResponseSchema = z.object({
-  error: z.literal(true),
-  message: z.string().min(1, "エラーメッセージは必須です"),
-  code: z.string(),
-  details: z.record(z.string()).optional(),
-});
-
-/**
  * 成功レスポンスのスキーマを生成する関数
  */
 export const successResponseSchema = <T extends z.ZodType>(dataSchema: T) => {
   return z.object({
-    success: z.literal(true),
+    result_code: z.literal("OK"),
     data: dataSchema,
   });
+};
+
+/**
+ * エラーレスポンスのスキーマを生成する関数
+ */
+export const errorResponseSchema = <TErrorCode extends string>(
+  errorCodes: readonly TErrorCode[]
+) => {
+  return z.object({
+    result_code: z.enum(errorCodes as [TErrorCode, ...TErrorCode[]]),
+  });
+};
+
+/**
+ * API レスポンスのユニオンスキーマを生成する関数
+ */
+export const apiResponseSchema = <
+  T extends z.ZodType,
+  TErrorCode extends string
+>(
+  dataSchema: T,
+  errorCodes: readonly TErrorCode[]
+) => {
+  return z.union([
+    successResponseSchema(dataSchema),
+    errorResponseSchema(errorCodes),
+  ]);
 };
 
 /**
