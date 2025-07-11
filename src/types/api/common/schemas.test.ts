@@ -4,38 +4,28 @@ import {
   errorResponseSchema,
   successResponseSchema,
   paginationSchema,
-} from "./schemas";
+} from "@/types/api/common/schemas";
 
 describe("Common API Schemas", () => {
   describe("errorResponseSchema", () => {
     test("有効なエラーレスポンスを受け入れる", () => {
+      const errorCodes = ["VALIDATION_ERROR", "NOT_FOUND"] as const;
+      const schema = errorResponseSchema(errorCodes);
       const validErrorResponse = {
-        error: true,
-        message: "エラーが発生しました",
-        code: "VALIDATION_ERROR",
+        result_code: "VALIDATION_ERROR",
       };
 
-      expect(() => errorResponseSchema.parse(validErrorResponse)).not.toThrow();
+      expect(() => schema.parse(validErrorResponse)).not.toThrow();
     });
 
-    test("messageが空文字の場合にバリデーションエラーになる", () => {
+    test("無効なエラーコードの場合にバリデーションエラーになる", () => {
+      const errorCodes = ["VALIDATION_ERROR", "NOT_FOUND"] as const;
+      const schema = errorResponseSchema(errorCodes);
       const invalidErrorResponse = {
-        error: true,
-        message: "",
-        code: "VALIDATION_ERROR",
+        result_code: "INVALID_CODE",
       };
 
-      expect(() => errorResponseSchema.parse(invalidErrorResponse)).toThrow();
-    });
-
-    test("errorがfalseの場合にバリデーションエラーになる", () => {
-      const invalidErrorResponse = {
-        error: false,
-        message: "エラーが発生しました",
-        code: "VALIDATION_ERROR",
-      };
-
-      expect(() => errorResponseSchema.parse(invalidErrorResponse)).toThrow();
+      expect(() => schema.parse(invalidErrorResponse)).toThrow();
     });
   });
 
@@ -48,7 +38,7 @@ describe("Common API Schemas", () => {
 
       const responseSchema = successResponseSchema(dataSchema);
       const validResponse = {
-        success: true,
+        result_code: "OK",
         data: {
           id: 1,
           name: "テスト",
@@ -58,7 +48,7 @@ describe("Common API Schemas", () => {
       expect(() => responseSchema.parse(validResponse)).not.toThrow();
     });
 
-    test("successがfalseの場合にバリデーションエラーになる", () => {
+    test("result_codeがOK以外の場合にバリデーションエラーになる", () => {
       const dataSchema = z.object({
         id: z.number(),
         name: z.string(),
@@ -66,7 +56,7 @@ describe("Common API Schemas", () => {
 
       const responseSchema = successResponseSchema(dataSchema);
       const invalidResponse = {
-        success: false,
+        result_code: "ERROR",
         data: {
           id: 1,
           name: "テスト",

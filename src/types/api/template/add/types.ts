@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { templateAddRequestSchema, templateAddResponseSchema } from "./schemas";
+import { templateAddRequestSchema, templateAddResponseSchema } from "@/types/api/template/add/schemas";
 
 /**
  * テンプレート追加リクエストの型

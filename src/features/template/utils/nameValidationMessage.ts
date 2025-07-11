@@ -1,4 +1,4 @@
-import { validateTemplateName } from "../../../utils/templateNameValidation";
+import { validateTemplateName } from "@/utils/templateNameValidation";
 
 /**
  * テンプレート名のバリデーションメッセージを取得する

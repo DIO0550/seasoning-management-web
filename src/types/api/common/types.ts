@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { paginationSchema } from "./schemas";
+import { paginationSchema } from "@/types/api/common/schemas";
 
 /**
  * 成功レスポンスの型

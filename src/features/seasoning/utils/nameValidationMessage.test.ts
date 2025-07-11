@@ -1,4 +1,4 @@
-import { nameValidationErrorMessage } from "./nameValidationMessage";
+import { nameValidationErrorMessage } from "@/features/seasoning/utils/nameValidationMessage";
 
 describe("nameValidationErrorMessage", () => {
   test("REQUIRED エラーの場合、必須メッセージを返す", () => {

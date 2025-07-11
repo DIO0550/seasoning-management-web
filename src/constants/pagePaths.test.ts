@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import { SEASONING_PAGE_PATHS, type SeasoningPagePath } from "./pagePaths";
+import { describe, test, expect } from "vitest";
+import { SEASONING_PAGE_PATHS, type SeasoningPagePath } from "@/constants/pagePaths";
 
 describe("SEASONING_PAGE_PATHS", () => {
   describe("ページパス定数値の確認", () => {

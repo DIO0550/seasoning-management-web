@@ -1,4 +1,4 @@
-import { validateTemplateDescription } from "./templateDescriptionValidation";
+import { validateTemplateDescription } from "@/utils/templateDescriptionValidation";
 
 describe("validateTemplateDescription", () => {
   test("空文字の場合はtrueを返す（任意項目のため）", () => {
