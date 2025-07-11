@@ -1,17 +1,17 @@
 import React, { ChangeEvent } from "react";
-import { ErrorMessage } from "../../elements/errors/ErrorMessage";
-import { TextInput } from "../../elements/inputs/TextInput";
-import { SelectInput } from "../../elements/inputs/SelectInput";
-import { FileInput } from "../../elements/inputs/FileInput";
-import { SubmitButton } from "../../elements/buttons/SubmitButton";
-import { useSeasoningNameInput } from "../../../hooks/useSeasoningNameInput";
-import { useSeasoningTypeInput } from "../../../hooks/useSeasoningTypeInput";
-import { useSeasoningImageInput } from "../../../hooks/useSeasoningImageInput";
+import { ErrorMessage } from "@/components/forms/../elements/errors/ErrorMessage";
+import { TextInput } from "@/components/forms/../elements/inputs/TextInput";
+import { SelectInput } from "@/components/forms/../elements/inputs/SelectInput";
+import { FileInput } from "@/components/forms/../elements/inputs/FileInput";
+import { SubmitButton } from "@/components/forms/../elements/buttons/SubmitButton";
+import { useSeasoningNameInput } from "@/components/forms/../../hooks/useSeasoningNameInput";
+import { useSeasoningTypeInput } from "@/components/forms/../../hooks/useSeasoningTypeInput";
+import { useSeasoningImageInput } from "@/components/forms/../../hooks/useSeasoningImageInput";
 import {
   useSeasoningSubmit,
   FormData,
-} from "../../../hooks/useSeasoningSubmit";
-import { VALIDATION_CONSTANTS } from "../../../constants/validation";
+} from "@/components/forms/../../hooks/useSeasoningSubmit";
+import { VALIDATION_CONSTANTS } from "@/components/forms/../../constants/validation";
 
 /**
  * 調味料の種類定義

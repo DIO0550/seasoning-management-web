@@ -2,8 +2,8 @@ import { z } from "zod";
 import {
   seasoningAddRequestSchema,
   seasoningAddResponseSchema,
-} from "./schemas";
-import type { ApiResponse } from "../../common/types";
+} from "@/types/api/seasoning/add/schemas";
+import type { ApiResponse } from "@/types/api/seasoning/../common/types";
 
 /**
  * 調味料追加リクエストの型

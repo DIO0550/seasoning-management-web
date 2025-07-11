@@ -2,9 +2,9 @@ import { useState, ChangeEvent, FocusEvent } from "react";
 import {
   validateType,
   type TypeValidationError,
-} from "../utils/typeValidation";
-import type { ValidationErrorState } from "../types/validationErrorState";
-import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
+} from "@/utils/typeValidation";
+import type { ValidationErrorState } from "@/types/validationErrorState";
+import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 
 export interface UseSeasoningTypeInputReturn {
   value: string;

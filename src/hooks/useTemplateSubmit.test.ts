@@ -1,6 +1,6 @@
 import { renderHook, act } from "@testing-library/react";
-import { useTemplateSubmit } from "./useTemplateSubmit";
-import { SUBMIT_ERROR_STATES } from "../types/submitErrorState";
+import { useTemplateSubmit } from "@/hooks/useTemplateSubmit";
+import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 
 describe("useTemplateSubmit", () => {
   test("初期状態では送信中でない", () => {

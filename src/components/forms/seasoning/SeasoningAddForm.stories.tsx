@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SeasoningAddForm } from './SeasoningAddForm';
+import { SeasoningAddForm } from '@/components/forms/seasoning/SeasoningAddForm';
 import { FormData } from '@/hooks/useSeasoningSubmit';
 
 const meta: Meta<typeof SeasoningAddForm> = {

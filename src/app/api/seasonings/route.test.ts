@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
-import { GET, POST } from "./route";
+import { GET, POST } from "@/app/api/seasonings/route";
 
 // テスト用のモックリクエスト作成関数
 const createRequest = (

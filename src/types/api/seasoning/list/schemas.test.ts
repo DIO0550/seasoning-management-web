@@ -2,7 +2,7 @@ import { describe, test, expect } from "vitest";
 import {
   seasoningListResponseSchema,
   seasoningListQuerySchema,
-} from "./schemas";
+} from "@/types/api/seasoning/list/schemas";
 
 describe("Seasoning List API Schemas", () => {
   describe("seasoningListQuerySchema", () => {

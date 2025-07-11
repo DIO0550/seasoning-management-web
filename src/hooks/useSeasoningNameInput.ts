@@ -2,9 +2,9 @@ import { useState, ChangeEvent, FocusEvent } from "react";
 import {
   validateSeasoningName,
   type NameValidationError,
-} from "../utils/nameValidation";
-import type { ValidationErrorState } from "../types/validationErrorState";
-import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
+} from "@/utils/nameValidation";
+import type { ValidationErrorState } from "@/types/validationErrorState";
+import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 
 export interface UseSeasoningNameInputReturn {
   value: string;

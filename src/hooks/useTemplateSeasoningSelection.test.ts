@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { useTemplateSeasoningSelection } from "./useTemplateSeasoningSelection";
+import { useTemplateSeasoningSelection } from "@/hooks/useTemplateSeasoningSelection";
 
 describe("useTemplateSeasoningSelection", () => {
   test("初期値が空配列である", () => {

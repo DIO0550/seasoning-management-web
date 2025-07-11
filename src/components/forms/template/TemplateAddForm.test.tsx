@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { TemplateAddForm } from "./TemplateAddForm";
+import { TemplateAddForm } from "@/components/forms/template/TemplateAddForm";
 
 describe("TemplateAddForm", () => {
   test("フォーム要素が表示される", () => {

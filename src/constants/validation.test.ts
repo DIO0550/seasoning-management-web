@@ -1,5 +1,8 @@
 import { describe, test, expect } from "vitest";
-import { VALIDATION_ERROR_MESSAGES, VALIDATION_CONSTANTS } from "@/constants/validation";
+import {
+  VALIDATION_ERROR_MESSAGES,
+  VALIDATION_CONSTANTS,
+} from "@/constants/validation";
 
 describe("validation constants", () => {
   describe("VALIDATION_ERROR_MESSAGES (ネストされた構造)", () => {

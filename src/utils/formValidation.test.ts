@@ -5,7 +5,7 @@ import {
   canSubmit,
   type FormField,
   type FormErrors,
-} from "./formValidation";
+} from "@/utils/formValidation";
 
 describe("formValidation utils (モックなし)", () => {
   describe("hasAllRequiredFields", () => {
