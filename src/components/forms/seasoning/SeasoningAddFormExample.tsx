@@ -1,5 +1,5 @@
 import React from 'react';
-import { SeasoningAddForm } from './SeasoningAddForm';
+import { SeasoningAddForm } from '@/components/forms/seasoning/SeasoningAddForm';
 
 interface FormData {
   name: string;

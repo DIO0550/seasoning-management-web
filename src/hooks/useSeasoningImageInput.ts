@@ -2,9 +2,9 @@ import { useState } from "react";
 import {
   validateImage,
   type ImageValidationError,
-} from "../utils/imageValidation";
-import type { ValidationErrorState } from "../types/validationErrorState";
-import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
+} from "@/utils/imageValidation";
+import type { ValidationErrorState } from "@/types/validationErrorState";
+import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 
 export interface UseSeasoningImageInputReturn {
   value: File | null;

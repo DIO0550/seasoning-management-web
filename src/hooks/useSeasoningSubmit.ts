@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback } from "react";
-import type { SubmitErrorState } from "../types/submitErrorState";
-import type { ValidationErrorState } from "../types/validationErrorState";
-import { SUBMIT_ERROR_STATES } from "../types/submitErrorState";
-import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
-import { UseSeasoningNameInputReturn } from "./useSeasoningNameInput";
-import { UseSeasoningTypeInputReturn } from "./useSeasoningTypeInput";
-import { validateImage } from "../utils/imageValidation";
+import { useState, useCallback, useEffect } from "react";
+import type { SubmitErrorState } from "@/types/submitErrorState";
+import type { ValidationErrorState } from "@/types/validationErrorState";
+import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
+import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
+import { UseSeasoningNameInputReturn } from "@/hooks/useSeasoningNameInput";
+import { UseSeasoningTypeInputReturn } from "@/hooks/useSeasoningTypeInput";
+import { validateImage } from "@/utils/imageValidation";
 
 export interface FormData {
   name: string;

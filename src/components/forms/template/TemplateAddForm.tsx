@@ -1,16 +1,16 @@
 "use client";
 
 import React from "react";
-import { TextInput } from "../../elements/inputs/TextInput";
-import { SubmitButton } from "../../elements/buttons/SubmitButton";
-import { ErrorMessage } from "../../elements/errors/ErrorMessage";
-import { useTemplateNameInput } from "../../../hooks/useTemplateNameInput";
-import { useTemplateDescriptionInput } from "../../../hooks/useTemplateDescriptionInput";
-import { useTemplateSeasoningSelection } from "../../../hooks/useTemplateSeasoningSelection";
+import { TextInput } from "@/components/forms/../elements/inputs/TextInput";
+import { SubmitButton } from "@/components/forms/../elements/buttons/SubmitButton";
+import { ErrorMessage } from "@/components/forms/../elements/errors/ErrorMessage";
+import { useTemplateNameInput } from "@/components/forms/../../hooks/useTemplateNameInput";
+import { useTemplateDescriptionInput } from "@/components/forms/../../hooks/useTemplateDescriptionInput";
+import { useTemplateSeasoningSelection } from "@/components/forms/../../hooks/useTemplateSeasoningSelection";
 import {
   useTemplateSubmit,
   TemplateFormData,
-} from "../../../hooks/useTemplateSubmit";
+} from "@/components/forms/../../hooks/useTemplateSubmit";
 
 /**
  * テンプレート追加フォームのProps

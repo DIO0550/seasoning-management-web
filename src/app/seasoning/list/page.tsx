@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Button } from "../../../components/elements/buttons/button";
-import { useSeasoningNavigation } from "../../../hooks/useSeasoningNavigation";
+import { Button } from "@/app/seasoning/../../components/elements/buttons/button";
+import { useSeasoningNavigation } from "@/app/seasoning/../../hooks/useSeasoningNavigation";
 
 /**
  * 調味料一覧ページコンポーネント

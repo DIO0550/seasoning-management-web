@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { useSeasoningTypeInput } from "./useSeasoningTypeInput";
+import { useSeasoningTypeInput } from "@/hooks/useSeasoningTypeInput";
 
 describe("useSeasoningTypeInput", () => {
   test("初期値が空文字でエラーがないこと", () => {

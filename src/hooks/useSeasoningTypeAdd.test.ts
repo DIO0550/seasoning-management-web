@@ -1,8 +1,8 @@
 import { renderHook, act } from "@testing-library/react";
 import { vi } from "vitest";
-import { useSeasoningTypeAdd } from "./useSeasoningTypeAdd";
-import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
-import { SUBMIT_ERROR_STATES } from "../types/submitErrorState";
+import { useSeasoningTypeAdd } from "@/hooks/useSeasoningTypeAdd";
+import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
+import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 
 describe("useSeasoningTypeAdd", () => {
   describe("初期状態", () => {
