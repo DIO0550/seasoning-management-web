@@ -24,6 +24,9 @@
       ]
     }
   },
+  "remoteEnv": {
+    "GITHUB_TOKEN": "${localEnv:GITHUB_PERSONAL_ACCESS_TOKEN}"
+  },
   "forwardPorts": [3000],
   "postCreateCommand": "npm install",
   "remoteUser": "node"

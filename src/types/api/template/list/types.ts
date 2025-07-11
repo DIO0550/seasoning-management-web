@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { templateListQuerySchema, templateListResponseSchema } from "./schemas";
+import { templateListQuerySchema, templateListResponseSchema } from "@/types/api/template/list/schemas";
 
 /**
  * テンプレート一覧クエリパラメータの型

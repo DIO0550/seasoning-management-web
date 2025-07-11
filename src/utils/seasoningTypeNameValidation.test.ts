@@ -1,4 +1,4 @@
-import { validateSeasoningTypeName } from "./seasoningTypeNameValidation";
+import { validateSeasoningTypeName } from "@/utils/seasoningTypeNameValidation";
 
 describe("validateSeasoningTypeName", () => {
   test("空の文字列の場合、REQUIRED エラーを返す", () => {

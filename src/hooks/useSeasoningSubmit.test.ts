@@ -1,11 +1,11 @@
 import { renderHook, act } from "@testing-library/react";
-import { useSeasoningSubmit } from "./useSeasoningSubmit";
-import { UseSeasoningNameInputReturn } from "./useSeasoningNameInput";
-import { UseSeasoningTypeInputReturn } from "./useSeasoningTypeInput";
-import { vi } from "vitest";
-import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
-import type { ValidationErrorState } from "../types/validationErrorState";
-import { SUBMIT_ERROR_STATES } from "../types/submitErrorState";
+import { useSeasoningSubmit } from "@/hooks/useSeasoningSubmit";
+import { UseSeasoningNameInputReturn } from "@/hooks/useSeasoningNameInput";
+import { UseSeasoningTypeInputReturn } from "@/hooks/useSeasoningTypeInput";
+import { beforeEach, vi } from "vitest";
+import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
+import type { ValidationErrorState } from "@/types/validationErrorState";
+import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 
 // モックの作成
 const createMockSeasoningNameInput = (

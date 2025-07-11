@@ -1,3 +1,12 @@
+# Use Go 1.23 for building, then switch to Node.js for runtime
+FROM golang:1.23-bullseye AS builder
+
+# Build GitHub MCP Server
+RUN git clone https://github.com/github/github-mcp-server.git /tmp/github-mcp-server \
+    && cd /tmp/github-mcp-server \
+    && go build -o github-mcp-server ./cmd/github-mcp-server
+
+
 # Use Ubuntu as the base image
 FROM ubuntu:22.04
 
@@ -9,11 +18,14 @@ ENV LC_ALL=ja_JP.UTF-8
 # Install dependencies and Node.js
 ARG NODE_MAJOR=22
 RUN apt-get update && \
-    apt-get install -y curl gnupg git locales fonts-noto-cjk && \
+    apt-get install -y curl vim nano tree sudo wget gnupg git locales fonts-noto-cjk && \
     curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash - && \
     apt-get install -y nodejs build-essential && \
     locale-gen ja_JP.UTF-8 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Copy the built MCP server binary
+COPY --from=builder /tmp/github-mcp-server/github-mcp-server /usr/local/bin/
 
 # Create a non-root user called 'node' with sudo privileges
 RUN useradd -m -s /bin/bash node && \

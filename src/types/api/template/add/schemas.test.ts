@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { templateAddRequestSchema, templateAddResponseSchema } from "./schemas";
+import { templateAddRequestSchema, templateAddResponseSchema } from "@/types/api/template/add/schemas";
 
 describe("Template Add API Schemas", () => {
   describe("templateAddRequestSchema", () => {

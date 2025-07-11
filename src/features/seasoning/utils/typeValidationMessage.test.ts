@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { typeValidationErrorMessage } from "./typeValidationMessage";
+import { typeValidationErrorMessage } from "@/features/seasoning/utils/typeValidationMessage";
 
 describe("typeValidationErrorMessage", () => {
   test("REQUIREDエラーの場合に適切なメッセージを返す", () => {

@@ -1,4 +1,4 @@
-import { VALIDATION_CONSTANTS } from "../constants/validation";
+import { VALIDATION_CONSTANTS } from "@/constants/validation";
 
 /**
  * 画像バリデーションエラーの種類
