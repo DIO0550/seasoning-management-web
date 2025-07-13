@@ -164,7 +164,9 @@ describe("SeasoningAddErrorCode", () => {
 
   describe("DEFAULT", () => {
     it("DEFAULT定数がVALIDATION_ERROR_NAME_REQUIREDであること", () => {
-      expect(SeasoningAddErrorCode.DEFAULT).toBe("VALIDATION_ERROR_NAME_REQUIRED");
+      expect(SeasoningAddErrorCode.DEFAULT).toBe(
+        "VALIDATION_ERROR_NAME_REQUIRED"
+      );
     });
   });
 });
