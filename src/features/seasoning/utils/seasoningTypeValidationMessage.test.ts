@@ -6,8 +6,8 @@ import {
 import {
   VALIDATION_ERROR_STATES,
   type ValidationErrorState,
-} from "@/features/seasoning/../../types/validationErrorState";
-import { SUBMIT_ERROR_STATES } from "@/features/seasoning/../../types/submitErrorState";
+} from "@/types/validationErrorState";
+import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 
 describe("getSeasoningTypeValidationMessage", () => {
   test("REQUIREDエラーの場合、必須メッセージを返す", () => {

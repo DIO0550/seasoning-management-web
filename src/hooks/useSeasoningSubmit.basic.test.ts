@@ -7,7 +7,7 @@ import { vi } from "vitest";
 // モックの作成
 const createMockSeasoningNameInput = (
   value = "",
-  error = ""
+  error = "NONE"
 ): UseSeasoningNameInputReturn => ({
   value,
   error,
@@ -18,7 +18,7 @@ const createMockSeasoningNameInput = (
 
 const createMockSeasoningTypeInput = (
   value = "",
-  error = ""
+  error = "NONE"
 ): UseSeasoningTypeInputReturn => ({
   value,
   error,
@@ -28,7 +28,7 @@ const createMockSeasoningTypeInput = (
 });
 
 // モック作成
-vi.mock("../utils/imageValidation", () => ({
+vi.mock("@/utils/imageValidation", () => ({
   validateImage: vi.fn(() => "NONE"),
 }));
 
@@ -47,14 +47,14 @@ describe("useSeasoningSubmit - 基本テスト", () => {
     );
 
     expect(result.current.isSubmitting).toBe(false);
-    expect(result.current.errors.image).toBeNull();
-    expect(result.current.errors.general).toBeNull();
+    expect(result.current.errors.image).toBe("NONE");
+    expect(result.current.errors.general).toBe("NONE");
     expect(result.current.isFormValid).toBe(false);
   });
 
   test("エラー種別を正しく設定できること", () => {
-    const mockSeasoningName = createMockSeasoningNameInput("テスト", "");
-    const mockSeasoningType = createMockSeasoningTypeInput("タイプ", "");
+    const mockSeasoningName = createMockSeasoningNameInput("テスト", "NONE");
+    const mockSeasoningType = createMockSeasoningTypeInput("タイプ", "NONE");
     const mockFormData = { image: null };
 
     const { result } = renderHook(() =>
@@ -66,12 +66,12 @@ describe("useSeasoningSubmit - 基本テスト", () => {
     });
 
     expect(result.current.errors.image).toBe("INVALID_FILE_TYPE");
-    expect(result.current.errors.general).toBeNull();
+    expect(result.current.errors.general).toBe("NONE");
   });
 
   test("送信エラーが適切に処理されること", async () => {
-    const mockSeasoningName = createMockSeasoningNameInput("テスト", "");
-    const mockSeasoningType = createMockSeasoningTypeInput("タイプ", "");
+    const mockSeasoningName = createMockSeasoningNameInput("テスト", "NONE");
+    const mockSeasoningType = createMockSeasoningTypeInput("タイプ", "NONE");
     const mockFormData = { image: null };
     const mockOnSubmit = vi.fn().mockRejectedValue(new Error("Test error"));
 
@@ -93,8 +93,8 @@ describe("useSeasoningSubmit - 基本テスト", () => {
   });
 
   test("ネットワークエラーを正しく識別すること", async () => {
-    const mockSeasoningName = createMockSeasoningNameInput("テスト", "");
-    const mockSeasoningType = createMockSeasoningTypeInput("タイプ", "");
+    const mockSeasoningName = createMockSeasoningNameInput("テスト", "NONE");
+    const mockSeasoningType = createMockSeasoningTypeInput("タイプ", "NONE");
     const mockFormData = { image: null };
 
     const networkError = new Error("Network failed");
