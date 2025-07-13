@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { SubmitErrorState } from "../types/submitErrorState";
-import { SUBMIT_ERROR_STATES } from "../types/submitErrorState";
+import type { SubmitErrorState } from "@/types/submitErrorState";
+import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 
 /**
  * テンプレート送信フォームデータの型定義

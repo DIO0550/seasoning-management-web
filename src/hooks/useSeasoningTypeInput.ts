@@ -1,14 +1,12 @@
 import { useState, ChangeEvent, FocusEvent } from "react";
-import {
-  validateType,
-  type TypeValidationError,
-} from "../utils/typeValidation";
-import type { ValidationErrorState } from "../types/validationErrorState";
-import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
+import { validateType, type TypeValidationError } from "@/utils/typeValidation";
+import { typeValidationErrorMessage } from "@/features/seasoning/utils/typeValidationMessage";
+import type { ValidationErrorState } from "@/types/validationErrorState";
+import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 
 export interface UseSeasoningTypeInputReturn {
   value: string;
-  error: ValidationErrorState;
+  error: string;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   onBlur: (e: FocusEvent<HTMLSelectElement>) => void;
   reset: () => void;
@@ -20,9 +18,20 @@ export interface UseSeasoningTypeInputReturn {
  */
 export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
   const [value, setValue] = useState("");
-  const [error, setError] = useState<ValidationErrorState>(
+  const [errorState, setErrorState] = useState<ValidationErrorState>(
     VALIDATION_ERROR_STATES.NONE
   );
+
+  // ValidationErrorStateから実際のバリデーションエラーを逆変換
+  const getValidationErrorFromState = (state: ValidationErrorState): TypeValidationError => {
+    switch (state) {
+      case VALIDATION_ERROR_STATES.REQUIRED:
+        return "REQUIRED";
+      case VALIDATION_ERROR_STATES.NONE:
+      default:
+        return "NONE";
+    }
+  };
 
   // バリデーション結果をValidationErrorStateに変換
   const convertValidationError = (
@@ -44,8 +53,8 @@ export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
 
     // 変更時にフィールドをバリデーション
     const validationError = validateType(newValue);
-    const errorState = convertValidationError(validationError);
-    setError(errorState);
+    const newErrorState = convertValidationError(validationError);
+    setErrorState(newErrorState);
   };
 
   // バリデーションのためのブラーイベントの処理
@@ -54,19 +63,19 @@ export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
 
     // ブラー時にフィールドをバリデーション
     const validationError = validateType(currentValue);
-    const errorState = convertValidationError(validationError);
-    setError(errorState);
+    const newErrorState = convertValidationError(validationError);
+    setErrorState(newErrorState);
   };
 
   // 値とエラーをクリアするリセット関数
   const reset = () => {
     setValue("");
-    setError(VALIDATION_ERROR_STATES.NONE);
+    setErrorState(VALIDATION_ERROR_STATES.NONE);
   };
 
   return {
     value,
-    error,
+    error: typeValidationErrorMessage(getValidationErrorFromState(errorState)),
     onChange,
     onBlur,
     reset,

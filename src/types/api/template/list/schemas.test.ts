@@ -1,5 +1,8 @@
 import { describe, test, expect } from "vitest";
-import { templateListResponseSchema, templateListQuerySchema } from "./schemas";
+import {
+  templateListResponseSchema,
+  templateListQuerySchema,
+} from "@/types/api/template/list/schemas";
 
 describe("Template List API Schemas", () => {
   describe("templateListQuerySchema", () => {
@@ -57,7 +60,7 @@ describe("Template List API Schemas", () => {
   describe("templateListResponseSchema", () => {
     test("有効なテンプレート一覧レスポンスを受け入れる", () => {
       const validResponse = {
-        success: true,
+        result_code: "OK",
         data: {
           items: [
             {
@@ -101,7 +104,7 @@ describe("Template List API Schemas", () => {
 
     test("空の一覧レスポンスを受け入れる", () => {
       const validResponse = {
-        success: true,
+        result_code: "OK",
         data: {
           items: [],
           pagination: {
@@ -120,7 +123,7 @@ describe("Template List API Schemas", () => {
 
     test("descriptionがnullのテンプレートを受け入れる", () => {
       const validResponse = {
-        success: true,
+        result_code: "OK",
         data: {
           items: [
             {
@@ -157,7 +160,7 @@ describe("Template List API Schemas", () => {
 
     test("successがfalseの場合にバリデーションエラーになる", () => {
       const invalidResponse = {
-        success: false,
+        result_code: "ERROR",
         data: {
           items: [],
           pagination: {

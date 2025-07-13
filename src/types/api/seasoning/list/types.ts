@@ -2,7 +2,7 @@ import { z } from "zod";
 import {
   seasoningListQuerySchema,
   seasoningListResponseSchema,
-} from "./schemas";
+} from "@/types/api/seasoning/list/schemas";
 
 /**
  * 調味料一覧クエリパラメータの型

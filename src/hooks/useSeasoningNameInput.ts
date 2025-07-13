@@ -2,13 +2,14 @@ import { useState, ChangeEvent, FocusEvent } from "react";
 import {
   validateSeasoningName,
   type NameValidationError,
-} from "../utils/nameValidation";
-import type { ValidationErrorState } from "../types/validationErrorState";
-import { VALIDATION_ERROR_STATES } from "../types/validationErrorState";
+} from "@/utils/nameValidation";
+import { nameValidationErrorMessage } from "@/features/seasoning/utils/nameValidationMessage";
+import type { ValidationErrorState } from "@/types/validationErrorState";
+import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 
 export interface UseSeasoningNameInputReturn {
   value: string;
-  error: ValidationErrorState;
+  error: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onBlur: (e: FocusEvent<HTMLInputElement>) => void;
   reset: () => void;
@@ -20,7 +21,7 @@ export interface UseSeasoningNameInputReturn {
  */
 export const useSeasoningNameInput = (): UseSeasoningNameInputReturn => {
   const [value, setValue] = useState("");
-  const [error, setError] = useState<ValidationErrorState>(
+  const [errorState, setErrorState] = useState<ValidationErrorState>(
     VALIDATION_ERROR_STATES.NONE
   );
 
@@ -48,8 +49,8 @@ export const useSeasoningNameInput = (): UseSeasoningNameInputReturn => {
 
     // 変更時にフィールドをバリデーション
     const validationError = validateSeasoningName(newValue);
-    const errorState = convertValidationError(validationError);
-    setError(errorState);
+    const newErrorState = convertValidationError(validationError);
+    setErrorState(newErrorState);
   };
 
   // バリデーションのためのブラーイベントの処理
@@ -58,19 +59,34 @@ export const useSeasoningNameInput = (): UseSeasoningNameInputReturn => {
 
     // ブラー時にフィールドをバリデーション
     const validationError = validateSeasoningName(currentValue);
-    const errorState = convertValidationError(validationError);
-    setError(errorState);
+    const newErrorState = convertValidationError(validationError);
+    setErrorState(newErrorState);
   };
 
   // 値とエラーをクリアするリセット関数
   const reset = () => {
     setValue("");
-    setError(VALIDATION_ERROR_STATES.NONE);
+    setErrorState(VALIDATION_ERROR_STATES.NONE);
+  };
+
+  // ValidationErrorStateから実際のバリデーションエラーを逆変換
+  const getValidationErrorFromState = (state: ValidationErrorState): NameValidationError => {
+    switch (state) {
+      case VALIDATION_ERROR_STATES.REQUIRED:
+        return "REQUIRED";
+      case VALIDATION_ERROR_STATES.TOO_LONG:
+        return "LENGTH_EXCEEDED";
+      case VALIDATION_ERROR_STATES.INVALID_FORMAT:
+        return "INVALID_FORMAT";
+      case VALIDATION_ERROR_STATES.NONE:
+      default:
+        return "NONE";
+    }
   };
 
   return {
     value,
-    error,
+    error: nameValidationErrorMessage(getValidationErrorFromState(errorState)),
     onChange,
     onBlur,
     reset,

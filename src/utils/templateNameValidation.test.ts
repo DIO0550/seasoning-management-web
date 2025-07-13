@@ -1,4 +1,4 @@
-import { validateTemplateName } from "./templateNameValidation";
+import { validateTemplateName } from "@/utils/templateNameValidation";
 
 describe("validateTemplateName", () => {
   test("有効な名前の場合はtrueを返す", () => {

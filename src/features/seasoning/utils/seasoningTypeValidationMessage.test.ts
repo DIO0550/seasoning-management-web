@@ -2,12 +2,12 @@ import { describe, test, expect } from "vitest";
 import {
   getSeasoningTypeValidationMessage,
   getSeasoningTypeSubmitMessage,
-} from "./seasoningTypeValidationMessage";
+} from "@/features/seasoning/utils/seasoningTypeValidationMessage";
 import {
   VALIDATION_ERROR_STATES,
   type ValidationErrorState,
-} from "../../../types/validationErrorState";
-import { SUBMIT_ERROR_STATES } from "../../../types/submitErrorState";
+} from "@/types/validationErrorState";
+import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 
 describe("getSeasoningTypeValidationMessage", () => {
   test("REQUIREDエラーの場合、必須メッセージを返す", () => {

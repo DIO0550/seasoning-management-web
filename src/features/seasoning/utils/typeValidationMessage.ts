@@ -1,4 +1,4 @@
-import type { TypeValidationError } from "../../../utils/typeValidation";
+import type { TypeValidationError } from "@/utils/typeValidation";
 
 /**
  * タイプバリデーションエラーのメッセージ表示

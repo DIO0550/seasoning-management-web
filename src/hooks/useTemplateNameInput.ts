@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { validateTemplateName } from "../utils/templateNameValidation";
-import { getTemplateNameValidationMessage } from "../features/template/utils/nameValidationMessage";
+import { validateTemplateName } from "@/utils/templateNameValidation";
+import { getTemplateNameValidationMessage } from "@/features/template/utils/nameValidationMessage";
 
 /**
  * テンプレート名入力のカスタムフック

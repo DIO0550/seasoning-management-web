@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { useTemplateDescriptionInput } from "./useTemplateDescriptionInput";
+import { useTemplateDescriptionInput } from "@/hooks/useTemplateDescriptionInput";
 
 describe("useTemplateDescriptionInput", () => {
   test("初期値が空文字である", () => {

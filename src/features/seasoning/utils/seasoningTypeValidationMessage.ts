@@ -1,5 +1,5 @@
-import type { ValidationErrorState } from "../../../types/validationErrorState";
-import type { SubmitErrorState } from "../../../types/submitErrorState";
+import type { ValidationErrorState } from "@/types/validationErrorState";
+import type { SubmitErrorState } from "@/types/submitErrorState";
 
 /**
  * 調味料の種類追加時のバリデーションエラーメッセージを取得

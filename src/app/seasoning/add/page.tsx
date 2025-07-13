@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { SeasoningAddForm } from "../../../components/forms/seasoning/SeasoningAddForm";
-import { FormData } from "../../../hooks/useSeasoningSubmit";
-import { useSeasoningNavigation } from "../../../hooks/useSeasoningNavigation";
-import { Button } from "../../../components/elements/buttons/button";
+import { SeasoningAddForm } from "@/components/forms/seasoning/SeasoningAddForm";
+import { FormData } from "@/hooks/useSeasoningSubmit";
+import { useSeasoningNavigation } from "@/hooks/useSeasoningNavigation";
+import { Button } from "@/components/elements/buttons/button";
 
 /**
  * 調味料追加ページコンポーネント

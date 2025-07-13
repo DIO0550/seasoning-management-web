@@ -3,7 +3,7 @@
  * MySQL接続設定とプール設定を管理する
  */
 
-import { env } from "./environment";
+import { env } from "@/config/environment";
 
 /**
  * データベース接続設定の型定義

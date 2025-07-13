@@ -2,13 +2,13 @@ import { describe, test, expect } from "vitest";
 import {
   seasoningAddRequestSchema,
   seasoningAddResponseSchema,
-} from "./schemas";
+} from "@/types/api/seasoning/add/schemas";
 
 describe("Seasoning Add API Schemas", () => {
   describe("seasoningAddRequestSchema", () => {
     test("有効な調味料追加リクエストを受け入れる", () => {
       const validRequest = {
-        name: "醤油",
+        name: "soysauce",
         seasoningTypeId: 1,
         image: null,
       };
@@ -18,7 +18,7 @@ describe("Seasoning Add API Schemas", () => {
 
     test("画像ありの調味料追加リクエストを受け入れる", () => {
       const validRequest = {
-        name: "醤油",
+        name: "soysauce",
         seasoningTypeId: 1,
         image: "base64encodedimage",
       };
@@ -48,7 +48,7 @@ describe("Seasoning Add API Schemas", () => {
 
     test("seasoningTypeIdが正の整数でない場合にバリデーションエラーになる", () => {
       const invalidRequest = {
-        name: "醤油",
+        name: "soysauce",
         seasoningTypeId: 0,
         image: null,
       };
@@ -60,7 +60,7 @@ describe("Seasoning Add API Schemas", () => {
   describe("seasoningAddResponseSchema", () => {
     test("有効な調味料追加レスポンスを受け入れる", () => {
       const validResponse = {
-        success: true,
+        result_code: "OK",
         data: {
           id: 1,
           name: "醤油",
@@ -79,7 +79,7 @@ describe("Seasoning Add API Schemas", () => {
 
     test("画像URLありのレスポンスを受け入れる", () => {
       const validResponse = {
-        success: true,
+        result_code: "OK",
         data: {
           id: 1,
           name: "醤油",
@@ -98,7 +98,7 @@ describe("Seasoning Add API Schemas", () => {
 
     test("successがfalseの場合にバリデーションエラーになる", () => {
       const invalidResponse = {
-        success: false,
+        result_code: "ERROR",
         data: {
           id: 1,
           name: "醤油",
