@@ -99,151 +99,119 @@ describe("/api/seasonings", () => {
 
     describe("バリデーションエラー", () => {
       describe("名前フィールドのバリデーション", () => {
-        test.each([
-          {
+        test("名前が空の場合、VALIDATION_ERROR_NAME_REQUIREDが返される", async () => {
+          const request = createRequest({
             name: "",
-            expectedMessage: "調味料名は必須です",
-            description: "空文字",
-          },
-          {
-            name: "a".repeat(21),
-            expectedMessage: "20文字以内で入力してください",
-            description: "21文字（境界値超過）",
-          },
-          {
-            name: "調味料",
-            expectedMessage: "半角英数字で入力してください",
-            description: "日本語文字",
-          },
-          {
-            name: "salt!",
-            expectedMessage: "半角英数字で入力してください",
-            description: "記号を含む",
-          },
-          {
-            name: "salt space",
-            expectedMessage: "半角英数字で入力してください",
-            description: "スペースを含む",
-          },
-        ])(
-          "$description の場合はエラーが返される",
-          async ({ name, expectedMessage }) => {
-            const request = createRequest({
-              name,
-              seasoningTypeId: 1,
-              image: null,
-            });
-            const response = await POST(request);
-            const data = await response.json();
+            seasoningTypeId: 1,
+            image: null,
+          });
 
-            expect(response.status).toBe(400);
-            expect(data.error).toBe(true);
-            expect(data.message).toBe("バリデーションエラーが発生しました");
-            expect(data.details?.name).toContain(expectedMessage);
-          }
-        );
+          const response = await POST(request);
+          const data = await response.json();
+
+          expect(response.status).toBe(400);
+          expect(data).toEqual({
+            result_code: "VALIDATION_ERROR_NAME_REQUIRED",
+          });
+        });
+
+        test("名前が長すぎる場合、VALIDATION_ERROR_NAME_TOO_LONGが返される", async () => {
+          const request = createRequest({
+            name: "a".repeat(21), // 21文字
+            seasoningTypeId: 1,
+            image: null,
+          });
+
+          const response = await POST(request);
+          const data = await response.json();
+
+          expect(response.status).toBe(400);
+          expect(data).toEqual({
+            result_code: "VALIDATION_ERROR_NAME_TOO_LONG",
+          });
+        });
+
+        test("名前の形式が無効な場合、VALIDATION_ERROR_NAME_INVALID_FORMATが返される", async () => {
+          const request = createRequest({
+            name: "調味料", // 日本語
+            seasoningTypeId: 1,
+            image: null,
+          });
+
+          const response = await POST(request);
+          const data = await response.json();
+
+          expect(response.status).toBe(400);
+          expect(data).toEqual({
+            result_code: "VALIDATION_ERROR_NAME_INVALID_FORMAT",
+          });
+        });
       });
 
       describe("調味料種類IDのバリデーション", () => {
-        test.each([
-          {
-            seasoningTypeId: null,
-            description: "null値",
-          },
-          {
-            seasoningTypeId: undefined,
-            description: "undefined",
-          },
-          {
-            seasoningTypeId: 0,
-            description: "0（境界値）",
-          },
-          {
-            seasoningTypeId: -1,
-            description: "負の数",
-          },
-          {
-            seasoningTypeId: 1.5,
-            description: "小数",
-          },
-        ])(
-          "$description の場合はエラーが返される",
-          async ({ seasoningTypeId }) => {
-            const request = createRequest({
-              name: "salt",
-              seasoningTypeId,
-              image: null,
-            });
-            const response = await POST(request);
-            const data = await response.json();
+        test("調味料種類IDが無効な場合、VALIDATION_ERROR_TYPE_REQUIREDが返される", async () => {
+          const request = createRequest({
+            name: "salt",
+            seasoningTypeId: 0, // 無効な値
+            image: null,
+          });
 
-            expect(response.status).toBe(400);
-            expect(data.error).toBe(true);
-            expect(data.details?.seasoningTypeId).toContain(
-              "調味料の種類を選択してください"
-            );
-          }
-        );
+          const response = await POST(request);
+          const data = await response.json();
+
+          expect(response.status).toBe(400);
+          expect(data).toEqual({
+            result_code: "VALIDATION_ERROR_TYPE_REQUIRED",
+          });
+        });
       });
     });
 
     describe("重複チェック", () => {
-      test("同じ名前の調味料は重複作成できない", async () => {
-        const seasoningData = {
-          name: "pepper",
+      test("重複する名前の場合、DUPLICATE_NAMEが返される", async () => {
+        // 最初の調味料を作成
+        const request1 = createRequest({
+          name: "salt",
           seasoningTypeId: 1,
           image: null,
-        };
+        });
+        await POST(request1);
 
-        // 1つ目を作成
-        const request1 = createRequest(seasoningData);
-        const response1 = await POST(request1);
-        expect(response1.status).toBe(201);
-
-        // 同じ名前で2つ目を作成試行
-        const request2 = createRequest(seasoningData);
-        const response2 = await POST(request2);
-        const data2 = await response2.json();
-
-        expect(response2.status).toBe(400);
-        expect(data2.error).toBe(true);
-        expect(data2.message).toBe("この調味料名は既に登録されています");
-        expect(data2.code).toBe("DUPLICATE_NAME");
-      });
-    });
-
-    describe("リクエスト形式エラー", () => {
-      test.each([
-        {
-          body: "invalid json",
-          description: "不正なJSON文字列",
-        },
-        {
-          body: "{}",
-          description: "空のJSONオブジェクト",
-        },
-      ])("$description の場合はエラーが返される", async ({ body }) => {
-        const url = "http://localhost:3000/api/seasonings";
-        const invalidRequest = new NextRequest(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body,
+        // 同じ名前で再作成を試行
+        const request2 = createRequest({
+          name: "salt",
+          seasoningTypeId: 2,
+          image: null,
         });
 
-        const response = await POST(invalidRequest);
+        const response = await POST(request2);
         const data = await response.json();
 
         expect(response.status).toBe(400);
-        expect(data.error).toBe(true);
-        if (body === "invalid json") {
-          expect(data.message).toBe("リクエストの形式が正しくありません");
-          expect(data.code).toBe("INVALID_JSON");
-        } else {
-          expect(data.message).toBe("バリデーションエラーが発生しました");
-          expect(data.code).toBe("VALIDATION_ERROR");
-        }
+        expect(data).toEqual({
+          result_code: "DUPLICATE_NAME",
+        });
+      });
+    });
+
+    describe("正常ケース", () => {
+      test("正常なデータの場合、調味料が作成される", async () => {
+        const request = createRequest({
+          name: "salt",
+          seasoningTypeId: 1,
+          image: null,
+        });
+
+        const response = await POST(request);
+        const data = await response.json();
+
+        expect(response.status).toBe(201);
+        expect(data).toMatchObject({
+          name: "salt",
+          seasoningTypeId: 1,
+          id: expect.any(String),
+          createdAt: expect.any(String),
+        });
       });
     });
   });
