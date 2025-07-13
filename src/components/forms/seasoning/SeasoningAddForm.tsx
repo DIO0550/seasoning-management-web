@@ -7,10 +7,7 @@ import { SubmitButton } from "@/components/elements/buttons/SubmitButton";
 import { useSeasoningNameInput } from "@/hooks/useSeasoningNameInput";
 import { useSeasoningTypeInput } from "@/hooks/useSeasoningTypeInput";
 import { useSeasoningImageInput } from "@/hooks/useSeasoningImageInput";
-import {
-  useSeasoningSubmit,
-  FormData,
-} from "@/hooks/useSeasoningSubmit";
+import { useSeasoningSubmit, FormData } from "@/hooks/useSeasoningSubmit";
 import { VALIDATION_CONSTANTS } from "@/constants/validation";
 
 /**
@@ -57,14 +54,13 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
   const formData = { image: seasoningImage.value };
 
   // フォーム送信用のカスタムフック
-  const { submit, isSubmitting, errors, isFormValid } =
-    useSeasoningSubmit(
-      seasoningName,
-      seasoningType,
-      formData,
-      onSubmit,
-      () => seasoningImage.reset() // リセット時に画像フックをリセット
-    );
+  const { submit, isSubmitting, errors, isFormValid } = useSeasoningSubmit(
+    seasoningName,
+    seasoningType,
+    formData,
+    onSubmit,
+    () => seasoningImage.reset() // リセット時に画像フックをリセット
+  );
 
   /**
    * ファイル入力変更時のハンドラー
@@ -105,7 +101,9 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
         maxLength={VALIDATION_CONSTANTS.NAME_MAX_LENGTH}
         required={true}
         errorMessage={seasoningName.error !== "NONE" ? seasoningName.error : ""}
-        aria-describedby={seasoningName.error !== "NONE" ? "name-error" : undefined}
+        aria-describedby={
+          seasoningName.error !== "NONE" ? "name-error" : undefined
+        }
       />
 
       {/* 種類フィールド */}
@@ -119,7 +117,9 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
         options={SEASONING_TYPES}
         required={true}
         errorMessage={seasoningType.error !== "NONE" ? seasoningType.error : ""}
-        aria-describedby={seasoningType.error !== "NONE" ? "type-error" : undefined}
+        aria-describedby={
+          seasoningType.error !== "NONE" ? "type-error" : undefined
+        }
       />
 
       {/* 画像フィールド */}
@@ -130,9 +130,9 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
         onChange={handleFileChange}
         accept={VALIDATION_CONSTANTS.IMAGE_VALID_TYPES.join(",")}
         errorMessage={
-          seasoningImage.error !== "NONE" 
+          seasoningImage.error !== "NONE"
             ? seasoningImage.error
-            : errors.image !== "NONE" 
+            : errors.image !== "NONE"
             ? errors.image
             : ""
         }
