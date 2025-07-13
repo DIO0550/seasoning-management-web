@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { seasoningAddRequestSchema } from "@/types/api/seasoning/add/schemas";
 import type { ErrorResponse } from "@/types/api/common/types";
+import type { SeasoningAddErrorCode } from "@/types/api/seasoning/add/types";
 
 // 調味料の型定義（新しい形式）
 interface Seasoning {
@@ -40,18 +41,24 @@ export async function POST(request: NextRequest) {
     const validationResult = seasoningAddRequestSchema.safeParse(body);
 
     if (!validationResult.success) {
-      // 詳細なバリデーションエラーを生成
-      const details: Record<string, string> = {};
-      validationResult.error.issues.forEach((issue) => {
-        const path = issue.path.join(".");
-        details[path] = issue.message;
-      });
+      // バリデーションエラーの種類に応じて適切なエラーコードを決定
+      const firstError = validationResult.error.issues[0];
+      let errorCode: SeasoningAddErrorCode = "VALIDATION_ERROR_NAME_REQUIRED";
 
-      const errorResponse: ErrorResponse = {
-        error: true,
-        message: "バリデーションエラーが発生しました",
-        code: "VALIDATION_ERROR",
-        details,
+      if (firstError.path.includes("name")) {
+        if (firstError.code === "too_small") {
+          errorCode = "VALIDATION_ERROR_NAME_REQUIRED";
+        } else if (firstError.code === "too_big") {
+          errorCode = "VALIDATION_ERROR_NAME_TOO_LONG";
+        } else if (firstError.code === "custom") {
+          errorCode = "VALIDATION_ERROR_NAME_INVALID_FORMAT";
+        }
+      } else if (firstError.path.includes("seasoningTypeId")) {
+        errorCode = "VALIDATION_ERROR_TYPE_REQUIRED";
+      }
+
+      const errorResponse: ErrorResponse<SeasoningAddErrorCode> = {
+        result_code: errorCode,
       };
 
       return NextResponse.json(errorResponse, { status: 400 });
@@ -62,10 +69,8 @@ export async function POST(request: NextRequest) {
     // 重複チェック（名前が同じものがないかチェック）
     const existingSeasoning = seasonings.find((s) => s.name === name);
     if (existingSeasoning) {
-      const errorResponse: ErrorResponse = {
-        error: true,
-        message: "この調味料名は既に登録されています",
-        code: "DUPLICATE_NAME",
+      const errorResponse: ErrorResponse<SeasoningAddErrorCode> = {
+        result_code: "DUPLICATE_NAME",
       };
 
       return NextResponse.json(errorResponse, { status: 400 });
@@ -89,18 +94,14 @@ export async function POST(request: NextRequest) {
 
     // JSON解析エラーなどの場合
     if (error instanceof SyntaxError) {
-      const errorResponse: ErrorResponse = {
-        error: true,
-        message: "リクエストの形式が正しくありません",
-        code: "INVALID_JSON",
+      const errorResponse: ErrorResponse<SeasoningAddErrorCode> = {
+        result_code: "INTERNAL_ERROR",
       };
       return NextResponse.json(errorResponse, { status: 400 });
     }
 
-    const errorResponse: ErrorResponse = {
-      error: true,
-      message: "システムエラーが発生しました",
-      code: "INTERNAL_ERROR",
+    const errorResponse: ErrorResponse<SeasoningAddErrorCode> = {
+      result_code: "INTERNAL_ERROR",
     };
     return NextResponse.json(errorResponse, { status: 500 });
   }
