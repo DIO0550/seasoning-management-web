@@ -57,7 +57,7 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
   const formData = { image: seasoningImage.value };
 
   // フォーム送信用のカスタムフック
-  const { submit, isSubmitting, errors, isFormValid, setImageError } =
+  const { submit, isSubmitting, errors, isFormValid } =
     useSeasoningSubmit(
       seasoningName,
       seasoningType,
@@ -75,10 +75,7 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
     const file = e.target.files?.[0] || null;
     seasoningImage.onChange(file);
 
-    // カスタムフックのエラーを外部エラーに同期
-    if (seasoningImage.error) {
-      setImageError(seasoningImage.error);
-    }
+    // 画像バリデーションは内部で処理されるため、ここではsetImageErrorは不要
   };
 
   return (
@@ -92,7 +89,9 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
       aria-label="調味料追加フォーム"
     >
       {/* 全般的なエラーメッセージ */}
-      {errors.general ? <ErrorMessage message={errors.general} /> : null}
+      {errors.general && errors.general !== "NONE" ? (
+        <ErrorMessage message={errors.general} />
+      ) : null}
 
       {/* 名前フィールド */}
       <TextInput
@@ -105,8 +104,8 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
         placeholder="調味料名を入力"
         maxLength={VALIDATION_CONSTANTS.NAME_MAX_LENGTH}
         required={true}
-        errorMessage={seasoningName.error}
-        aria-describedby={seasoningName.error ? "name-error" : undefined}
+        errorMessage={seasoningName.error !== "NONE" ? seasoningName.error : ""}
+        aria-describedby={seasoningName.error !== "NONE" ? "name-error" : undefined}
       />
 
       {/* 種類フィールド */}
@@ -119,8 +118,8 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
         onBlur={seasoningType.onBlur}
         options={SEASONING_TYPES}
         required={true}
-        errorMessage={seasoningType.error}
-        aria-describedby={seasoningType.error ? "type-error" : undefined}
+        errorMessage={seasoningType.error !== "NONE" ? seasoningType.error : ""}
+        aria-describedby={seasoningType.error !== "NONE" ? "type-error" : undefined}
       />
 
       {/* 画像フィールド */}
@@ -130,10 +129,18 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
         label="調味料の画像"
         onChange={handleFileChange}
         accept={VALIDATION_CONSTANTS.IMAGE_VALID_TYPES.join(",")}
-        errorMessage={seasoningImage.error || errors.image}
+        errorMessage={
+          seasoningImage.error !== "NONE" 
+            ? seasoningImage.error
+            : errors.image !== "NONE" 
+            ? errors.image
+            : ""
+        }
         helperText={`JPEG または PNG 形式、${VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_MB}MB以下`}
         aria-describedby={
-          seasoningImage.error || errors.image ? "image-error" : "image-help"
+          seasoningImage.error !== "NONE" || errors.image !== "NONE"
+            ? "image-error"
+            : "image-help"
         }
       />
 
