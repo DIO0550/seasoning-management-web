@@ -1,8 +1,8 @@
-import type { ImageValidationError } from "@/features/seasoning/../../utils/imageValidation";
+import type { ImageValidationError } from "@/utils/imageValidation";
 import {
   VALIDATION_CONSTANTS,
   VALIDATION_ERROR_MESSAGES,
-} from "@/features/seasoning/../../constants/validation";
+} from "@/constants/validation";
 
 /**
  * 画像バリデーションエラーのメッセージ表示

@@ -1,5 +1,3 @@
-import { validateTemplateName } from "@/utils/templateNameValidation";
-
 /**
  * テンプレート名のバリデーションメッセージを取得する
  * @param name - バリデーション対象のテンプレート名
