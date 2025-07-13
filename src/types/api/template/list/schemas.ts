@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { successResponseSchema, paginationSchema } from "@/types/api/template/../common/schemas";
+import { successResponseSchema, paginationSchema } from "@/types/api/common/schemas";
 
 /**
  * テンプレート一覧クエリパラメータのスキーマ

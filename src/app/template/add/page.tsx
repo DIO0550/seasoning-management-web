@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { TemplateAddForm } from "@/app/template/../../components/forms/template/TemplateAddForm";
-import { TemplateFormData } from "@/app/template/../../hooks/useTemplateSubmit";
+import { TemplateAddForm } from "@/components/forms/template/TemplateAddForm";
+import { TemplateFormData } from "@/hooks/useTemplateSubmit";
 
 /**
  * テンプレート追加ページコンポーネント
