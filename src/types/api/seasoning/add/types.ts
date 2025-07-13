@@ -3,7 +3,7 @@ import {
   seasoningAddRequestSchema,
   seasoningAddResponseSchema,
 } from "@/types/api/seasoning/add/schemas";
-import type { ApiResponse } from "@/types/api/seasoning/../common/types";
+import type { ApiResponse } from "@/types/api/common/types";
 
 /**
  * 調味料追加リクエストの型

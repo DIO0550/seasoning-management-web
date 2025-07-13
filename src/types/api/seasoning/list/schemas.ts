@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { successResponseSchema, paginationSchema } from "@/types/api/seasoning/../common/schemas";
+import { successResponseSchema, paginationSchema } from "@/types/api/common/schemas";
 
 /**
  * 調味料一覧クエリパラメータのスキーマ

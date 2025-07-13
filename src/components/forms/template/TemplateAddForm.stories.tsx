@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { TemplateAddForm } from "@/components/forms/template/TemplateAddForm";
-import { TemplateFormData } from "@/components/forms/../../hooks/useTemplateSubmit";
+import { TemplateFormData } from "@/hooks/useTemplateSubmit";
 
 const meta: Meta<typeof TemplateAddForm> = {
   title: "Forms/Template/TemplateAddForm",
