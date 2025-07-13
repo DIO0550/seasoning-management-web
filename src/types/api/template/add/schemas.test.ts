@@ -80,7 +80,7 @@ describe("Template Add API Schemas", () => {
   describe("templateAddResponseSchema", () => {
     test("有効なテンプレート追加レスポンスを受け入れる", () => {
       const validResponse = {
-        success: true,
+        result_code: "OK",
         data: {
           id: 1,
           name: "和食の基本",
@@ -113,7 +113,7 @@ describe("Template Add API Schemas", () => {
 
     test("descriptionがnullのレスポンスを受け入れる", () => {
       const validResponse = {
-        success: true,
+        result_code: "OK",
         data: {
           id: 1,
           name: "和食の基本",
@@ -139,7 +139,7 @@ describe("Template Add API Schemas", () => {
 
     test("successがfalseの場合にバリデーションエラーになる", () => {
       const invalidResponse = {
-        success: false,
+        result_code: "ERROR",
         data: {
           id: 1,
           name: "和食の基本",

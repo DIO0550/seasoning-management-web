@@ -65,7 +65,7 @@ describe("Seasoning List API Schemas", () => {
   describe("seasoningListResponseSchema", () => {
     test("有効な調味料一覧レスポンスを受け入れる", () => {
       const validResponse = {
-        success: true,
+        result_code: "OK",
         data: {
           items: [
             {
@@ -94,7 +94,7 @@ describe("Seasoning List API Schemas", () => {
 
     test("空の一覧レスポンスを受け入れる", () => {
       const validResponse = {
-        success: true,
+        result_code: "OK",
         data: {
           items: [],
           pagination: {
@@ -113,7 +113,7 @@ describe("Seasoning List API Schemas", () => {
 
     test("successがfalseの場合にバリデーションエラーになる", () => {
       const invalidResponse = {
-        success: false,
+        result_code: "ERROR",
         data: {
           items: [],
           pagination: {
