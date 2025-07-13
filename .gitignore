@@ -42,3 +42,6 @@ next-env.d.ts
 
 # storybook
 storybook-static
+
+# temporary scripts
+fix_imports.sh
