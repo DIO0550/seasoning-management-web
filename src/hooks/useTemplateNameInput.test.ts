@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { useTemplateNameInput } from "./useTemplateNameInput";
+import { useTemplateNameInput } from "@/hooks/useTemplateNameInput";
 
 describe("useTemplateNameInput", () => {
   test("初期値が空文字である", () => {

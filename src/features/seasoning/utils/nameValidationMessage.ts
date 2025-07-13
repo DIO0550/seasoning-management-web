@@ -1,8 +1,8 @@
-import type { NameValidationError } from "../../../utils/nameValidation";
+import type { NameValidationError } from "@/utils/nameValidation";
 import {
   VALIDATION_CONSTANTS,
   VALIDATION_ERROR_MESSAGES,
-} from "../../../constants/validation";
+} from "@/constants/validation";
 
 /**
  * 調味料名バリデーションエラーのメッセージ表示

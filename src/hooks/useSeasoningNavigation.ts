@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-import { SEASONING_PAGE_PATHS } from "../constants/pagePaths";
+import { SEASONING_PAGE_PATHS } from "@/constants/pagePaths";
 
 /**
  * 調味料関連の画面遷移を管理するカスタムフック

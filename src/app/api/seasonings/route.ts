@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { seasoningAddRequestSchema } from "../../../types/api/seasoning/add/schemas";
-import type { ErrorResponse } from "../../../types/api/common/types";
+import { seasoningAddRequestSchema } from "@/types/api/seasoning/add/schemas";
+import type { ErrorResponse } from "@/types/api/common/types";
 
 // 調味料の型定義（新しい形式）
 interface Seasoning {

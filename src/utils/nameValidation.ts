@@ -1,4 +1,4 @@
-import { VALIDATION_CONSTANTS } from "../constants/validation";
+import { VALIDATION_CONSTANTS } from "@/constants/validation";
 
 /**
  * 調味料名バリデーションエラーの種類

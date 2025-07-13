@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { successResponseSchema } from "../../common/schemas";
+import { successResponseSchema } from "@/types/api/common/schemas";
 
 /**
  * テンプレート追加リクエストのスキーマ

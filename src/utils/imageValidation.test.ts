@@ -3,7 +3,7 @@ import {
   isValidImageType,
   isValidImageSize,
   validateImage,
-} from "./imageValidation";
+} from "@/utils/imageValidation";
 
 describe("isValidImageType", () => {
   test("JPEG形式のファイルは有効である", () => {
