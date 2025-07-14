@@ -1,7 +1,4 @@
-import { ZodError } from "zod";
-
-// Zodエラーコードの型定義
-type ZodErrorCode = "too_small" | "too_big" | "custom" | "invalid_type";
+import { ZodError, ZodIssue, ZodIssueCode } from "zod";
 
 // フィールド名の型定義
 type FieldName = "name" | "seasoningTypeId" | "image";
@@ -58,7 +55,7 @@ export const SeasoningAddErrorCode = {
  * nameフィールドのZodエラーコードに対応する調味料APIエラーコード
  */
 const nameFieldErrorCode = (
-  zodErrorCode: ZodErrorCode
+  zodErrorCode: ZodIssueCode
 ): SeasoningAddErrorCode => {
   switch (zodErrorCode) {
     case "too_small":
@@ -76,7 +73,7 @@ const nameFieldErrorCode = (
  * seasoningTypeIdフィールドのZodエラーコードに対応する調味料APIエラーコード
  */
 const seasoningTypeIdFieldErrorCode = (
-  zodErrorCode: ZodErrorCode
+  zodErrorCode: ZodIssueCode
 ): SeasoningAddErrorCode => {
   switch (zodErrorCode) {
     case "invalid_type":
@@ -91,7 +88,7 @@ const seasoningTypeIdFieldErrorCode = (
  * imageフィールドのZodエラーコードに対応する調味料APIエラーコード
  */
 const imageFieldErrorCode = (
-  zodErrorCode: ZodErrorCode
+  zodErrorCode: ZodIssueCode
 ): SeasoningAddErrorCode => {
   switch (zodErrorCode) {
     case "invalid_type":
@@ -116,20 +113,18 @@ const isFieldName = (
 /**
  * ZodIssueをSeasoningAddErrorCodeに変換
  */
-const issueToErrorCode = (
-  issue: ZodError["issues"][0]
-): SeasoningAddErrorCode => {
+const issueToErrorCode = (issue: ZodIssue): SeasoningAddErrorCode => {
   // 各フィールドの変換処理
   if (isFieldName(issue.path, "name")) {
-    return nameFieldErrorCode(issue.code as ZodErrorCode);
+    return nameFieldErrorCode(issue.code);
   }
 
   if (isFieldName(issue.path, "seasoningTypeId")) {
-    return seasoningTypeIdFieldErrorCode(issue.code as ZodErrorCode);
+    return seasoningTypeIdFieldErrorCode(issue.code);
   }
 
   if (isFieldName(issue.path, "image")) {
-    return imageFieldErrorCode(issue.code as ZodErrorCode);
+    return imageFieldErrorCode(issue.code);
   }
 
   // ガード節: 未知のフィールドの場合
