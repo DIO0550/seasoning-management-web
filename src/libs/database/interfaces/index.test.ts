@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect } from "vitest";
 import {
   // エラー型
   DatabaseError,
@@ -13,10 +13,10 @@ import {
   type ConnectionConfig,
   type TransactionOptions,
   type TransactionStatus,
-} from './index';
+} from "./index";
 
-describe('Database Interfaces Index', () => {
-  test('エラー型が正しくエクスポートされている', () => {
+describe("Database Interfaces Index", () => {
+  test("エラー型が正しくエクスポートされている", () => {
     expect(DatabaseError).toBeDefined();
     expect(ConnectionError).toBeDefined();
     expect(TransactionError).toBeDefined();
@@ -24,44 +24,51 @@ describe('Database Interfaces Index', () => {
     expect(DATABASE_ERROR_CODES).toBeDefined();
   });
 
-  test('エラークラスが正しく動作する', () => {
-    const dbError = new DatabaseError('test error', 'TEST_CODE');
+  test("エラークラスが正しく動作する", () => {
+    const dbError = new DatabaseError("test error", "TEST_CODE");
     expect(dbError).toBeInstanceOf(Error);
     expect(dbError).toBeInstanceOf(DatabaseError);
-    expect(dbError.message).toBe('test error');
-    expect(dbError.code).toBe('TEST_CODE');
+    expect(dbError.message).toBe("test error");
+    expect(dbError.code).toBe("TEST_CODE");
   });
 
-  test('ConnectionErrorが正しく動作する', () => {
-    const connError = new ConnectionError('connection failed', 'CONN_FAILED');
+  test("ConnectionErrorが正しく動作する", () => {
+    const connError = new ConnectionError("connection failed", "CONN_FAILED");
     expect(connError).toBeInstanceOf(DatabaseError);
     expect(connError).toBeInstanceOf(ConnectionError);
-    expect(connError.name).toBe('ConnectionError');
+    expect(connError.name).toBe("ConnectionError");
   });
 
-  test('TransactionErrorが正しく動作する', () => {
-    const txError = new TransactionError('transaction failed', 'TX_FAILED');
+  test("TransactionErrorが正しく動作する", () => {
+    const txError = new TransactionError("transaction failed", "TX_FAILED");
     expect(txError).toBeInstanceOf(DatabaseError);
     expect(txError).toBeInstanceOf(TransactionError);
-    expect(txError.name).toBe('TransactionError');
+    expect(txError.name).toBe("TransactionError");
   });
 
-  test('QueryErrorが正しく動作する', () => {
-    const queryError = new QueryError('query failed', 'QUERY_FAILED', undefined, 'SELECT * FROM test');
+  test("QueryErrorが正しく動作する", () => {
+    const queryError = new QueryError(
+      "query failed",
+      "QUERY_FAILED",
+      undefined,
+      "SELECT * FROM test"
+    );
     expect(queryError).toBeInstanceOf(DatabaseError);
     expect(queryError).toBeInstanceOf(QueryError);
-    expect(queryError.name).toBe('QueryError');
-    expect(queryError.sql).toBe('SELECT * FROM test');
+    expect(queryError.name).toBe("QueryError");
+    expect(queryError.sql).toBe("SELECT * FROM test");
   });
 
-  test('エラーコード定数が定義されている', () => {
-    expect(DATABASE_ERROR_CODES.CONNECTION_FAILED).toBe('CONNECTION_FAILED');
-    expect(DATABASE_ERROR_CODES.TRANSACTION_BEGIN_FAILED).toBe('TRANSACTION_BEGIN_FAILED');
-    expect(DATABASE_ERROR_CODES.SQL_SYNTAX_ERROR).toBe('SQL_SYNTAX_ERROR');
-    expect(DATABASE_ERROR_CODES.UNKNOWN_ERROR).toBe('UNKNOWN_ERROR');
+  test("エラーコード定数が定義されている", () => {
+    expect(DATABASE_ERROR_CODES.CONNECTION_FAILED).toBe("CONNECTION_FAILED");
+    expect(DATABASE_ERROR_CODES.TRANSACTION_BEGIN_FAILED).toBe(
+      "TRANSACTION_BEGIN_FAILED"
+    );
+    expect(DATABASE_ERROR_CODES.SQL_SYNTAX_ERROR).toBe("SQL_SYNTAX_ERROR");
+    expect(DATABASE_ERROR_CODES.UNKNOWN_ERROR).toBe("UNKNOWN_ERROR");
   });
 
-  test('型定義が正しくエクスポートされている', () => {
+  test("型定義が正しくエクスポートされている", () => {
     // TypeScriptの型チェック用
     // 実際の実行時テストではないが、型の存在確認として有効
     const typeCheck = {

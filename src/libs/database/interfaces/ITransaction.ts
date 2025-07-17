@@ -46,7 +46,11 @@ export interface TransactionOptions {
   /**
    * 分離レベル
    */
-  isolationLevel?: 'READ_UNCOMMITTED' | 'READ_COMMITTED' | 'REPEATABLE_READ' | 'SERIALIZABLE';
+  isolationLevel?:
+    | "READ_UNCOMMITTED"
+    | "READ_COMMITTED"
+    | "REPEATABLE_READ"
+    | "SERIALIZABLE";
 
   /**
    * 読み取り専用トランザクションかどうか
@@ -57,9 +61,9 @@ export interface TransactionOptions {
 /**
  * トランザクション状態
  */
-export type TransactionStatus = 
-  | 'INACTIVE'    // 非アクティブ
-  | 'ACTIVE'      // アクティブ
-  | 'COMMITTED'   // コミット済み
-  | 'ROLLED_BACK' // ロールバック済み
-  | 'FAILED';     // 失敗
+export type TransactionStatus =
+  | "INACTIVE" // 非アクティブ
+  | "ACTIVE" // アクティブ
+  | "COMMITTED" // コミット済み
+  | "ROLLED_BACK" // ロールバック済み
+  | "FAILED"; // 失敗
