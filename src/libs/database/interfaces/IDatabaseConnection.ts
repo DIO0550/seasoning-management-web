@@ -1,4 +1,4 @@
-import type { ITransaction } from './ITransaction';
+import type { ITransaction } from "./ITransaction";
 
 /**
  * データベース接続のインターフェース
@@ -129,12 +129,14 @@ export interface ConnectionConfig {
   /**
    * SSL設定
    */
-  ssl?: boolean | {
-    ca?: string;
-    cert?: string;
-    key?: string;
-    rejectUnauthorized?: boolean;
-  };
+  ssl?:
+    | boolean
+    | {
+        ca?: string;
+        cert?: string;
+        key?: string;
+        rejectUnauthorized?: boolean;
+      };
 
   /**
    * 追加オプション
