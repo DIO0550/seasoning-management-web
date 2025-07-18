@@ -33,3 +33,12 @@ export type {
 
 // エラー型の型定義も再エクスポート
 export type { DatabaseErrorCode } from "./types/DatabaseErrors";
+
+// 共通型定義
+export type * from "./common/types";
+
+// リポジトリインターフェース
+export type * from "./ISeasoningRepository";
+export type * from "./ISeasoningTypeRepository";
+export type * from "./ISeasoningImageRepository";
+export type * from "./ISeasoningTemplateRepository";
