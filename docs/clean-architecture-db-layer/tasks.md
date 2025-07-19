@@ -85,19 +85,19 @@
 
 #### サブタスク
 
-- [ ] `src/libs/database/mysql/connection/MySQLConnection.ts` - 接続管理クラス
-- [ ] `src/libs/database/mysql/connection/MySQLTransaction.ts` - トランザクション管理
-- [ ] `src/libs/database/mysql/types/MySQLTypes.ts` - MySQL 固有型定義
-- [ ] 接続プール設定の統合
-- [ ] 接続ヘルスチェック機能
+- [x] `src/libs/database/mysql/connection/MySQLConnection.ts` - 接続管理クラス
+- [x] `src/libs/database/mysql/connection/MySQLTransaction.ts` - トランザクション管理
+- [x] `src/libs/database/mysql/types/MySQLTypes.ts` - MySQL 固有型定義
+- [x] 接続プール設定の統合
+- [x] 接続ヘルスチェック機能
 
 #### 受け入れ基準
 
-- [ ] mysql2 との統合が完了している
-- [ ] 接続プールが正常に動作する
-- [ ] トランザクション管理が実装されている
-- [ ] エラーハンドリングが実装されている
-- [ ] ユニットテストが実装されている
+- [x] mysql2 との統合が完了している
+- [x] 接続プールが正常に動作する
+- [x] トランザクション管理が実装されている
+- [x] エラーハンドリングが実装されている
+- [x] ユニットテストが実装されている
 
 ---
 
