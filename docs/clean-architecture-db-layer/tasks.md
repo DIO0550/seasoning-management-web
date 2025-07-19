@@ -59,19 +59,19 @@
 
 #### サブタスク
 
-- [ ] `src/libs/database/interfaces/ISeasoningRepository.ts` - 調味料リポジトリ IF
-- [ ] `src/libs/database/interfaces/ISeasoningTypeRepository.ts` - 調味料種類リポジトリ IF
-- [ ] `src/libs/database/interfaces/ISeasoningImageRepository.ts` - 調味料画像リポジトリ IF
-- [ ] `src/libs/database/interfaces/ISeasoningTemplateRepository.ts` - 調味料テンプレートリポジトリ IF
-- [ ] CRUD 操作の定義
-- [ ] 検索・フィルタリング機能の定義
+- [x] `src/libs/database/interfaces/ISeasoningRepository.ts` - 調味料リポジトリ IF
+- [x] `src/libs/database/interfaces/ISeasoningTypeRepository.ts` - 調味料種類リポジトリ IF
+- [x] `src/libs/database/interfaces/ISeasoningImageRepository.ts` - 調味料画像リポジトリ IF
+- [x] `src/libs/database/interfaces/ISeasoningTemplateRepository.ts` - 調味料テンプレートリポジトリ IF
+- [x] CRUD 操作の定義
+- [x] 検索・フィルタリング機能の定義
 
 #### 受け入れ基準
 
-- [ ] 全ての CRUD 操作が定義されている
-- [ ] 型安全なメソッドシグネチャ
+- [x] 全ての CRUD 操作が定義されている
+- [x] 型安全なメソッドシグネチャ
 - [ ] GraphQL スキーマとの整合性確認
-- [ ] インターフェース仕様ドキュメント作成
+- [x] インターフェース仕様ドキュメント作成
 
 ---
 
