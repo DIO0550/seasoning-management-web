@@ -3,7 +3,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: .devcontainer/node/Dockerfile
+      dockerfile: ./node/Dockerfile
     volumes:
       - ..:/workspace:cached
     command: sleep infinity
@@ -11,6 +11,8 @@ services:
       - "3000:3000"
     depends_on:
       - db
+    networks:
+      - seasoning_management_network
 
   db:
     build:
@@ -26,6 +28,12 @@ services:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    networks:
+      - seasoning_management_network
 
 volumes:
   mysql_data:
+
+networks:
+  seasoning_management_network:
+    driver: bridge
