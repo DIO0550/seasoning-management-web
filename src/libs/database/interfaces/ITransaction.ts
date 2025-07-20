@@ -1,13 +1,18 @@
+import type { QueryResult } from "./IDatabaseConnection";
+
 /**
  * データベーストランザクションのインターフェース
  * クリーンアーキテクチャに基づき、具体的なDB実装に依存しない抽象的なトランザクション操作を定義
  */
 export interface ITransaction {
   /**
-   * トランザクションを開始する
-   * @throws {TransactionError} トランザクション開始に失敗した場合
+   * トランザクション内でSQLクエリを実行する
+   * @param sql 実行するSQL文
+   * @param params パラメータ
+   * @returns クエリ結果
+   * @throws {TransactionError} クエリ実行に失敗した場合
    */
-  begin(): Promise<void>;
+  query<T = unknown>(sql: string, params?: unknown[]): Promise<QueryResult<T>>;
 
   /**
    * トランザクションをコミットする
@@ -20,18 +25,6 @@ export interface ITransaction {
    * @throws {TransactionError} ロールバックに失敗した場合
    */
   rollback(): Promise<void>;
-
-  /**
-   * トランザクションがアクティブかどうかを確認する
-   * @returns トランザクションがアクティブな場合はtrue
-   */
-  isActive(): boolean;
-
-  /**
-   * トランザクションの一意識別子を取得する
-   * @returns トランザクションID
-   */
-  getId(): string;
 }
 
 /**
@@ -57,13 +50,3 @@ export interface TransactionOptions {
    */
   readOnly?: boolean;
 }
-
-/**
- * トランザクション状態
- */
-export type TransactionStatus =
-  | "INACTIVE" // 非アクティブ
-  | "ACTIVE" // アクティブ
-  | "COMMITTED" // コミット済み
-  | "ROLLED_BACK" // ロールバック済み
-  | "FAILED"; // 失敗

@@ -78,6 +78,43 @@ export interface QueryResult<T = unknown> {
 }
 
 /**
+ * QueryResultのコンパニオンオブジェクト
+ */
+export const QueryResult = {
+  /**
+   * 空のQueryResultを作成
+   */
+  empty<T = unknown>(): QueryResult<T> {
+    return {
+      rows: [],
+      rowsAffected: 0,
+      insertId: null,
+    };
+  },
+
+  /**
+   * MySQL結果からQueryResultを作成
+   */
+  fromMySQL<T = unknown>(mysqlResult: {
+    rows: T[];
+    affectedRows: number;
+    insertId: number;
+    changedRows: number;
+    warningCount: number;
+  }): QueryResult<T> {
+    return {
+      rows: mysqlResult.rows,
+      rowsAffected: mysqlResult.affectedRows,
+      insertId: mysqlResult.insertId === 0 ? null : mysqlResult.insertId,
+      metadata: {
+        changedRows: mysqlResult.changedRows,
+        warningCount: mysqlResult.warningCount,
+      },
+    };
+  },
+} as const;
+
+/**
  * データベース接続設定
  */
 export interface ConnectionConfig {
