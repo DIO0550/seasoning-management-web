@@ -109,19 +109,19 @@
 
 #### サブタスク
 
-- [ ] `src/libs/database/mysql/repositories/MySQLSeasoningRepository.ts` 実装
-- [ ] CRUD 操作の実装（create, read, update, delete）
-- [ ] 検索機能の実装（名前、種類、期限での検索）
-- [ ] ページネーション機能
-- [ ] SQL クエリの最適化
+- [x] `src/libs/database/mysql/repositories/MySQLSeasoningRepository.ts` 実装
+- [x] CRUD 操作の実装（create, read, update, delete）
+- [x] 検索機能の実装（名前、種類、期限での検索）
+- [x] ページネーション機能
+- [x] SQL クエリの最適化
 
 #### 受け入れ基準
 
-- [ ] 全 CRUD 操作が動作する
-- [ ] SQL インジェクション対策済み
-- [ ] エラーハンドリングが適切
-- [ ] ユニットテストが実装されている
-- [ ] 統合テストが実装されている
+- [x] 全 CRUD 操作が動作する
+- [x] SQL インジェクション対策済み
+- [x] エラーハンドリングが適切
+- [x] ユニットテストが実装されている
+- [x] 統合テストが実装されている
 
 ---
 
