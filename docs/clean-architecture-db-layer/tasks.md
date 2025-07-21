@@ -154,16 +154,16 @@
 
 #### サブタスク
 
-- [ ] `src/libs/database/mysql/repositories/MySQLSeasoningImageRepository.ts` 実装
-- [ ] 画像メタデータの CRUD 操作
-- [ ] UUID 管理機能
-- [ ] ファイルパス生成機能
+- [x] `src/libs/database/mysql/repositories/MySQLSeasoningImageRepository.ts` 実装
+- [x] 画像メタデータの CRUD 操作
+- [x] UUID 管理機能
+- [x] ファイルパス生成機能
 
 #### 受け入れ基準
 
-- [ ] 画像メタデータ管理が動作する
-- [ ] UUID 生成・管理が正常動作
-- [ ] ユニットテスト・統合テストが完了
+- [x] 画像メタデータ管理が動作する
+- [x] UUID 生成・管理が正常動作
+- [x] ユニットテスト・統合テストが完了
 
 ---
 
