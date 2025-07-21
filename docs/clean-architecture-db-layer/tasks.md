@@ -133,16 +133,16 @@
 
 #### サブタスク
 
-- [ ] `src/libs/database/mysql/repositories/MySQLSeasoningTypeRepository.ts` 実装
-- [ ] CRUD 操作の実装
-- [ ] 名前での検索機能
-- [ ] 重複チェック機能
+- [x] `src/libs/database/mysql/repositories/MySQLSeasoningTypeRepository.ts` 実装
+- [x] CRUD 操作の実装
+- [x] 名前での検索機能
+- [x] 重複チェック機能
 
 #### 受け入れ基準
 
-- [ ] 全 CRUD 操作が動作する
-- [ ] 重複チェックが実装されている
-- [ ] ユニットテスト・統合テストが完了
+- [x] 全 CRUD 操作が動作する
+- [x] 重複チェックが実装されている
+- [x] ユニットテスト・統合テストが完了
 
 ---
 
