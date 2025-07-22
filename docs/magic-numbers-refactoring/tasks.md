@@ -14,18 +14,18 @@
 
 #### サブタスク
 
-- [ ] `src/constants/validation/nameValidation.ts` - 名前系バリデーション定数の作成
-- [ ] 調味料名の文字数制限定数 (20 文字)
-- [ ] テンプレート名の文字数制限定数 (20 文字)
-- [ ] 調味料種類名の文字数制限定数 (50 文字)
-- [ ] 型定義と JSDoc コメントの追加
+- [x] `src/constants/validation/nameValidation.ts` - 名前系バリデーション定数の作成
+- [x] 調味料名の文字数制限定数 (20 文字)
+- [x] テンプレート名の文字数制限定数 (20 文字)
+- [x] 調味料種類名の文字数制限定数 (50 文字)
+- [x] 型定義と JSDoc コメントの追加
 
 #### 受け入れ基準
 
-- [ ] 名前系の全てのマジックナンバーが定数化されている
-- [ ] TypeScript の型安全性が確保されている
-- [ ] 適切な JSDoc コメントが記述されている
-- [ ] エクスポート形式が統一されている
+- [x] 名前系の全てのマジックナンバーが定数化されている
+- [x] TypeScript の型安全性が確保されている
+- [x] 適切な JSDoc コメントが記述されている
+- [x] エクスポート形式が統一されている
 
 ---
 
@@ -37,15 +37,15 @@
 
 #### サブタスク
 
-- [ ] `src/constants/validation/descriptionValidation.ts` - 説明系バリデーション定数の作成
-- [ ] テンプレート説明の文字数制限定数 (200 文字)
-- [ ] 型定義と JSDoc コメントの追加
+- [x] `src/constants/validation/descriptionValidation.ts` - 説明系バリデーション定数の作成
+- [x] テンプレート説明の文字数制限定数 (200 文字)
+- [x] 型定義と JSDoc コメントの追加
 
 #### 受け入れ基準
 
-- [ ] 説明系の全てのマジックナンバーが定数化されている
-- [ ] TypeScript の型安全性が確保されている
-- [ ] 適切な JSDoc コメントが記述されている
+- [x] 説明系の全てのマジックナンバーが定数化されている
+- [x] TypeScript の型安全性が確保されている
+- [x] 適切な JSDoc コメントが記述されている
 
 ---
 
@@ -57,16 +57,16 @@
 
 #### サブタスク
 
-- [ ] `src/constants/validation/imageValidation.ts` - 画像系バリデーション定数の作成
-- [ ] 画像サイズ制限定数 (5MB)
-- [ ] バイト換算定数 (1024)
-- [ ] 型定義と JSDoc コメントの追加
+- [x] `src/constants/validation/imageValidation.ts` - 画像系バリデーション定数の作成
+- [x] 画像サイズ制限定数 (5MB)
+- [x] バイト換算定数 (1024)
+- [x] 型定義と JSDoc コメントの追加
 
 #### 受け入れ基準
 
-- [ ] 画像系の全てのマジックナンバーが定数化されている
-- [ ] MB・バイト変換の計算が定数化されている
-- [ ] TypeScript の型安全性が確保されている
+- [x] 画像系の全てのマジックナンバーが定数化されている
+- [x] MB・バイト変換の計算が定数化されている
+- [x] TypeScript の型安全性が確保されている
 
 ---
 
@@ -78,19 +78,19 @@
 
 #### サブタスク
 
-- [ ] `src/features/template/utils/nameValidationMessage.ts` - 新定数の適用
-- [ ] `src/features/template/utils/descriptionValidationMessage.ts` - 新定数の適用
-- [ ] `src/utils/seasoningTypeNameValidation.ts` - 新定数の適用
-- [ ] `src/utils/templateNameValidation.ts` - 新定数の適用
-- [ ] `src/utils/templateDescriptionValidation.ts` - 新定数の適用
-- [ ] インポート文の追加と整理
+- [x] `src/features/template/utils/nameValidationMessage.ts` - 新定数の適用
+- [x] `src/features/template/utils/descriptionValidationMessage.ts` - 新定数の適用
+- [x] `src/utils/seasoningTypeNameValidation.ts` - 新定数の適用
+- [x] `src/utils/templateNameValidation.ts` - 新定数の適用
+- [x] `src/utils/templateDescriptionValidation.ts` - 新定数の適用
+- [x] インポート文の追加と整理
 
 #### 受け入れ基準
 
-- [ ] 全対象ファイルでマジックナンバーが除去されている
-- [ ] 新しい定数が正しくインポートされている
-- [ ] 既存機能に影響がない
-- [ ] テストが正常に通る
+- [x] 全対象ファイルでマジックナンバーが除去されている
+- [x] 新しい定数が正しくインポートされている
+- [x] 既存機能に影響がない
+- [x] テストが正常に通る
 
 ---
 
