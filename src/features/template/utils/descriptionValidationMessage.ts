@@ -1,3 +1,5 @@
+import { TEMPLATE_DESCRIPTION_MAX_LENGTH } from "@/constants/validation/descriptionValidation";
+
 /**
  * テンプレート説明のバリデーションメッセージを取得する
  * @param description - バリデーション対象のテンプレート説明
@@ -6,6 +8,7 @@
 export const getTemplateDescriptionValidationMessage = (
   description: string
 ): string => {
-  if (description.length > 200) return "説明は200文字以内で入力してください。";
+  if (description.length > TEMPLATE_DESCRIPTION_MAX_LENGTH)
+    return `説明は${TEMPLATE_DESCRIPTION_MAX_LENGTH}文字以内で入力してください。`;
   return "";
 };

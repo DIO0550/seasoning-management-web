@@ -1,7 +1,4 @@
-/**
- * 調味料の種類名の最大文字数
- */
-const MAX_SEASONING_TYPE_NAME_LENGTH = 50;
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
 
 /**
  * 調味料の種類名バリデーションエラーの種類
@@ -24,7 +21,7 @@ export const validateSeasoningTypeName = (
     return "REQUIRED";
   }
 
-  if (name.trim().length > MAX_SEASONING_TYPE_NAME_LENGTH) {
+  if (name.trim().length > SEASONING_TYPE_NAME_MAX_LENGTH) {
     return "LENGTH_EXCEEDED";
   }
 

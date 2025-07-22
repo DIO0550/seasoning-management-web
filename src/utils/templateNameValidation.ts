@@ -1,7 +1,4 @@
-/**
- * テンプレート名の最大文字数
- */
-const MAX_TEMPLATE_NAME_LENGTH = 20;
+import { TEMPLATE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
 
 /**
  * テンプレート名のバリデーションを行う
@@ -10,6 +7,6 @@ const MAX_TEMPLATE_NAME_LENGTH = 20;
  */
 export const validateTemplateName = (name: string): boolean => {
   if (name.length === 0) return false;
-  if (name.length > MAX_TEMPLATE_NAME_LENGTH) return false;
+  if (name.length > TEMPLATE_NAME_MAX_LENGTH) return false;
   return true;
 };
