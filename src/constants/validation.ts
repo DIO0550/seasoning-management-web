@@ -1,13 +1,19 @@
+import { SEASONING_NAME_MAX_LENGTH } from "./validation/nameValidation";
+import {
+  IMAGE_MAX_SIZE_MB,
+  IMAGE_MAX_SIZE_BYTES,
+} from "./validation/imageValidation";
+
 /**
  * フォームバリデーション用の定数
  */
 export const VALIDATION_CONSTANTS = {
   /** 調味料名の最大文字数 */
-  NAME_MAX_LENGTH: 20,
+  NAME_MAX_LENGTH: SEASONING_NAME_MAX_LENGTH,
   /** 画像ファイルの最大サイズ（バイト） */
-  IMAGE_MAX_SIZE_BYTES: 5 * 1024 * 1024, // 5MB
+  IMAGE_MAX_SIZE_BYTES: IMAGE_MAX_SIZE_BYTES,
   /** 画像ファイルの最大サイズ（MB表示用） */
-  IMAGE_MAX_SIZE_MB: 5,
+  IMAGE_MAX_SIZE_MB: IMAGE_MAX_SIZE_MB,
   /** 許可される画像ファイル形式 */
   IMAGE_VALID_TYPES: ["image/jpeg", "image/png"] as const,
 } as const;
