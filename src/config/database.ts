@@ -4,6 +4,19 @@
  */
 
 import { env } from "@/config/environment";
+import {
+  PRODUCTION_CONNECTION_LIMIT,
+  DEVELOPMENT_CONNECTION_LIMIT,
+  TEST_CONNECTION_LIMIT,
+} from "@/constants/database/connectionLimits";
+import {
+  PRODUCTION_ACQUIRE_TIMEOUT,
+  PRODUCTION_QUERY_TIMEOUT,
+  DEVELOPMENT_ACQUIRE_TIMEOUT,
+  DEVELOPMENT_QUERY_TIMEOUT,
+  TEST_ACQUIRE_TIMEOUT,
+  TEST_QUERY_TIMEOUT,
+} from "@/constants/database/timeouts";
 
 /**
  * データベース接続設定の型定義
@@ -31,9 +44,9 @@ const PRODUCTION_DB_CONFIG: DatabaseConfig = {
   user: env.DATABASE_USER,
   password: env.DATABASE_PASSWORD,
   database: env.DATABASE_NAME,
-  connectionLimit: 10,
-  acquireTimeout: 60000,
-  timeout: 60000,
+  connectionLimit: PRODUCTION_CONNECTION_LIMIT,
+  acquireTimeout: PRODUCTION_ACQUIRE_TIMEOUT,
+  timeout: PRODUCTION_QUERY_TIMEOUT,
   reconnect: true,
   charset: "utf8mb4",
   timezone: "+00:00",
@@ -44,9 +57,9 @@ const PRODUCTION_DB_CONFIG: DatabaseConfig = {
  */
 const DEVELOPMENT_DB_CONFIG: DatabaseConfig = {
   ...PRODUCTION_DB_CONFIG,
-  connectionLimit: 5,
-  acquireTimeout: 30000,
-  timeout: 30000,
+  connectionLimit: DEVELOPMENT_CONNECTION_LIMIT,
+  acquireTimeout: DEVELOPMENT_ACQUIRE_TIMEOUT,
+  timeout: DEVELOPMENT_QUERY_TIMEOUT,
 };
 
 /**
@@ -55,7 +68,9 @@ const DEVELOPMENT_DB_CONFIG: DatabaseConfig = {
 const TEST_DB_CONFIG: DatabaseConfig = {
   ...DEVELOPMENT_DB_CONFIG,
   database: `${env.DATABASE_NAME}_test`,
-  connectionLimit: 3,
+  connectionLimit: TEST_CONNECTION_LIMIT,
+  acquireTimeout: TEST_ACQUIRE_TIMEOUT,
+  timeout: TEST_QUERY_TIMEOUT,
 };
 
 /**
