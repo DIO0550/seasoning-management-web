@@ -18,6 +18,11 @@ import type {
 } from "@/libs/database/interfaces/common/types";
 import { SeasoningImage } from "@/libs/database/entities/SeasoningImage";
 import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
+import {
+  DEFAULT_PAGE_NUMBER,
+  SEASONING_IMAGE_PAGE_SIZE,
+  calculateOffset,
+} from "@/constants/pagination";
 
 /**
  * データベースから取得した生データの型定義
@@ -102,9 +107,9 @@ export class MySQLSeasoningImageRepository
   async findAll(
     options?: SeasoningImageSearchOptions
   ): Promise<PaginatedResult<SeasoningImage>> {
-    const page = options?.pagination?.page ?? 1;
-    const limit = options?.pagination?.limit ?? 20;
-    const offset = (page - 1) * limit;
+    const page = options?.pagination?.page ?? DEFAULT_PAGE_NUMBER;
+    const limit = options?.pagination?.limit ?? SEASONING_IMAGE_PAGE_SIZE;
+    const offset = calculateOffset(page, limit);
 
     let whereClause = "";
     const params: unknown[] = [];

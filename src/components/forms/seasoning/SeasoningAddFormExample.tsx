@@ -1,5 +1,6 @@
-import React from 'react';
-import { SeasoningAddForm } from '@/components/forms/seasoning/SeasoningAddForm';
+import React from "react";
+import { SeasoningAddForm } from "@/components/forms/seasoning/SeasoningAddForm";
+import { STORYBOOK_DELAY_MEDIUM } from "@/constants/ui";
 
 interface FormData {
   name: string;
@@ -10,17 +11,17 @@ interface FormData {
 export const SeasoningAddFormExample = (): React.JSX.Element => {
   const handleSubmit = async (data: FormData) => {
     // This would typically call an API
-    console.log('Form submitted with data:', data);
-    
+    console.log("Form submitted with data:", data);
+
     // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, STORYBOOK_DELAY_MEDIUM));
+
     // Example: Check for duplicate name
     // This would be an API call in a real application
-    if (data.name === 'salt') {
-      throw new Error('この調味料名は既に登録されています');
+    if (data.name === "salt") {
+      throw new Error("この調味料名は既に登録されています");
     }
-    
+
     // If successful, the form will be reset
   };
 

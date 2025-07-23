@@ -17,6 +17,11 @@ import type {
 } from "../../interfaces/common/types";
 import { Seasoning } from "../../entities/Seasoning";
 import type { IDatabaseConnection } from "../../interfaces/IDatabaseConnection";
+import {
+  DEFAULT_PAGE_NUMBER,
+  SEASONING_PAGE_SIZE,
+  calculateOffset,
+} from "@/constants/pagination";
 
 /**
  * データベースから取得した生データの型定義
@@ -198,9 +203,9 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
     }
 
     // ページネーション
-    const page = options?.pagination?.page || 1;
-    const limit = options?.pagination?.limit || 10;
-    const offset = (page - 1) * limit;
+    const page = options?.pagination?.page || DEFAULT_PAGE_NUMBER;
+    const limit = options?.pagination?.limit || SEASONING_PAGE_SIZE;
+    const offset = calculateOffset(page, limit);
 
     sql += ` LIMIT ? OFFSET ?`;
     params.push(limit, offset);
