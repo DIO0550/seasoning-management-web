@@ -1,12 +1,19 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { SeasoningAddForm } from '@/components/forms/seasoning/SeasoningAddForm';
-import { FormData } from '@/hooks/useSeasoningSubmit';
+import type { Meta, StoryObj } from "@storybook/react";
+import { SeasoningAddForm } from "@/components/forms/seasoning/SeasoningAddForm";
+import { FormData } from "@/hooks/useSeasoningSubmit";
+import {
+  STORYBOOK_DELAY_SHORT,
+  STORYBOOK_DELAY_MEDIUM,
+  STORYBOOK_DELAY_LONG,
+  STORYBOOK_DELAY_VERY_LONG,
+  STORYBOOK_DELAY_EXTRA_LONG,
+} from "@/constants/ui";
 
 const meta: Meta<typeof SeasoningAddForm> = {
   component: SeasoningAddForm,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   parameters: {
-    layout: 'centered',
+    layout: "centered",
   },
   decorators: [
     (Story) => (
@@ -28,9 +35,11 @@ type Story = StoryObj<typeof SeasoningAddForm>;
 export const Default: Story = {
   args: {
     onSubmit: async (data: FormData) => {
-      console.log('Form submitted:', data);
-      // 通常の送信処理をシミュレート
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log("Quick validation and submit:", data);
+      // 素早い処理をシミュレート
+      await new Promise((resolve) =>
+        setTimeout(resolve, STORYBOOK_DELAY_SHORT)
+      );
     },
   },
 };
@@ -42,10 +51,12 @@ export const Default: Story = {
 export const SuccessSubmission: Story = {
   args: {
     onSubmit: async (data: FormData) => {
-      console.log('Form submitted successfully:', data);
-      // 成功した送信処理をシミュレート
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      alert('調味料が正常に追加されました！');
+      console.log("Form submitted with success:", data);
+      // 成功時の処理をシミュレート
+      await new Promise((resolve) =>
+        setTimeout(resolve, STORYBOOK_DELAY_MEDIUM)
+      );
+      alert("調味料が正常に追加されました！");
     },
   },
 };
@@ -57,15 +68,15 @@ export const SuccessSubmission: Story = {
 export const DuplicateError: Story = {
   args: {
     onSubmit: async (data: FormData) => {
-      console.log('Checking for duplicate:', data);
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      console.log("Checking for duplicate:", data);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       // 特定の名前で重複エラーをシミュレート
-      if (data.name === '塩' || data.name === 'salt') {
-        throw new Error('この調味料名は既に登録されています');
+      if (data.name === "塩" || data.name === "salt") {
+        throw new Error("この調味料名は既に登録されています");
       }
-      
-      console.log('Form submitted successfully:', data);
+
+      console.log("Form submitted successfully:", data);
     },
   },
 };
@@ -77,11 +88,13 @@ export const DuplicateError: Story = {
 export const NetworkError: Story = {
   args: {
     onSubmit: async (data: FormData) => {
-      console.log('Attempting to submit:', data);
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
+      console.log("Attempting to submit:", data);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
       // ネットワークエラーをシミュレート
-      throw new Error('ネットワークエラーが発生しました。しばらく時間をおいてから再度お試しください。');
+      throw new Error(
+        "ネットワークエラーが発生しました。しばらく時間をおいてから再度お試しください。"
+      );
     },
   },
 };
@@ -103,10 +116,10 @@ export const WithoutSubmitHandler: Story = {
 export const LongSubmission: Story = {
   args: {
     onSubmit: async (data: FormData) => {
-      console.log('Starting long submission:', data);
+      console.log("Starting long submission:", data);
       // 長時間の送信処理をシミュレート
-      await new Promise(resolve => setTimeout(resolve, 5000));
-      console.log('Long submission completed:', data);
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      console.log("Long submission completed:", data);
     },
   },
 };
@@ -114,18 +127,18 @@ export const LongSubmission: Story = {
 /**
  * バリデーションエラーのシナリオ
  * フォームのバリデーションエラーを確認する場合
- * 
+ *
  * 注意: このストーリーは手動でフォームに無効な値を入力して
  * バリデーションエラーの表示を確認するために使用してください
  */
 export const ValidationErrors: Story = {
   args: {
     onSubmit: async (data: FormData) => {
-      console.log('Form validation test:', data);
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+      console.log("Form validation test:", data);
+      await new Promise((resolve) => setTimeout(resolve, 500));
+
       // バリデーションが通った場合の成功メッセージ
-      alert('バリデーションが正常に通りました！');
+      alert("バリデーションが正常に通りました！");
     },
   },
   parameters: {
