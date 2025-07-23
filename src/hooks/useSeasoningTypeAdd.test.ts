@@ -3,6 +3,7 @@ import { vi } from "vitest";
 import { useSeasoningTypeAdd } from "@/hooks/useSeasoningTypeAdd";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
+import { TEST_ASYNC_DELAY } from "@/constants/ui";
 
 describe("useSeasoningTypeAdd", () => {
   describe("初期状態", () => {
@@ -140,7 +141,7 @@ describe("useSeasoningTypeAdd", () => {
       // promiseを解決
       await act(async () => {
         resolvePromise();
-        await new Promise((resolve) => setTimeout(resolve, 0)); // Promiseの解決を待つ
+        await new Promise((resolve) => setTimeout(resolve, TEST_ASYNC_DELAY)); // Promiseの解決を待つ
       });
 
       expect(result.current.isSubmitting).toBe(false);
