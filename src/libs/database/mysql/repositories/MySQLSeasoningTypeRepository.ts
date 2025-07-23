@@ -15,8 +15,13 @@ import type {
   DeleteResult,
   PaginatedResult,
 } from "@/libs/database/interfaces/common/types";
-import { SeasoningType } from "@/libs/database/entities/SeasoningType";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
+import { SeasoningType } from "../../entities/SeasoningType";
+import type { IDatabaseConnection } from "../../interfaces/IDatabaseConnection";
+import {
+  DEFAULT_PAGE_NUMBER,
+  SEASONING_TYPE_PAGE_SIZE,
+  calculateOffset,
+} from "@/constants/pagination";
 
 /**
  * データベースから取得した生データの型定義
@@ -107,9 +112,9 @@ export class MySQLSeasoningTypeRepository implements ISeasoningTypeRepository {
     options?: SeasoningTypeSearchOptions
   ): Promise<PaginatedResult<SeasoningType>> {
     // デフォルト値の設定
-    const page = options?.pagination?.page || 1;
-    const limit = options?.pagination?.limit || 50;
-    const offset = (page - 1) * limit;
+    const page = options?.pagination?.page || DEFAULT_PAGE_NUMBER;
+    const limit = options?.pagination?.limit || SEASONING_TYPE_PAGE_SIZE;
+    const offset = calculateOffset(page, limit);
 
     // WHERE句の構築
     let whereClause = "";
