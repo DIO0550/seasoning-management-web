@@ -74,4 +74,65 @@ describe("validation constants", () => {
       ]);
     });
   });
+
+  describe("VALIDATION_CONSTANTS 統合構造", () => {
+    describe("新しい構造の検証", () => {
+      test("すべてのカテゴリが含まれている", () => {
+        expect(VALIDATION_CONSTANTS).toHaveProperty("NAME");
+        expect(VALIDATION_CONSTANTS).toHaveProperty("DESCRIPTION");
+        expect(VALIDATION_CONSTANTS).toHaveProperty("IMAGE");
+      });
+
+      test("NAME カテゴリに必要な定数が含まれている", () => {
+        expect(VALIDATION_CONSTANTS.NAME).toHaveProperty(
+          "SEASONING_NAME_MAX_LENGTH"
+        );
+        expect(VALIDATION_CONSTANTS.NAME).toHaveProperty(
+          "TEMPLATE_NAME_MAX_LENGTH"
+        );
+        expect(VALIDATION_CONSTANTS.NAME).toHaveProperty(
+          "SEASONING_TYPE_NAME_MAX_LENGTH"
+        );
+      });
+
+      test("DESCRIPTION カテゴリに必要な定数が含まれている", () => {
+        expect(VALIDATION_CONSTANTS.DESCRIPTION).toHaveProperty(
+          "TEMPLATE_DESCRIPTION_MAX_LENGTH"
+        );
+      });
+
+      test("IMAGE カテゴリに必要な定数が含まれている", () => {
+        expect(VALIDATION_CONSTANTS.IMAGE).toHaveProperty("BYTES_PER_KB");
+        expect(VALIDATION_CONSTANTS.IMAGE).toHaveProperty("IMAGE_MAX_SIZE_MB");
+        expect(VALIDATION_CONSTANTS.IMAGE).toHaveProperty(
+          "IMAGE_MAX_SIZE_BYTES"
+        );
+        expect(VALIDATION_CONSTANTS.IMAGE).toHaveProperty("VALID_TYPES");
+      });
+    });
+
+    describe("後方互換性の検証", () => {
+      test("非推奨定数が正しい値を持っている", () => {
+        expect(VALIDATION_CONSTANTS.NAME_MAX_LENGTH).toBe(20);
+        expect(VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_BYTES).toBe(5242880);
+        expect(VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_MB).toBe(5);
+        expect(VALIDATION_CONSTANTS.IMAGE_VALID_TYPES).toEqual([
+          "image/jpeg",
+          "image/png",
+        ]);
+      });
+
+      test("新しい構造と後方互換性の値が一致している", () => {
+        expect(VALIDATION_CONSTANTS.NAME_MAX_LENGTH).toBe(
+          VALIDATION_CONSTANTS.NAME.SEASONING_NAME_MAX_LENGTH
+        );
+        expect(VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_BYTES).toBe(
+          VALIDATION_CONSTANTS.IMAGE.IMAGE_MAX_SIZE_BYTES
+        );
+        expect(VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_MB).toBe(
+          VALIDATION_CONSTANTS.IMAGE.IMAGE_MAX_SIZE_MB
+        );
+      });
+    });
+  });
 });
