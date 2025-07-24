@@ -1,17 +1,20 @@
 import { validateTemplateDescription } from "@/utils/templateDescriptionValidation";
+import { TEMPLATE_DESCRIPTION_MAX_LENGTH } from "@/constants/validation/descriptionValidation";
 
 describe("validateTemplateDescription", () => {
   test("空文字の場合はtrueを返す（任意項目のため）", () => {
     expect(validateTemplateDescription("")).toBe(true);
   });
 
-  test("200文字以内の場合はtrueを返す", () => {
-    const description = "あ".repeat(200);
+  test(`${TEMPLATE_DESCRIPTION_MAX_LENGTH}文字以内の場合はtrueを返す`, () => {
+    const description = "あ".repeat(TEMPLATE_DESCRIPTION_MAX_LENGTH);
     expect(validateTemplateDescription(description)).toBe(true);
   });
 
-  test("201文字以上の場合はfalseを返す", () => {
-    const description = "あ".repeat(201);
+  test(`${
+    TEMPLATE_DESCRIPTION_MAX_LENGTH + 1
+  }文字以上の場合はfalseを返す`, () => {
+    const description = "あ".repeat(TEMPLATE_DESCRIPTION_MAX_LENGTH + 1);
     expect(validateTemplateDescription(description)).toBe(false);
   });
 
