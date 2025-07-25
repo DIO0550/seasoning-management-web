@@ -9,49 +9,49 @@
  * デフォルトのページサイズ
  * 一般的なリスト表示で使用される標準的なページサイズ
  */
-export const DEFAULT_PAGE_SIZE = 10 as const;
+export const DEFAULT_PAGE_SIZE = 10;
 
 /**
  * デフォルトのページ番号
  * ページネーション開始時の初期ページ
  */
-export const DEFAULT_PAGE_NUMBER = 1 as const;
+export const DEFAULT_PAGE_NUMBER = 1;
 
 /**
  * 最小ページ番号
  * ページネーションで指定可能な最小値
  */
-export const MIN_PAGE_NUMBER = 1 as const;
+export const MIN_PAGE_NUMBER = 1;
 
 /**
  * 最小ページサイズ
  * 1ページあたりの最小表示件数
  */
-export const MIN_PAGE_SIZE = 1 as const;
+export const MIN_PAGE_SIZE = 1;
 
 /**
  * 最大ページサイズ
  * パフォーマンスを考慮した1ページあたりの最大表示件数
  */
-export const MAX_PAGE_SIZE = 100 as const;
+export const MAX_PAGE_SIZE = 100;
 
 /**
  * 調味料一覧のページサイズ
  * 調味料リストで使用される専用のページサイズ
  */
-export const SEASONING_PAGE_SIZE = 10 as const;
+export const SEASONING_PAGE_SIZE = 10;
 
 /**
  * 調味料画像一覧のページサイズ
  * 調味料画像リストで使用される専用のページサイズ
  */
-export const SEASONING_IMAGE_PAGE_SIZE = 20 as const;
+export const SEASONING_IMAGE_PAGE_SIZE = 20;
 
 /**
  * 調味料種類一覧のページサイズ
  * 調味料種類リストで使用される専用のページサイズ
  */
-export const SEASONING_TYPE_PAGE_SIZE = 50 as const;
+export const SEASONING_TYPE_PAGE_SIZE = 50;
 
 /**
  * ページ番号とページサイズからオフセット値を計算する

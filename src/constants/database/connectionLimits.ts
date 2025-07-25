@@ -21,19 +21,19 @@ export type ConnectionLimits = {
  * 本番環境のデータベース接続プール数
  * 高トラフィックに対応するため多めの接続数を設定
  */
-export const PRODUCTION_CONNECTION_LIMIT = 10 as const;
+export const PRODUCTION_CONNECTION_LIMIT = 10;
 
 /**
  * 開発環境のデータベース接続プール数
  * 開発作業に必要十分な接続数を設定
  */
-export const DEVELOPMENT_CONNECTION_LIMIT = 5 as const;
+export const DEVELOPMENT_CONNECTION_LIMIT = 5;
 
 /**
  * テスト環境のデータベース接続プール数
  * テスト実行時のリソース消費を最小化するため少なめの接続数を設定
  */
-export const TEST_CONNECTION_LIMIT = 3 as const;
+export const TEST_CONNECTION_LIMIT = 3;
 
 /**
  * 環境別データベース接続制限設定
