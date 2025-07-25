@@ -30,25 +30,25 @@ export type DatabaseTimeouts = {
  * 本番環境のデータベース取得タイムアウト（ミリ秒）
  * 接続プールから接続を取得する際の最大待機時間
  */
-export const PRODUCTION_ACQUIRE_TIMEOUT = 60000 as const;
+export const PRODUCTION_ACQUIRE_TIMEOUT = 60000;
 
 /**
  * 本番環境のデータベースクエリタイムアウト（ミリ秒）
  * SQLクエリ実行の最大待機時間
  */
-export const PRODUCTION_QUERY_TIMEOUT = 60000 as const;
+export const PRODUCTION_QUERY_TIMEOUT = 60000;
 
 /**
  * 開発環境のデータベース取得タイムアウト（ミリ秒）
  * 開発時の応答性を重視した短めの設定
  */
-export const DEVELOPMENT_ACQUIRE_TIMEOUT = 30000 as const;
+export const DEVELOPMENT_ACQUIRE_TIMEOUT = 30000;
 
 /**
  * 開発環境のデータベースクエリタイムアウト（ミリ秒）
  * 開発時の応答性を重視した短めの設定
  */
-export const DEVELOPMENT_QUERY_TIMEOUT = 30000 as const;
+export const DEVELOPMENT_QUERY_TIMEOUT = 30000;
 
 /**
  * テスト環境のデータベース取得タイムアウト（ミリ秒）
