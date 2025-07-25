@@ -1,9 +1,9 @@
-import type { Connection } from "mysql2/promise";
 import type {
   ConnectionConfig,
   QueryResult,
   PoolStats,
 } from "./IDatabaseConnection";
+import type { IDatabaseConnection } from "./IDatabaseConnection";
 
 /**
  * データベースプールの抽象インターフェース
@@ -20,7 +20,7 @@ export interface IDatabasePool {
   /**
    * 接続プールから単一の接続を取得する
    */
-  getConnection(): Promise<Connection>;
+  getConnection(): Promise<IDatabaseConnection>;
 
   /**
    * データベース接続の生存確認を行う
