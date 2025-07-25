@@ -1,4 +1,5 @@
 import { validateSeasoningName } from "@/utils/nameValidation";
+import { SEASONING_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
 
 describe("validateSeasoningName", () => {
   test("空の文字列の場合、REQUIRED エラーを返す", () => {
@@ -12,7 +13,7 @@ describe("validateSeasoningName", () => {
   });
 
   test("最大文字数を超えた場合、LENGTH_EXCEEDED エラーを返す", () => {
-    const longName = "a".repeat(21); // 21文字
+    const longName = "a".repeat(SEASONING_NAME_MAX_LENGTH + 1); // 21文字
     const result = validateSeasoningName(longName);
     expect(result).toBe("LENGTH_EXCEEDED");
   });
@@ -27,8 +28,8 @@ describe("validateSeasoningName", () => {
     expect(result).toBe("INVALID_FORMAT");
   });
 
-  test("最大文字数ちょうど（20文字）の場合、NONE を返す", () => {
-    const maxLengthName = "a".repeat(20);
+  test(`最大文字数ちょうど（${SEASONING_NAME_MAX_LENGTH}文字）の場合、NONE を返す`, () => {
+    const maxLengthName = "a".repeat(SEASONING_NAME_MAX_LENGTH);
     const result = validateSeasoningName(maxLengthName);
     expect(result).toBe("NONE");
   });
