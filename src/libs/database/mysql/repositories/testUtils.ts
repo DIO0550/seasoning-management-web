@@ -123,11 +123,15 @@ export class TestDatabaseSetup {
 
     // 外部キー制約は使わないため、単純にDELETEする
     await this.connection.execute("DELETE FROM seasoning");
+    await this.connection.execute("DELETE FROM seasoning_template");
     await this.connection.execute("DELETE FROM seasoning_type");
     await this.connection.execute("DELETE FROM seasoning_image");
 
     // AUTO_INCREMENTをリセット
     await this.connection.execute("ALTER TABLE seasoning AUTO_INCREMENT = 1");
+    await this.connection.execute(
+      "ALTER TABLE seasoning_template AUTO_INCREMENT = 1"
+    );
     await this.connection.execute(
       "ALTER TABLE seasoning_type AUTO_INCREMENT = 1"
     );
@@ -215,6 +219,18 @@ export class TestDatabaseSetup {
         best_before_at DATE NULL,
         expires_at DATE NULL,
         purchased_at DATE NULL,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+    `);
+
+    // 調味料テンプレートテーブル（外部キー制約なし）
+    await this.connection.execute(`
+      CREATE TABLE IF NOT EXISTS seasoning_template (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(256) NOT NULL,
+        type_id INT NOT NULL,
+        image_id INT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
       ) ENGINE=InnoDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
