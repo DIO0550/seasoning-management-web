@@ -175,16 +175,16 @@
 
 #### サブタスク
 
-- [ ] `src/libs/database/mysql/repositories/MySQLSeasoningTemplateRepository.ts` 実装
-- [ ] テンプレートの CRUD 操作
-- [ ] 調味料との関連付け機能
-- [ ] テンプレート検索機能
+- [x] `src/libs/database/mysql/repositories/MySQLSeasoningTemplateRepository.ts` 実装
+- [x] テンプレートの CRUD 操作
+- [x] 調味料との関連付け機能
+- [x] テンプレート検索機能
 
 #### 受け入れ基準
 
-- [ ] テンプレート管理が動作する
+- [x] テンプレート管理が動作する
 - [ ] 調味料との関連が正常動作
-- [ ] ユニットテスト・統合テストが完了
+- [x] ユニットテスト・統合テストが完了
 
 ---
 
