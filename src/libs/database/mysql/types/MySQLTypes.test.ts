@@ -1,14 +1,14 @@
 import { describe, test, expect } from "vitest";
+import type { MySQLQueryResult } from "./MySQLTypes";
+import { MySQLError, createMySQLError } from "../errors";
 import {
-  MySQLQueryResult,
-  MySQLConnectionConfig,
-  MySQLError,
-  createMySQLError,
-} from "./MySQLTypes";
+  MySQLQueryResultConverter,
+  MySQLConnectionConfigConverter,
+} from "../converters";
 import type { ConnectionConfig } from "@/libs/database/interfaces/IDatabaseConnection";
 
 describe("MySQLTypes", () => {
-  describe("MySQLQueryResult.toQueryResult", () => {
+  describe("MySQLQueryResultConverter.toQueryResult", () => {
     test("mysql2のクエリ結果を独自のQueryResultに変換できる", () => {
       // Red: テストを先に書く
       const mysqlResult: MySQLQueryResult = {
@@ -20,7 +20,7 @@ describe("MySQLTypes", () => {
         warningCount: 0,
       };
 
-      const result = MySQLQueryResult.toQueryResult(mysqlResult);
+      const result = MySQLQueryResultConverter.toQueryResult(mysqlResult);
 
       expect(result).toEqual({
         rows: [{ id: 1, name: "テスト調味料" }],
@@ -43,13 +43,13 @@ describe("MySQLTypes", () => {
         warningCount: 0,
       };
 
-      const result = MySQLQueryResult.toQueryResult(mysqlResult);
+      const result = MySQLQueryResultConverter.toQueryResult(mysqlResult);
 
       expect(result.insertId).toBeNull();
     });
   });
 
-  describe("MySQLConnectionConfig.from", () => {
+  describe("MySQLConnectionConfigConverter.from", () => {
     test("独自のConnectionConfigをMySQL設定に変換できる", () => {
       const config: ConnectionConfig = {
         host: "localhost",
@@ -63,7 +63,7 @@ describe("MySQLTypes", () => {
         minConnections: 1,
       };
 
-      const mysqlConfig = MySQLConnectionConfig.from(config);
+      const mysqlConfig = MySQLConnectionConfigConverter.from(config);
 
       expect(mysqlConfig).toEqual({
         host: "localhost",
@@ -88,7 +88,7 @@ describe("MySQLTypes", () => {
         ssl: true,
       };
 
-      const mysqlConfig = MySQLConnectionConfig.from(config);
+      const mysqlConfig = MySQLConnectionConfigConverter.from(config);
 
       expect(mysqlConfig.ssl).toBe("Amazon RDS");
     });
@@ -103,7 +103,7 @@ describe("MySQLTypes", () => {
         ssl: false,
       };
 
-      const mysqlConfig = MySQLConnectionConfig.from(config);
+      const mysqlConfig = MySQLConnectionConfigConverter.from(config);
 
       expect(mysqlConfig.ssl).toBeUndefined();
     });
@@ -124,7 +124,7 @@ describe("MySQLTypes", () => {
         ssl: sslOptions,
       };
 
-      const mysqlConfig = MySQLConnectionConfig.from(config);
+      const mysqlConfig = MySQLConnectionConfigConverter.from(config);
 
       expect(mysqlConfig.ssl).toEqual(sslOptions);
     });
