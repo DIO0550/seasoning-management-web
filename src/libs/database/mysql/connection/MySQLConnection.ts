@@ -6,7 +6,7 @@ import type {
 } from "@/libs/database/interfaces/IDatabaseConnection";
 import { ITransaction } from "@/libs/database/interfaces/ITransaction";
 import type { IConnectionAdapter } from "@/libs/database/interfaces/IConnectionAdapter";
-import { createMySQLError } from "../types/MySQLTypes";
+import { createMySQLError } from "../errors";
 import { MySQLTransaction } from "./MySQLTransaction";
 
 /**
