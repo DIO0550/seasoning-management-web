@@ -1,38 +1,45 @@
 import { describe, test, expect } from "vitest";
 import type { ITransaction } from "./ITransaction";
+import type { QueryResult } from "./IDatabaseConnection";
 
 // テスト用のモック実装
 class MockTransaction implements ITransaction {
-  private _isActive = false;
   private _isCommitted = false;
   private _isRolledBack = false;
 
-  async begin(): Promise<void> {
-    this._isActive = true;
+  async query<T = unknown>(
+    _sql: string,
+    _params?: unknown[]
+  ): Promise<QueryResult<T>> {
+    if (this._isCommitted || this._isRolledBack) {
+      throw new Error("Transaction is not active");
+    }
+    return {
+      rows: [] as T[],
+      rowsAffected: 0,
+      insertId: null,
+      metadata: {},
+    };
   }
 
   async commit(): Promise<void> {
-    if (!this._isActive) {
-      throw new Error("Transaction is not active");
+    if (this._isRolledBack) {
+      throw new Error("Transaction has been rolled back");
+    }
+    if (this._isCommitted) {
+      throw new Error("Transaction has already been committed");
     }
     this._isCommitted = true;
-    this._isActive = false;
   }
 
   async rollback(): Promise<void> {
-    if (!this._isActive) {
-      throw new Error("Transaction is not active");
+    if (this._isCommitted) {
+      throw new Error("Transaction has been committed");
+    }
+    if (this._isRolledBack) {
+      throw new Error("Transaction has already been rolled back");
     }
     this._isRolledBack = true;
-    this._isActive = false;
-  }
-
-  isActive(): boolean {
-    return this._isActive;
-  }
-
-  getId(): string {
-    return "mock-transaction-id";
   }
 
   // テスト用のヘルパーメソッド
@@ -46,70 +53,89 @@ class MockTransaction implements ITransaction {
 }
 
 describe("ITransaction", () => {
-  test("トランザクションを開始できる", async () => {
+  test("queryメソッドが呼び出せる", async () => {
     const transaction = new MockTransaction();
 
-    expect(transaction.isActive()).toBe(false);
+    const result = await transaction.query("SELECT 1");
 
-    await transaction.begin();
-
-    expect(transaction.isActive()).toBe(true);
+    expect(result).toBeDefined();
+    expect(result.rows).toEqual([]);
+    expect(result.rowsAffected).toBe(0);
   });
 
   test("トランザクションをコミットできる", async () => {
     const transaction = new MockTransaction();
 
-    await transaction.begin();
-    expect(transaction.isActive()).toBe(true);
-
     await transaction.commit();
 
-    expect(transaction.isActive()).toBe(false);
     expect(transaction.isCommitted).toBe(true);
   });
 
   test("トランザクションをロールバックできる", async () => {
     const transaction = new MockTransaction();
 
-    await transaction.begin();
-    expect(transaction.isActive()).toBe(true);
-
     await transaction.rollback();
 
-    expect(transaction.isActive()).toBe(false);
     expect(transaction.isRolledBack).toBe(true);
   });
 
-  test("非アクティブなトランザクションはコミットできない", async () => {
+  test("コミット後のクエリはエラーになる", async () => {
     const transaction = new MockTransaction();
+
+    await transaction.commit();
+
+    await expect(transaction.query("SELECT 1")).rejects.toThrow(
+      "Transaction is not active"
+    );
+  });
+
+  test("ロールバック後のクエリはエラーになる", async () => {
+    const transaction = new MockTransaction();
+
+    await transaction.rollback();
+
+    await expect(transaction.query("SELECT 1")).rejects.toThrow(
+      "Transaction is not active"
+    );
+  });
+
+  test("二重コミットはエラーになる", async () => {
+    const transaction = new MockTransaction();
+
+    await transaction.commit();
 
     await expect(transaction.commit()).rejects.toThrow(
-      "Transaction is not active"
+      "Transaction has already been committed"
     );
   });
 
-  test("非アクティブなトランザクションはロールバックできない", async () => {
+  test("二重ロールバックはエラーになる", async () => {
     const transaction = new MockTransaction();
+
+    await transaction.rollback();
 
     await expect(transaction.rollback()).rejects.toThrow(
-      "Transaction is not active"
+      "Transaction has already been rolled back"
     );
   });
 
-  test("トランザクションIDを取得できる", () => {
+  test("コミット後のロールバックはエラーになる", async () => {
     const transaction = new MockTransaction();
 
-    expect(transaction.getId()).toBe("mock-transaction-id");
-    expect(typeof transaction.getId()).toBe("string");
+    await transaction.commit();
+
+    await expect(transaction.rollback()).rejects.toThrow(
+      "Transaction has been committed"
+    );
   });
 
-  test("複数回のbeginは許可されない", async () => {
+  test("ロールバック後のコミットはエラーになる", async () => {
     const transaction = new MockTransaction();
 
-    await transaction.begin();
-    expect(transaction.isActive()).toBe(true);
+    await transaction.rollback();
 
-    // 2回目のbeginはエラーになるべき（実装次第）
-    // この部分は実装によって動作が変わる可能性がある
+    await expect(transaction.commit()).rejects.toThrow(
+      "Transaction has been rolled back"
+    );
   });
 });
