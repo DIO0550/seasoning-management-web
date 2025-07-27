@@ -12,7 +12,6 @@ import {
   type QueryResult,
   type ConnectionConfig,
   type TransactionOptions,
-  type TransactionStatus,
 } from "./index";
 
 describe("Database Interfaces Index", () => {
@@ -77,7 +76,6 @@ describe("Database Interfaces Index", () => {
       QueryResult: null as QueryResult | null,
       ConnectionConfig: null as ConnectionConfig | null,
       TransactionOptions: null as TransactionOptions | null,
-      TransactionStatus: null as TransactionStatus | null,
     };
 
     // 型が正しく定義されていれば、このオブジェクトの作成でエラーは発生しない

@@ -50,11 +50,14 @@ class MockDatabaseConnection implements IDatabaseConnection {
 
     // モックトランザクション
     return {
-      begin: async () => {},
+      query: async <T = unknown>(): Promise<QueryResult<T>> => ({
+        rows: [] as T[],
+        rowsAffected: 0,
+        insertId: null,
+        metadata: {},
+      }),
       commit: async () => {},
       rollback: async () => {},
-      isActive: () => true,
-      getId: () => "mock-transaction",
     };
   }
 
