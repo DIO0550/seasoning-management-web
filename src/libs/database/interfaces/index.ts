@@ -25,11 +25,7 @@ export type {
   PoolStats,
 } from "./IDatabaseConnection";
 
-export type {
-  ITransaction,
-  TransactionOptions,
-  TransactionStatus,
-} from "./ITransaction";
+export type { ITransaction, TransactionOptions } from "./ITransaction";
 
 // エラー型の型定義も再エクスポート
 export type { DatabaseErrorCode } from "./types/DatabaseErrors";
