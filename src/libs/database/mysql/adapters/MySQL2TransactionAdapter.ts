@@ -5,7 +5,7 @@ import type {
   ConnectionConfig,
   PoolStats,
 } from "@/libs/database/interfaces/IDatabaseConnection";
-import { createMySQLError } from "../types/MySQLTypes";
+import { createMySQLError } from "../errors";
 
 /**
  * MySQL2ライブラリ用のトランザクションアダプター
