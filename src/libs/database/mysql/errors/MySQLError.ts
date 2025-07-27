@@ -1,8 +1,17 @@
-import type { MySQLErrorType } from "@/libs/database/mysql/types";
-
 /**
  * MySQL固有のエラー処理
  */
+
+/**
+ * MySQLエラーの種類
+ */
+export type MySQLErrorType =
+  | "CONNECTION_ERROR"
+  | "QUERY_ERROR"
+  | "TRANSACTION_ERROR"
+  | "TIMEOUT_ERROR"
+  | "AUTHENTICATION_ERROR"
+  | "UNKNOWN_ERROR";
 
 /**
  * MySQL固有のエラー型
