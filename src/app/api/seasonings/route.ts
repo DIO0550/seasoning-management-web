@@ -14,7 +14,10 @@ interface Seasoning {
 }
 
 // モックデータ（本来はDBから取得）
-export const seasonings: Seasoning[] = [];
+const seasonings: Seasoning[] = [];
+
+// テスト用にseasoningsを公開
+export { seasonings };
 
 /**
  * GET /api/seasonings - 調味料一覧を取得
