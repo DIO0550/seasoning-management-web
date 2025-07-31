@@ -104,15 +104,13 @@ export const useSeasoningSubmit = (
 
     return {
       hasErrors: Boolean(
-        nameError !== VALIDATION_ERROR_STATES.NONE ||
-          typeError !== VALIDATION_ERROR_STATES.NONE ||
+        nameError !== "" ||
+          typeError !== "" ||
           imageError !== VALIDATION_ERROR_STATES.NONE
       ),
       errors,
     };
-  };
-
-  // フォーム有効性をチェックする内部関数
+  }; // フォーム有効性をチェックする内部関数
   const canSubmitForm = useCallback((): boolean => {
     const fields = [
       { value: seasoningName.value, error: seasoningName.error },
@@ -122,9 +120,9 @@ export const useSeasoningSubmit = (
     // すべてのフィールドが入力され、エラーがないかチェック
     const hasAllValues = fields.every((field) => field.value.trim() !== "");
     const hasNoErrors =
-      fields.every((field) => field.error === VALIDATION_ERROR_STATES.NONE) &&
+      fields.every((field) => field.error === "") &&
       errors.image === VALIDATION_ERROR_STATES.NONE &&
-      errors.general === SUBMIT_ERROR_STATES.NONE;
+      errors.general === "NONE";
 
     return hasAllValues && hasNoErrors;
   }, [

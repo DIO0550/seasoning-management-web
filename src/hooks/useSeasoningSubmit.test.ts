@@ -4,13 +4,12 @@ import { UseSeasoningNameInputReturn } from "@/hooks/useSeasoningNameInput";
 import { UseSeasoningTypeInputReturn } from "@/hooks/useSeasoningTypeInput";
 import { beforeEach, vi } from "vitest";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
-import type { ValidationErrorState } from "@/types/validationErrorState";
 import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 
 // モックの作成
 const createMockSeasoningNameInput = (
   value = "",
-  error: ValidationErrorState = VALIDATION_ERROR_STATES.NONE
+  error = ""
 ): UseSeasoningNameInputReturn => ({
   value,
   error,
@@ -21,7 +20,7 @@ const createMockSeasoningNameInput = (
 
 const createMockSeasoningTypeInput = (
   value = "",
-  error: ValidationErrorState = VALIDATION_ERROR_STATES.NONE
+  error = ""
 ): UseSeasoningTypeInputReturn => ({
   value,
   error,
@@ -51,19 +50,13 @@ describe("useSeasoningSubmit", () => {
 
     expect(result.current.isSubmitting).toBe(false);
     expect(result.current.errors.image).toBe(VALIDATION_ERROR_STATES.NONE);
-    expect(result.current.errors.general).toBe(VALIDATION_ERROR_STATES.NONE);
+    expect(result.current.errors.general).toBe(SUBMIT_ERROR_STATES.NONE);
     expect(result.current.isFormValid).toBe(false);
   });
 
   test("必須フィールドが入力されるとフォームが有効になること", () => {
-    const mockSeasoningName = createMockSeasoningNameInput(
-      "salt",
-      VALIDATION_ERROR_STATES.NONE
-    );
-    const mockSeasoningType = createMockSeasoningTypeInput(
-      "salt",
-      VALIDATION_ERROR_STATES.NONE
-    );
+    const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+    const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
     const mockFormData = { image: null };
 
     const { result } = renderHook(() =>
@@ -76,12 +69,9 @@ describe("useSeasoningSubmit", () => {
   test("エラーがある場合はフォームが無効になること", () => {
     const mockSeasoningName = createMockSeasoningNameInput(
       "salt",
-      VALIDATION_ERROR_STATES.REQUIRED
+      "調味料名は必須です"
     );
-    const mockSeasoningType = createMockSeasoningTypeInput(
-      "salt",
-      VALIDATION_ERROR_STATES.NONE
-    );
+    const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
     const mockFormData = { image: null };
 
     const { result } = renderHook(() =>
@@ -110,14 +100,8 @@ describe("useSeasoningSubmit", () => {
   });
 
   test("送信処理が正常に動作すること", async () => {
-    const mockSeasoningName = createMockSeasoningNameInput(
-      "salt",
-      VALIDATION_ERROR_STATES.NONE
-    );
-    const mockSeasoningType = createMockSeasoningTypeInput(
-      "salt",
-      VALIDATION_ERROR_STATES.NONE
-    );
+    const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+    const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
     const mockFormData = { image: null };
     const mockOnSubmit = vi.fn().mockResolvedValue(undefined);
     const mockOnReset = vi.fn();
@@ -147,14 +131,8 @@ describe("useSeasoningSubmit", () => {
   });
 
   test("送信エラーが適切に処理されること", async () => {
-    const mockSeasoningName = createMockSeasoningNameInput(
-      "salt",
-      VALIDATION_ERROR_STATES.NONE
-    );
-    const mockSeasoningType = createMockSeasoningTypeInput(
-      "salt",
-      VALIDATION_ERROR_STATES.NONE
-    );
+    const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+    const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
     const mockFormData = { image: null };
     const mockOnSubmit = vi.fn().mockRejectedValue(new Error("送信エラー"));
 
@@ -185,14 +163,8 @@ describe("useSeasoningSubmit", () => {
 
       mockValidateImage.mockReturnValue("SIZE_EXCEEDED");
 
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const file = new File(["test"], "test.jpg", { type: "image/jpeg" });
       const mockFormData = { image: file };
 
@@ -218,14 +190,8 @@ describe("useSeasoningSubmit", () => {
       // バリデーションが成功するよう設定
       mockValidateImage.mockReturnValue("NONE");
 
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
       const mockOnSubmit = vi.fn().mockResolvedValue(undefined);
       const mockOnReset = vi.fn();
@@ -258,7 +224,7 @@ describe("useSeasoningSubmit", () => {
       expect(mockSeasoningType.reset).toHaveBeenCalled();
       expect(mockOnReset).toHaveBeenCalled();
       expect(result.current.errors.image).toBe(VALIDATION_ERROR_STATES.NONE);
-      expect(result.current.errors.general).toBe(VALIDATION_ERROR_STATES.NONE);
+      expect(result.current.errors.general).toBe(SUBMIT_ERROR_STATES.NONE);
     });
 
     test("エラーメッセージが定数から取得されること", async () => {
@@ -269,14 +235,8 @@ describe("useSeasoningSubmit", () => {
       // バリデーションが成功するよう設定
       mockValidateImage.mockReturnValue("NONE");
 
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
       // メッセージのないエラーを投げる
       const mockOnSubmit = vi.fn().mockRejectedValue(new Error(""));
@@ -307,14 +267,8 @@ describe("useSeasoningSubmit", () => {
 
       mockValidateImage.mockReturnValue("NONE");
 
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const file = new File(["test"], "test.jpg", { type: "image/jpeg" });
       const mockFormData = { image: file };
 
@@ -332,14 +286,8 @@ describe("useSeasoningSubmit", () => {
 
   describe("リファクタリング後の責務分離テスト", () => {
     test("送信成功時にresetFormStateが呼び出されること", async () => {
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
       const mockOnSubmit = vi.fn().mockResolvedValue(undefined);
       const mockOnReset = vi.fn();
@@ -370,18 +318,12 @@ describe("useSeasoningSubmit", () => {
       expect(mockOnReset).toHaveBeenCalledTimes(1);
       // エラー状態もリセットされることを確認
       expect(result.current.errors.image).toBe(VALIDATION_ERROR_STATES.NONE);
-      expect(result.current.errors.general).toBe(VALIDATION_ERROR_STATES.NONE);
+      expect(result.current.errors.general).toBe(SUBMIT_ERROR_STATES.NONE);
     });
 
     test("エラーハンドリングで適切なエラーメッセージが設定されること", async () => {
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
       const mockOnSubmit = vi
         .fn()
@@ -429,20 +371,14 @@ describe("useSeasoningSubmit", () => {
       expect(result.current.errors.image).toBe(
         VALIDATION_ERROR_STATES.INVALID_FILE_TYPE
       );
-      expect(result.current.errors.general).toBe(VALIDATION_ERROR_STATES.NONE); // generalエラーは変更されない
+      expect(result.current.errors.general).toBe(SUBMIT_ERROR_STATES.NONE); // generalエラーは変更されない
     });
   });
 
   describe("フォーム有効性計算の改善テスト", () => {
     test("必須フィールドが揃っていてエラーがない場合のみフォームが有効になること", () => {
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
 
       const { result } = renderHook(() =>
@@ -453,14 +389,8 @@ describe("useSeasoningSubmit", () => {
     });
 
     test("必須フィールドのいずれかが空の場合、フォームが無効になること", () => {
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "",
-        VALIDATION_ERROR_STATES.NONE
-      ); // 名前が空
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("", ""); // 名前が空
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
 
       const { result } = renderHook(() =>
@@ -475,10 +405,7 @@ describe("useSeasoningSubmit", () => {
         "salt",
         VALIDATION_ERROR_STATES.REQUIRED
       );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
 
       const { result } = renderHook(() =>
@@ -489,14 +416,8 @@ describe("useSeasoningSubmit", () => {
     });
 
     test("画像エラーがある場合、フォームが無効になること", () => {
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
 
       const { result } = renderHook(() =>
@@ -512,14 +433,8 @@ describe("useSeasoningSubmit", () => {
     });
 
     test("送信エラー時にフォームが無効になること", async () => {
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
       const mockOnSubmit = vi.fn().mockRejectedValue(new Error("送信エラー"));
 
@@ -547,14 +462,8 @@ describe("useSeasoningSubmit", () => {
 
   describe("フォーム有効性チェックの可読性改善", () => {
     test("エラーがない状態を明確に判定できること", () => {
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
 
       const { result } = renderHook(() =>
@@ -570,10 +479,7 @@ describe("useSeasoningSubmit", () => {
         "salt",
         VALIDATION_ERROR_STATES.REQUIRED
       );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
 
       const { result } = renderHook(() =>
@@ -585,14 +491,8 @@ describe("useSeasoningSubmit", () => {
     });
 
     test("画像エラーがある場合の判定が明確であること", () => {
-      const mockSeasoningName = createMockSeasoningNameInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
-      const mockSeasoningType = createMockSeasoningTypeInput(
-        "salt",
-        VALIDATION_ERROR_STATES.NONE
-      );
+      const mockSeasoningName = createMockSeasoningNameInput("salt", "");
+      const mockSeasoningType = createMockSeasoningTypeInput("salt", "");
       const mockFormData = { image: null };
 
       const { result } = renderHook(() =>
