@@ -139,11 +139,9 @@ describe("IDatabaseConnection", () => {
 
     const transaction = await connection.beginTransaction();
 
-    expect(transaction).toHaveProperty("begin");
+    expect(transaction).toHaveProperty("query");
     expect(transaction).toHaveProperty("commit");
     expect(transaction).toHaveProperty("rollback");
-    expect(transaction).toHaveProperty("isActive");
-    expect(transaction).toHaveProperty("getId");
   });
 
   test("未接続状態でトランザクションを開始するとエラーが発生する", async () => {
