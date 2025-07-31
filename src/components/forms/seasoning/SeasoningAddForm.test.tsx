@@ -74,28 +74,41 @@ describe("SeasoningAddForm", () => {
     render(<SeasoningAddForm onSubmit={mockOnSubmit} />);
 
     // Fill in required fields
-    fireEvent.change(screen.getByRole("textbox", { name: /調味料/ }), {
+    const nameInput = screen.getByRole("textbox", { name: /調味料/ });
+    const typeSelect = screen.getByLabelText(/調味料の種類/);
+
+    fireEvent.change(nameInput, {
       target: { value: "salt" },
     });
-    fireEvent.change(screen.getByLabelText(/調味料の種類/), {
+    fireEvent.change(typeSelect, {
       target: { value: "salt" },
     });
 
+    // トリガーフィールドのblurイベントでバリデーションを実行
+    fireEvent.blur(nameInput);
+    fireEvent.blur(typeSelect);
+
     // Wait for button to be enabled
-    await waitFor(() => {
-      expect(screen.getByRole("button", { name: /追加/ })).not.toBeDisabled();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByRole("button", { name: /追加/ })).not.toBeDisabled();
+      },
+      { timeout: 2000 }
+    );
 
     // Submit the form
     fireEvent.click(screen.getByRole("button", { name: /追加/ }));
 
     // Check if onSubmit was called
-    await waitFor(() => {
-      expect(mockOnSubmit).toHaveBeenCalledWith({
-        name: "salt",
-        type: "salt",
-        image: null,
-      });
-    });
+    await waitFor(
+      () => {
+        expect(mockOnSubmit).toHaveBeenCalledWith({
+          name: "salt",
+          type: "salt",
+          image: null,
+        });
+      },
+      { timeout: 2000 }
+    );
   });
 });
