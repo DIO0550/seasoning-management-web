@@ -1,0 +1,34 @@
+/**
+ * データベース操作で発生可能なエラーコード
+ */
+export const ErrorCode = {
+  // 汎用エラー
+  UNKNOWN_ERROR: "UNKNOWN_ERROR",
+
+  // バリデーションエラー
+  VALIDATION_ERROR: "VALIDATION_ERROR",
+  CONSTRAINT_VIOLATION: "CONSTRAINT_VIOLATION",
+
+  // データ関連エラー
+  NOT_FOUND: "NOT_FOUND",
+  DUPLICATE_KEY: "DUPLICATE_KEY",
+
+  // 接続関連エラー
+  CONNECTION_ERROR: "CONNECTION_ERROR",
+  NETWORK_ERROR: "NETWORK_ERROR",
+  TIMEOUT_ERROR: "TIMEOUT_ERROR",
+
+  // トランザクション関連エラー
+  TRANSACTION_ERROR: "TRANSACTION_ERROR",
+  DEADLOCK_ERROR: "DEADLOCK_ERROR",
+
+  // 認可・認証エラー
+  PERMISSION_DENIED: "PERMISSION_DENIED",
+  AUTHENTICATION_FAILED: "AUTHENTICATION_FAILED",
+
+  // システムエラー
+  INTERNAL_ERROR: "INTERNAL_ERROR",
+  SERVICE_UNAVAILABLE: "SERVICE_UNAVAILABLE",
+} as const;
+
+export type ErrorCode = (typeof ErrorCode)[keyof typeof ErrorCode];
