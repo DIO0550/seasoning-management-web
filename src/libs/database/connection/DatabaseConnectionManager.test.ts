@@ -5,43 +5,37 @@
 
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { DatabaseConnectionManager } from "./DatabaseConnectionManager";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
 
-// すべてのテストで共有するモック接続オブジェクト
-const sharedMockConnection: IDatabaseConnection = {
+// vi.hoisted()を使ってモックオブジェクトを巻き上げ対応で定義
+const mockMysql2Connection = vi.hoisted(() => ({
   connect: vi.fn().mockResolvedValue(undefined),
-  disconnect: vi.fn().mockResolvedValue(undefined),
+  end: vi.fn().mockResolvedValue(undefined),
   query: vi.fn(),
   beginTransaction: vi.fn(),
-  isConnected: vi.fn().mockReturnValue(true),
+  commit: vi.fn(),
+  rollback: vi.fn(),
   ping: vi.fn().mockResolvedValue(true),
-  getConfig: vi.fn().mockReturnValue({
+  destroy: vi.fn(),
+  release: vi.fn(),
+  config: {
     host: "localhost",
     port: 3306,
     user: "test",
     password: "test",
     database: "test_db",
-    connectionLimit: 10,
-    timezone: "+09:00",
-    charset: "utf8mb4",
-  }),
-};
-
-// MySQL関連モジュールをモック
-vi.mock("mysql2/promise", () => ({
-  default: {
-    createPool: vi.fn().mockReturnValue({
-      getConnection: vi.fn().mockResolvedValue({}),
-    }),
   },
 }));
 
-vi.mock("@/libs/database/mysql/connection/MySQLConnection", () => ({
-  MySQLConnection: vi.fn().mockImplementation(() => sharedMockConnection),
+const mockPool = vi.hoisted(() => ({
+  getConnection: vi.fn().mockResolvedValue(mockMysql2Connection),
+  end: vi.fn(),
 }));
 
-vi.mock("@/libs/database/mysql/adapters/MySQL2ConnectionAdapter", () => ({
-  MySQL2ConnectionAdapter: vi.fn(),
+// 外部依存のみモック
+vi.mock("mysql2/promise", () => ({
+  default: {
+    createPool: vi.fn().mockReturnValue(mockPool),
+  },
 }));
 
 vi.mock("@/config/database", () => ({
@@ -109,9 +103,12 @@ describe("DatabaseConnectionManager", () => {
       const connection = await manager.getConnection();
 
       // Assert
-      expect(connection).toBe(sharedMockConnection);
-      // 新しい接続作成後、isConnected()チェックでconnect()が呼ばれる
-      expect(sharedMockConnection.connect).toHaveBeenCalledOnce();
+      expect(connection).toBeDefined();
+      expect(connection).toHaveProperty("connect");
+      expect(connection).toHaveProperty("disconnect");
+      expect(connection).toHaveProperty("query");
+      expect(connection).toHaveProperty("isConnected");
+      expect(typeof connection.isConnected).toBe("function");
     });
 
     it("2回目のgetConnection()では既存の接続を返すべき", async () => {
@@ -123,29 +120,25 @@ describe("DatabaseConnectionManager", () => {
       const connection2 = await manager.getConnection();
 
       // Assert
-      expect(connection1).toBe(sharedMockConnection);
-      expect(connection2).toBe(connection1); // 同じ接続を返す
+      expect(connection1).toBe(connection2); // 同じ接続を返す
     });
 
     it("接続が切断されている場合は再接続するべき", async () => {
       // Arrange
       const manager = DatabaseConnectionManager.getInstance();
 
-      // 最初の接続を作成（この時点で1回connect()が呼ばれる）
-      await manager.getConnection();
+      // 最初の接続を作成
+      const connection1 = await manager.getConnection();
 
-      // モックをリセットして、切断状態をシミュレート
-      vi.clearAllMocks();
-      (
-        sharedMockConnection.isConnected as ReturnType<typeof vi.fn>
-      ).mockReturnValue(false);
+      // 接続を強制的に切断
+      await manager.closeConnection();
 
       // Act: 再度接続を取得
-      const connection = await manager.getConnection();
+      const connection2 = await manager.getConnection();
 
       // Assert
-      expect(connection).toBe(sharedMockConnection);
-      expect(sharedMockConnection.connect).toHaveBeenCalledOnce(); // 再接続のため
+      expect(connection2).toBeDefined();
+      expect(connection2).not.toBe(connection1); // 新しい接続が作成される
     });
   });
 
@@ -159,7 +152,8 @@ describe("DatabaseConnectionManager", () => {
       const connection = await manager.getConnection();
 
       // Assert
-      expect(connection).toBe(sharedMockConnection);
+      expect(connection).toBeDefined();
+      expect(manager.getEnvironment()).toBe("development");
     });
 
     it("production環境で接続を作成できるべき", async () => {
@@ -171,7 +165,8 @@ describe("DatabaseConnectionManager", () => {
       const connection = await manager.getConnection();
 
       // Assert
-      expect(connection).toBe(sharedMockConnection);
+      expect(connection).toBeDefined();
+      expect(manager.getEnvironment()).toBe("production");
     });
 
     it("test環境で接続を作成できるべき", async () => {
@@ -183,7 +178,8 @@ describe("DatabaseConnectionManager", () => {
       const connection = await manager.getConnection();
 
       // Assert
-      expect(connection).toBe(sharedMockConnection);
+      expect(connection).toBeDefined();
+      expect(manager.getEnvironment()).toBe("test");
     });
 
     it("未対応環境でエラーを投げるべき", async () => {
@@ -208,7 +204,7 @@ describe("DatabaseConnectionManager", () => {
       await manager.closeConnection();
 
       // Assert
-      expect(sharedMockConnection.disconnect).toHaveBeenCalledOnce();
+      expect(manager.isConnected()).toBe(false);
     });
 
     it("接続がない状態でcloseConnection()を呼んでもエラーにならないべき", async () => {
@@ -227,16 +223,10 @@ describe("DatabaseConnectionManager", () => {
       expect(manager.isConnected()).toBe(false); // 初期状態
 
       // 接続を取得
-      const connection = await manager.getConnection();
-
-      // 確実にモック接続オブジェクトのisConnected()がtrueを返すように再設定
-      (connection.isConnected as ReturnType<typeof vi.fn>).mockReturnValue(
-        true
-      );
-
+      await manager.getConnection();
       expect(manager.isConnected()).toBe(true); // 接続後
 
-      // 接続を閉じてnullにした状態をシミュレート
+      // 接続を閉じた状態
       await manager.closeConnection();
       expect(manager.isConnected()).toBe(false); // 切断後
     });
@@ -258,14 +248,13 @@ describe("DatabaseConnectionManager", () => {
     it("接続作成エラーを適切にハンドリングするべき", async () => {
       // Arrange
       vi.clearAllMocks();
-      // MySQLConnectionのコンストラクタがエラーを投げるように設定
-      const { MySQLConnection } = await import(
-        "@/libs/database/mysql/connection/MySQLConnection"
-      );
-      (
-        MySQLConnection as unknown as ReturnType<typeof vi.fn>
-      ).mockImplementationOnce(() => {
-        throw new Error("Connection failed");
+      // MySQL2のgetConnectionがエラーを投げるように設定
+      const mysql = await import("mysql2/promise");
+      const createPool = mysql.default.createPool as ReturnType<typeof vi.fn>;
+      createPool.mockReturnValueOnce({
+        getConnection: vi
+          .fn()
+          .mockRejectedValueOnce(new Error("Connection failed")),
       });
 
       // シングルトンインスタンスをリセットして新しいマネージャーを作成
@@ -282,9 +271,11 @@ describe("DatabaseConnectionManager", () => {
       // Arrange
       const manager = DatabaseConnectionManager.getInstance();
       await manager.getConnection(); // 接続を作成
-      (
-        sharedMockConnection.disconnect as ReturnType<typeof vi.fn>
-      ).mockRejectedValueOnce(new Error("Disconnect failed"));
+
+      // MySQL2接続のendメソッドがエラーを投げるように設定
+      mockMysql2Connection.end.mockRejectedValueOnce(
+        new Error("Disconnect failed")
+      );
 
       // Act & Assert
       await expect(manager.closeConnection()).rejects.toThrow(
