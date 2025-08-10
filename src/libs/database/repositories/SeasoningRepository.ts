@@ -10,7 +10,6 @@ import type {
   SeasoningSearchOptions,
 } from "@/libs/database/interfaces/ISeasoningRepository";
 import type {
-  CreateResult,
   UpdateResult,
   DeleteResult,
   PaginatedResult,
@@ -43,10 +42,9 @@ export class SeasoningRepository implements ISeasoningRepository {
    */
   constructor(public readonly connection: IDatabaseConnection) {}
 
-  async create(input: SeasoningCreateInput): Promise<CreateResult> {
-    // バリデーション
-    if (!input.name || input.name.trim() === "") {
-      throw new Error("name cannot be empty");
+  async create(input: SeasoningCreateInput): Promise<Seasoning> {
+    if (!input.name?.trim()) {
+      throw new Error("調味料名は必須です");
     }
 
     const sql = `
@@ -65,11 +63,15 @@ export class SeasoningRepository implements ISeasoningRepository {
     ];
 
     const result = await this.connection.query(sql, params);
+    const insertId = result.insertId!;
 
-    return {
-      id: result.insertId!,
-      createdAt: new Date(),
-    };
+    // 作成したレコードを取得して返す
+    const created = await this.findById(insertId);
+    if (!created) {
+      throw new Error("作成した調味料の取得に失敗しました");
+    }
+
+    return created;
   }
 
   async findById(id: number): Promise<Seasoning | null> {
