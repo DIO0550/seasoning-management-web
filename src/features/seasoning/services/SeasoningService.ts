@@ -12,7 +12,7 @@ interface Dependencies {
 
 // Service層のページネーション結果型（Repositoryの実装詳細を隠蔽）
 interface SeasoningListResult {
-  seasonings: Seasoning[];
+  seasonings: readonly Seasoning[];
   totalCount: number;
 }
 
@@ -34,11 +34,11 @@ interface PurchasedSeasoningData {
 
 async function getSeasoningList({
   seasoningRepository,
-}: Dependencies): Promise<Seasoning[]> {
+}: Dependencies): Promise<readonly Seasoning[]> {
   const paginatedResult = await seasoningRepository.findAll();
 
   // Service層ではRepositoryの実装詳細を隠蔽し、純粋な配列を返す
-  return [...paginatedResult.items];
+  return paginatedResult.items;
 }
 
 async function getSeasoningListWithTotal({
@@ -48,7 +48,7 @@ async function getSeasoningListWithTotal({
 
   // Service層の抽象化レベルでページネーション情報を提供
   return {
-    seasonings: [...paginatedResult.items],
+    seasonings: paginatedResult.items,
     totalCount: paginatedResult.total,
   };
 }
@@ -64,15 +64,8 @@ async function addSeasoning(
   data: SeasoningCreateInput,
   { seasoningRepository }: Dependencies
 ): Promise<Seasoning> {
-  const result = await seasoningRepository.create(data);
-
-  // CreateResultからSeasoningを取得
-  const created = await seasoningRepository.findById(result.id);
-  if (!created) {
-    throw new Error("Failed to retrieve created seasoning");
-  }
-
-  return created;
+  // 直接作成したSeasoningエンティティを返す（データベースラウンドトリップを削減）
+  return await seasoningRepository.create(data);
 }
 
 /**
