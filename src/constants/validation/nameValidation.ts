@@ -6,7 +6,7 @@
 /**
  * 調味料名の最大文字数制限
  */
-export const SEASONING_NAME_MAX_LENGTH = 20;
+export const SEASONING_NAME_MAX_LENGTH = 100;
 
 /**
  * テンプレート名の最大文字数制限

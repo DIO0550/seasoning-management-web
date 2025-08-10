@@ -8,6 +8,7 @@ import {
   IMAGE_MAX_SIZE_MB,
   IMAGE_MAX_SIZE_BYTES,
 } from "./validation/imageValidation";
+import { EXPIRY_VALIDATION_CONSTANTS } from "./validation/expiryValidation";
 
 /**
  * 統合されたバリデーション定数
@@ -24,6 +25,8 @@ export const VALIDATION_CONSTANTS = {
     /** 許可される画像ファイル形式 */
     VALID_TYPES: ["image/jpeg", "image/png"] as const,
   },
+  /** 期限系バリデーション定数 */
+  EXPIRY: EXPIRY_VALIDATION_CONSTANTS,
 
   // 後方互換性のための定数（将来的に削除予定）
   /** @deprecated VALIDATION_CONSTANTS.NAME.SEASONING_NAME_MAX_LENGTH を使用してください */

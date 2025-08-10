@@ -7,7 +7,6 @@ import type { Seasoning } from "../entities/Seasoning";
 import type { IDatabaseConnection } from "./IDatabaseConnection";
 import type {
   PaginatedResult,
-  CreateResult,
   UpdateResult,
   DeleteResult,
   BaseSearchOptions,
@@ -62,10 +61,10 @@ export interface ISeasoningRepository {
   /**
    * 新しい調味料を作成する
    * @param input 作成する調味料のデータ
-   * @returns 作成結果（ID と作成日時）
+   * @returns 作成された調味料エンティティ
    * @throws {RepositoryError} データベース操作でエラーが発生した場合
    */
-  create(input: SeasoningCreateInput): Promise<CreateResult>;
+  create(input: SeasoningCreateInput): Promise<Seasoning>;
 
   /**
    * IDで調味料を取得する
