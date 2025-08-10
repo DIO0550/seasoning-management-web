@@ -2,6 +2,7 @@ import type { ISeasoningRepository } from "@/libs/database/interfaces/ISeasoning
 import type { ISeasoningTypeRepository } from "@/libs/database/interfaces/ISeasoningTypeRepository";
 import { SeasoningService } from "@/features/seasoning/services/SeasoningService";
 import { VALIDATION_CONSTANTS } from "@/constants/validation";
+import { sortSeasoningsByExpiry } from "@/utils/seasoningSort";
 
 interface Dependencies {
   seasoningRepository: ISeasoningRepository;
@@ -14,7 +15,10 @@ interface Dependencies {
  * - 期限切れ状況を含む調味料リストを提供
  * - 並び順は期限が近い順
  */
-interface SeasoningListItem {
+/**
+ * 調味料リスト項目の型定義
+ */
+export interface SeasoningListItem {
   id: number;
   name: string;
   typeId: number;
@@ -41,70 +45,51 @@ async function getSeasoningList({
     seasoningTypeRepository,
   });
   const today = new Date();
-  let expiringCount = 0;
-  let expiredCount = 0;
 
-  const listItems: SeasoningListItem[] = seasonings.map((seasoning) => {
-    const expiryDate = seasoning.expiresAt || seasoning.bestBeforeAt;
-    let daysUntilExpiry: number | undefined;
-    let expiryStatus: SeasoningListItem["expiryStatus"] = "unknown";
+  // reduceを使用してマッピングとカウンティングを一度のパスで実行
+  const { listItems, expiringCount, expiredCount } = seasonings.reduce(
+    (acc, seasoning) => {
+      const expiryDate = seasoning.expiresAt || seasoning.bestBeforeAt;
+      let daysUntilExpiry: number | undefined;
+      let expiryStatus: SeasoningListItem["expiryStatus"] = "unknown";
 
-    if (expiryDate) {
-      const timeDiff = expiryDate.getTime() - today.getTime();
-      daysUntilExpiry = Math.ceil(
-        timeDiff / VALIDATION_CONSTANTS.EXPIRY.MILLISECONDS_PER_DAY
-      );
+      if (expiryDate) {
+        const timeDiff = expiryDate.getTime() - today.getTime();
+        daysUntilExpiry = Math.ceil(
+          timeDiff / VALIDATION_CONSTANTS.EXPIRY.MILLISECONDS_PER_DAY
+        );
 
-      if (daysUntilExpiry < 0) {
-        expiryStatus = "expired";
-        expiredCount++;
-      } else if (
-        daysUntilExpiry <= VALIDATION_CONSTANTS.EXPIRY.EXPIRY_WARNING_DAYS
-      ) {
-        expiryStatus = "expiring_soon";
-        expiringCount++;
-      } else {
-        expiryStatus = "fresh";
+        if (daysUntilExpiry < 0) {
+          expiryStatus = "expired";
+          acc.expiredCount++;
+        } else if (
+          daysUntilExpiry <= VALIDATION_CONSTANTS.EXPIRY.EXPIRY_WARNING_DAYS
+        ) {
+          expiryStatus = "expiring_soon";
+          acc.expiringCount++;
+        } else {
+          expiryStatus = "fresh";
+        }
       }
-    }
 
-    return {
-      id: seasoning.id,
-      name: seasoning.name,
-      typeId: seasoning.typeId,
-      expiresAt: seasoning.expiresAt || undefined,
-      bestBeforeAt: seasoning.bestBeforeAt || undefined,
-      purchasedAt: seasoning.purchasedAt || undefined,
-      daysUntilExpiry,
-      expiryStatus,
-    };
-  });
+      acc.listItems.push({
+        id: seasoning.id,
+        name: seasoning.name,
+        typeId: seasoning.typeId,
+        expiresAt: seasoning.expiresAt || undefined,
+        bestBeforeAt: seasoning.bestBeforeAt || undefined,
+        purchasedAt: seasoning.purchasedAt || undefined,
+        daysUntilExpiry,
+        expiryStatus,
+      });
+
+      return acc;
+    },
+    { listItems: [] as SeasoningListItem[], expiringCount: 0, expiredCount: 0 }
+  );
 
   // 期限が近い順に並び替え
-  listItems.sort((a, b) => {
-    // 期限切れのものを最初に
-    if (a.expiryStatus === "expired" && b.expiryStatus !== "expired") return -1;
-    if (a.expiryStatus !== "expired" && b.expiryStatus === "expired") return 1;
-
-    // 期限が近いものを次に
-    if (a.expiryStatus === "expiring_soon" && b.expiryStatus === "fresh")
-      return -1;
-    if (a.expiryStatus === "fresh" && b.expiryStatus === "expiring_soon")
-      return 1;
-
-    // 同じステータス内では期限が近い順
-    if (a.daysUntilExpiry !== undefined && b.daysUntilExpiry !== undefined) {
-      return a.daysUntilExpiry - b.daysUntilExpiry;
-    }
-
-    // 期限不明のものは最後
-    if (a.daysUntilExpiry === undefined && b.daysUntilExpiry !== undefined)
-      return 1;
-    if (a.daysUntilExpiry !== undefined && b.daysUntilExpiry === undefined)
-      return -1;
-
-    return 0;
-  });
+  listItems.sort(sortSeasoningsByExpiry);
 
   return {
     seasonings: listItems,
