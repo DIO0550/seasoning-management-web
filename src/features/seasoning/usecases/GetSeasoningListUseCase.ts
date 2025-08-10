@@ -1,8 +1,8 @@
 import type { ISeasoningRepository } from "@/libs/database/interfaces/ISeasoningRepository";
 import type { ISeasoningTypeRepository } from "@/libs/database/interfaces/ISeasoningTypeRepository";
 import { SeasoningService } from "@/features/seasoning/services/SeasoningService";
-import { VALIDATION_CONSTANTS } from "@/constants/validation";
 import { sortSeasoningsByExpiry } from "@/utils/seasoningSort";
+import { calculateExpiryStatus } from "@/utils/expiryCalculation";
 
 interface Dependencies {
   seasoningRepository: ISeasoningRepository;
@@ -50,26 +50,13 @@ async function getSeasoningList({
   const { listItems, expiringCount, expiredCount } = seasonings.reduce(
     (acc, seasoning) => {
       const expiryDate = seasoning.expiresAt || seasoning.bestBeforeAt;
-      let daysUntilExpiry: number | undefined;
-      let expiryStatus: SeasoningListItem["expiryStatus"] = "unknown";
+      const expiryInfo = calculateExpiryStatus(expiryDate, today);
 
-      if (expiryDate) {
-        const timeDiff = expiryDate.getTime() - today.getTime();
-        daysUntilExpiry = Math.ceil(
-          timeDiff / VALIDATION_CONSTANTS.EXPIRY.MILLISECONDS_PER_DAY
-        );
-
-        if (daysUntilExpiry < 0) {
-          expiryStatus = "expired";
-          acc.expiredCount++;
-        } else if (
-          daysUntilExpiry <= VALIDATION_CONSTANTS.EXPIRY.EXPIRY_WARNING_DAYS
-        ) {
-          expiryStatus = "expiring_soon";
-          acc.expiringCount++;
-        } else {
-          expiryStatus = "fresh";
-        }
+      // カウンティング
+      if (expiryInfo.status === "expired") {
+        acc.expiredCount++;
+      } else if (expiryInfo.status === "expiring_soon") {
+        acc.expiringCount++;
       }
 
       acc.listItems.push({
@@ -79,8 +66,8 @@ async function getSeasoningList({
         expiresAt: seasoning.expiresAt || undefined,
         bestBeforeAt: seasoning.bestBeforeAt || undefined,
         purchasedAt: seasoning.purchasedAt || undefined,
-        daysUntilExpiry,
-        expiryStatus,
+        daysUntilExpiry: expiryInfo.daysUntilExpiry,
+        expiryStatus: expiryInfo.status,
       });
 
       return acc;
