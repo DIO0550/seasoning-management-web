@@ -99,12 +99,7 @@ async function addNewSeasoning(
     imageId: data.imageId || null,
   };
 
-  const result = await seasoningRepository.create(createInput);
-  const created = await seasoningRepository.findById(result.id);
-
-  if (!created) {
-    throw new Error("調味料の作成に失敗しました");
-  }
+  const created = await seasoningRepository.create(createInput);
 
   return created;
 }
@@ -153,14 +148,7 @@ async function registerPurchasedSeasoning(
     imageId: data.imageId || null,
   };
 
-  const result = await seasoningRepository.create(createInput);
-  const created = await seasoningRepository.findById(result.id);
-
-  if (!created) {
-    throw new Error("調味料の登録に失敗しました");
-  }
-
-  return created;
+  return await seasoningRepository.create(createInput);
 }
 
 // Service層として適切な抽象化レベルでエクスポート
