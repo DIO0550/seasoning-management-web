@@ -4,8 +4,8 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
-import type { QueryResult } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces";
+import type { QueryResult } from "@/libs/database/interfaces";
 import { SeasoningImageRepository } from "./SeasoningImageRepository";
 import { SeasoningImage } from "@/libs/database/entities/SeasoningImage";
 

@@ -17,7 +17,7 @@ import type {
   PaginatedResult,
 } from "@/libs/database/interfaces/common/types";
 import { SeasoningTemplate } from "@/libs/database/entities/SeasoningTemplate";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces";
 
 /**
  * データベースから取得した生データの型定義

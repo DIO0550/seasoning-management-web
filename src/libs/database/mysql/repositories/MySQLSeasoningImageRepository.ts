@@ -17,7 +17,7 @@ import type {
   PaginatedResult,
 } from "@/libs/database/interfaces/common/types";
 import { SeasoningImage } from "@/libs/database/entities/SeasoningImage";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces";
 import {
   DEFAULT_PAGE_NUMBER,
   SEASONING_IMAGE_PAGE_SIZE,

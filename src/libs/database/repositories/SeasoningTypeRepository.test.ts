@@ -4,7 +4,7 @@
  */
 
 import { describe, test, expect, beforeEach, vi } from "vitest";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces";
 import type { SeasoningTypeCreateInput } from "@/libs/database/interfaces/ISeasoningTypeRepository";
 import { SeasoningTypeRepository } from "./SeasoningTypeRepository";
 
