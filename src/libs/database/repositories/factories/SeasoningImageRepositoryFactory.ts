@@ -3,7 +3,7 @@
  * 調味料画像リポジトリ生成関数
  */
 
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces";
 import type { ISeasoningImageRepository } from "@/libs/database/interfaces/ISeasoningImageRepository";
 import { SeasoningImageRepository } from "../SeasoningImageRepository";
 
