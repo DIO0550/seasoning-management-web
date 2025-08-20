@@ -10,14 +10,13 @@ import type {
   SeasoningCreateInput,
   SeasoningUpdateInput,
 } from "./ISeasoningRepository";
-import type { Seasoning } from "../entities/Seasoning";
+import type { Seasoning } from "../../entities/Seasoning";
 import type {
   PaginatedResult,
-  CreateResult,
   UpdateResult,
   DeleteResult,
-} from "./common/types";
-import type { IDatabaseConnection } from "./IDatabaseConnection";
+} from "../common/types";
+import type { IDatabaseConnection } from "../core/IDatabaseConnection";
 
 // モック実装（テスト用）
 class MockSeasoningRepository implements ISeasoningRepository {
@@ -27,10 +26,17 @@ class MockSeasoningRepository implements ISeasoningRepository {
     this.connection = connection;
   }
 
-  async create(_input: SeasoningCreateInput): Promise<CreateResult> {
+  async create(_input: SeasoningCreateInput): Promise<Seasoning> {
     return {
       id: 1,
+      name: "醤油",
+      typeId: 1,
+      imageId: null,
+      bestBeforeAt: null,
+      expiresAt: null,
+      purchasedAt: null,
       createdAt: new Date("2024-01-01"),
+      updatedAt: new Date("2024-01-01"),
     };
   }
 
@@ -114,6 +120,8 @@ describe("ISeasoningRepository Interface", () => {
       const result = await repository.create(input);
 
       expect(result.id).toBe(1);
+      expect(result.name).toBe("醤油");
+      expect(result.typeId).toBe(1);
       expect(result.createdAt).toBeInstanceOf(Date);
     });
 

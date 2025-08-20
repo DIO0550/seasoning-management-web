@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect, vi } from "vitest";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces";
 import {
   createSeasoningRepository,
   createSeasoningTypeRepository,

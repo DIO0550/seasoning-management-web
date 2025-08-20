@@ -1,5 +1,5 @@
 import type { SslOptions } from "mysql2/promise";
-import type { ConnectionConfig } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { ConnectionConfig } from "@/libs/database/interfaces";
 
 /**
  * MySQL接続設定に関する型定義

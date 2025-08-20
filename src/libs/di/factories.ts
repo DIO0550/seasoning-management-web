@@ -4,7 +4,7 @@
  */
 
 import mysql from "mysql2/promise";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces";
 import { MySQLConnection } from "@/libs/database/mysql/connection/MySQLConnection";
 import { MySQL2ConnectionAdapter } from "@/libs/database/mysql/adapters/MySQL2ConnectionAdapter";
 import { databaseConfig } from "@/config/database";

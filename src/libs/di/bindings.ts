@@ -7,11 +7,11 @@ import type { DIContainer } from "./container";
 import type { ServiceIdentifier } from "./types";
 
 // リポジトリインターフェースのインポート
-import type { ISeasoningRepository } from "@/libs/database/interfaces/ISeasoningRepository";
-import type { ISeasoningTypeRepository } from "@/libs/database/interfaces/ISeasoningTypeRepository";
-import type { ISeasoningImageRepository } from "@/libs/database/interfaces/ISeasoningImageRepository";
-import type { ISeasoningTemplateRepository } from "@/libs/database/interfaces/ISeasoningTemplateRepository";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { ISeasoningRepository } from "@/libs/database/interfaces";
+import type { ISeasoningTypeRepository } from "@/libs/database/interfaces";
+import type { ISeasoningImageRepository } from "@/libs/database/interfaces";
+import type { ISeasoningTemplateRepository } from "@/libs/database/interfaces";
+import type { IDatabaseConnection } from "@/libs/database/interfaces";
 
 // MySQL実装のインポート
 import { MySQLSeasoningRepository } from "@/libs/database/mysql/repositories/MySQLSeasoningRepository";

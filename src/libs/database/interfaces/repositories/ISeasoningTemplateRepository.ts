@@ -3,15 +3,15 @@
  * クリーンアーキテクチャに基づき、調味料テンプレートデータの永続化操作を定義
  */
 
-import type { SeasoningTemplate } from "../entities/SeasoningTemplate";
-import type { IDatabaseConnection } from "./IDatabaseConnection";
+import type { SeasoningTemplate } from "../../entities/SeasoningTemplate";
+import type { IDatabaseConnection } from "../core/IDatabaseConnection";
 import type {
   PaginatedResult,
   CreateResult,
   UpdateResult,
   DeleteResult,
   BaseSearchOptions,
-} from "./common/types";
+} from "../common/types";
 
 /**
  * 調味料テンプレート作成用の入力データ

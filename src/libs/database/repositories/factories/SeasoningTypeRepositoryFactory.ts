@@ -3,7 +3,7 @@
  * 調味料種類リポジトリ生成関数
  */
 
-import type { IDatabaseConnection } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces";
 import type { ISeasoningTypeRepository } from "@/libs/database/interfaces/ISeasoningTypeRepository";
 import { SeasoningTypeRepository } from "../SeasoningTypeRepository";
 

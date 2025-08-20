@@ -11,14 +11,14 @@ import type {
   SeasoningTemplateUpdateInput,
   CreateSeasoningFromTemplateInput,
 } from "./ISeasoningTemplateRepository";
-import type { SeasoningTemplate } from "../entities/SeasoningTemplate";
+import type { SeasoningTemplate } from "../../entities/SeasoningTemplate";
 import type {
   PaginatedResult,
   CreateResult,
   UpdateResult,
   DeleteResult,
-} from "./common/types";
-import type { IDatabaseConnection } from "./IDatabaseConnection";
+} from "../common/types";
+import type { IDatabaseConnection } from "../core/IDatabaseConnection";
 
 // モック実装（テスト用）
 class MockSeasoningTemplateRepository implements ISeasoningTemplateRepository {

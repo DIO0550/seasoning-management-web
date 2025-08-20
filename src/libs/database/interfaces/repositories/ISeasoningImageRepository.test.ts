@@ -11,14 +11,14 @@ import type {
   SeasoningImageUpdateInput,
   ImagePathResult,
 } from "./ISeasoningImageRepository";
-import type { SeasoningImage } from "../entities/SeasoningImage";
+import type { SeasoningImage } from "../../entities/SeasoningImage";
 import type {
   PaginatedResult,
   CreateResult,
   UpdateResult,
   DeleteResult,
-} from "./common/types";
-import type { IDatabaseConnection } from "./IDatabaseConnection";
+} from "../common/types";
+import type { IDatabaseConnection } from "../core/IDatabaseConnection";
 
 // モック実装（テスト用）
 class MockSeasoningImageRepository implements ISeasoningImageRepository {
