@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
 import { MySQLTransaction } from "./MySQLTransaction";
 import type { ITransactionAdapter } from "@/libs/database/interfaces/IConnectionAdapter";
-import type { QueryResult } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { QueryResult } from "@/libs/database/interfaces";
 
 describe("MySQLTransaction", () => {
   let mockAdapter: ITransactionAdapter;

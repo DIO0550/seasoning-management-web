@@ -4,7 +4,7 @@ import type {
   ConnectionConfig,
   QueryResult,
   PoolStats,
-} from "@/libs/database/interfaces/IDatabaseConnection";
+} from "@/libs/database/interfaces";
 import type { IConnectionAdapter, ITransactionAdapter } from "@/libs/database/interfaces/IConnectionAdapter";
 
 describe("MySQLConnection", () => {

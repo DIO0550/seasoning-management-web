@@ -1,5 +1,5 @@
 import type { FieldPacket } from "mysql2/promise";
-import type { QueryResult } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { QueryResult } from "@/libs/database/interfaces";
 
 /**
  * MySQLクエリ結果に関する型定義

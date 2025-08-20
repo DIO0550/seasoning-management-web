@@ -4,7 +4,7 @@ import type {
   QueryResult,
   ConnectionConfig,
   PoolStats,
-} from "@/libs/database/interfaces/IDatabaseConnection";
+} from "@/libs/database/interfaces";
 import { createMySQLError } from "../errors";
 
 /**

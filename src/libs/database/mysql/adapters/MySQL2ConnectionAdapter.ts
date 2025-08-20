@@ -7,7 +7,7 @@ import type {
   QueryResult,
   ConnectionConfig,
   PoolStats,
-} from "@/libs/database/interfaces/IDatabaseConnection";
+} from "@/libs/database/interfaces";
 import { MySQL2TransactionAdapter } from "./MySQL2TransactionAdapter";
 
 /**

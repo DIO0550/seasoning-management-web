@@ -1,4 +1,4 @@
-import type { QueryResult } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { QueryResult } from "@/libs/database/interfaces";
 import type { ITransactionAdapter } from "@/libs/database/interfaces/IConnectionAdapter";
 import type { ITransaction } from "@/libs/database/interfaces/ITransaction";
 

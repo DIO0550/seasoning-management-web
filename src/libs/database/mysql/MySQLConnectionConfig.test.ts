@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import type { ConnectionConfig } from "@/libs/database/interfaces/IDatabaseConnection";
+import type { ConnectionConfig } from "@/libs/database/interfaces";
 import { MySQLConnectionConfig } from "@/libs/database/mysql/MySQLConnectionConfig";
 
 describe("MySQLConnectionConfig", () => {
