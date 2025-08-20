@@ -1,7 +1,7 @@
-import type { ISeasoningRepository } from "@/libs/database/interfaces/ISeasoningRepository";
-import type { ISeasoningTypeRepository } from "@/libs/database/interfaces/ISeasoningTypeRepository";
+import type { ISeasoningRepository } from "@/libs/database/interfaces";
+import type { ISeasoningTypeRepository } from "@/libs/database/interfaces";
 import { Seasoning } from "@/libs/database/entities/Seasoning";
-import type { SeasoningCreateInput } from "@/libs/database/interfaces/ISeasoningRepository";
+import type { SeasoningCreateInput } from "@/libs/database/interfaces";
 import { VALIDATION_CONSTANTS } from "@/constants/validation";
 
 // 依存性注入用型
