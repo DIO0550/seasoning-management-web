@@ -15,10 +15,15 @@ import { MySQLConnectionPool } from "./mysql/connection/MySQLConnectionPool";
 import { ConfigurationError } from "./errors";
 
 /**
+ * サポートされているデータベース種別の定数
+ */
+export const SUPPORTED_DATABASE_TYPES: DatabaseType[] = ["mysql"];
+
+/**
  * データベースファクトリーの具象実装
  */
 export class DatabaseFactory implements IDatabaseFactory {
-  private readonly supportedTypes: DatabaseType[] = ["mysql"];
+  private readonly supportedTypes: DatabaseType[] = SUPPORTED_DATABASE_TYPES;
 
   /**
    * データベース接続を作成する

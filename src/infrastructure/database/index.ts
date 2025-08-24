@@ -45,4 +45,8 @@ export type { DatabaseErrorCode } from "./errors";
 export * from "./mysql";
 
 // データベースファクトリー
-export { DatabaseFactory, databaseFactory } from "./DatabaseFactory";
+export {
+  DatabaseFactory,
+  databaseFactory,
+  SUPPORTED_DATABASE_TYPES,
+} from "./DatabaseFactory";
