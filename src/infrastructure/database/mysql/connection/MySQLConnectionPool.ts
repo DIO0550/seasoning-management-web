@@ -229,7 +229,7 @@ class PooledMySQLConnection implements IDatabaseConnection {
   }
 
   async beginTransaction(_options?: TransactionOptions): Promise<ITransaction> {
-    // 簡易実装（実際のプロジェクトでは適切に実装する）
+    // TODO: Implement transaction support for pooled connections. See issue #123.
     throw new Error("Transaction not implemented for pooled connections");
   }
 
