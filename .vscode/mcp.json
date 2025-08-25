@@ -1,4 +1,12 @@
 {
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "github_token",
+      "description": "GitHub Personal Access Token",
+      "password": true
+    }
+  ],
   "servers": {
     "github": {
       "command": "sh",
@@ -8,11 +16,11 @@
       ]
     },
     "github-mcp": {
-      "command": "bash",
-      "args": [
-        "-c",
-        "GITHUB_PERSONAL_ACCESS_TOKEN=\"$GITHUB_TOKEN\" exec /usr/local/bin/github-mcp-server stdio"
-      ]
+      "command": "/usr/local/bin/github-mcp-server",
+      "args": ["stdio"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github_token}"
+      }
     },
     "prompt-mcp-server": {
       "command": "docker",
