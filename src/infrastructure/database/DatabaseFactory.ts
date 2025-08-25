@@ -17,13 +17,14 @@ import { ConfigurationError } from "./errors";
 /**
  * サポートされているデータベース種別の定数
  */
-export const SUPPORTED_DATABASE_TYPES: DatabaseType[] = ["mysql"];
+export const SUPPORTED_DATABASE_TYPES = ["mysql"] as const;
 
 /**
  * データベースファクトリーの具象実装
  */
 export class DatabaseFactory implements IDatabaseFactory {
-  private readonly supportedTypes: DatabaseType[] = SUPPORTED_DATABASE_TYPES;
+  private readonly supportedTypes: readonly DatabaseType[] =
+    SUPPORTED_DATABASE_TYPES;
 
   /**
    * データベース接続を作成する
