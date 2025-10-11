@@ -5,7 +5,7 @@
 
 import type { IDatabaseConnection } from "../interfaces/IDatabaseConnection";
 import type { IConnectionPool } from "../interfaces/IConnectionPool";
-import type { ConnectionConfig } from "../shared";
+import type { ConnectionConfig } from "@/libs/database/interfaces/core";
 
 /**
  * サポートするデータベース種別

@@ -1,6 +1,9 @@
 import type * as mysql from "mysql2/promise";
 import type { ITransaction } from "../../interfaces/ITransaction";
-import type { QueryResult, TransactionStatus } from "../../shared";
+import type {
+  QueryResult,
+  TransactionStatus,
+} from "@/libs/database/interfaces/core";
 import { TransactionError, QueryError } from "../../errors";
 
 /**
@@ -120,8 +123,8 @@ export class MySQLTransaction implements ITransaction {
       const mysqlResult = rows as mysql.RowDataPacket[] & mysql.ResultSetHeader;
       return {
         rows: rows as T[],
-        affectedRows: mysqlResult.affectedRows || rows.length,
-        insertId: mysqlResult.insertId,
+        rowsAffected: mysqlResult.affectedRows || rows.length,
+        insertId: mysqlResult.insertId || null,
         metadata: { fields },
       };
     }
@@ -130,8 +133,8 @@ export class MySQLTransaction implements ITransaction {
     const result = rows as mysql.ResultSetHeader;
     return {
       rows: [] as T[],
-      affectedRows: result.affectedRows || 0,
-      insertId: result.insertId,
+      rowsAffected: result.affectedRows || 0,
+      insertId: result.insertId || null,
       metadata: { fields },
     };
   }

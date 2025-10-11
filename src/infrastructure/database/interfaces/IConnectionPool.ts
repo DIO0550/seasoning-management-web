@@ -1,5 +1,8 @@
 import type { IDatabaseConnection } from "./IDatabaseConnection";
-import type { PoolConfig, ConnectionConfig } from "../shared";
+import type {
+  PoolConfig,
+  ConnectionConfig,
+} from "@/libs/database/interfaces/core";
 
 /**
  * データベースコネクションプールのインターフェース

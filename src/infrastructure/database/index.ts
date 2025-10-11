@@ -50,3 +50,7 @@ export {
   databaseFactory,
   SUPPORTED_DATABASE_TYPES,
 } from "./DatabaseFactory";
+
+// コネクションマネージャー
+export { ConnectionManager } from "./ConnectionManager";
+export type { ConnectionManagerOptions } from "./ConnectionManager";
