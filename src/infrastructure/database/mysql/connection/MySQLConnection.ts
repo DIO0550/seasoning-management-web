@@ -5,7 +5,7 @@ import type {
   QueryResult,
   ConnectionConfig,
   TransactionOptions,
-} from "../../shared";
+} from "@/libs/database/interfaces/core";
 import { ConnectionError, QueryError, TransactionError } from "../../errors";
 import { MySQLTransaction } from "./MySQLTransaction";
 
@@ -29,7 +29,7 @@ export class MySQLConnection implements IDatabaseConnection {
       this.connection = await mysql.createConnection({
         host: this.config.host,
         port: this.config.port,
-        user: this.config.user,
+        user: this.config.username,
         password: this.config.password,
         database: this.config.database,
         connectTimeout: this.config.connectTimeout,
@@ -169,8 +169,8 @@ export class MySQLConnection implements IDatabaseConnection {
       const mysqlResult = rows as mysql.RowDataPacket[] & mysql.ResultSetHeader;
       return {
         rows: rows as T[],
-        affectedRows: mysqlResult.affectedRows || rows.length,
-        insertId: mysqlResult.insertId,
+        rowsAffected: mysqlResult.affectedRows || rows.length,
+        insertId: mysqlResult.insertId ?? null,
         metadata: { fields },
       };
     }
@@ -179,8 +179,8 @@ export class MySQLConnection implements IDatabaseConnection {
     const result = rows as mysql.ResultSetHeader;
     return {
       rows: [] as T[],
-      affectedRows: result.affectedRows || 0,
-      insertId: result.insertId,
+      rowsAffected: result.affectedRows || 0,
+      insertId: result.insertId ?? null,
       metadata: { fields },
     };
   }

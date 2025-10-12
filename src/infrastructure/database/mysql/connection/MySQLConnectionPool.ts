@@ -11,7 +11,7 @@ import type {
   PoolConfig,
   QueryResult,
   TransactionOptions,
-} from "../../shared";
+} from "@/libs/database/interfaces/core";
 import { PoolError, ConnectionError } from "../../errors";
 
 /**
@@ -51,7 +51,7 @@ export class MySQLConnectionPool implements IConnectionPool {
       const poolConfig: mysql.PoolOptions = {
         host: config.host,
         port: config.port,
-        user: config.user,
+        user: config.username,
         password: config.password,
         database: config.database,
         connectTimeout: config.connectTimeout,
@@ -159,17 +159,32 @@ export class MySQLConnectionPool implements IConnectionPool {
    * プール設定を取得する
    */
   getConfig(): PoolConfig {
-    return (
-      this.config?.pool || {
-        min: 0,
-        max: 10,
-        acquireTimeout: 30000,
-        createTimeout: 30000,
-        destroyTimeout: 5000,
-        idle: 600000,
-        reapInterval: 1000,
-      }
-    );
+    const defaultConfig: PoolConfig = {
+      min: 0,
+      max: 10,
+      acquireTimeout: 30000,
+      createTimeout: 30000,
+      destroyTimeout: 5000,
+      idle: 600000,
+      reapInterval: 1000,
+    };
+
+    if (!this.config?.pool) {
+      return defaultConfig;
+    }
+
+    return {
+      min: this.config.pool.min ?? defaultConfig.min,
+      max: this.config.pool.max ?? defaultConfig.max,
+      acquireTimeout:
+        this.config.pool.acquireTimeout ?? defaultConfig.acquireTimeout,
+      createTimeout:
+        this.config.pool.createTimeout ?? defaultConfig.createTimeout,
+      destroyTimeout:
+        this.config.pool.destroyTimeout ?? defaultConfig.destroyTimeout,
+      idle: this.config.pool.idle ?? defaultConfig.idle,
+      reapInterval: this.config.pool.reapInterval ?? defaultConfig.reapInterval,
+    };
   }
 
   /**
@@ -248,7 +263,9 @@ class PooledMySQLConnection implements IDatabaseConnection {
       host: "localhost",
       port: 3306,
       database: "",
-      user: "",
+      username: "",
+      maxConnections: 10,
+      minConnections: 0,
     };
   }
 
@@ -270,8 +287,8 @@ class PooledMySQLConnection implements IDatabaseConnection {
       const mysqlResult = rows as mysql.RowDataPacket[] & mysql.ResultSetHeader;
       return {
         rows: rows as T[],
-        affectedRows: mysqlResult.affectedRows || rows.length,
-        insertId: mysqlResult.insertId,
+        rowsAffected: mysqlResult.affectedRows || rows.length,
+        insertId: mysqlResult.insertId ?? null,
         metadata: { fields },
       };
     }
@@ -279,8 +296,8 @@ class PooledMySQLConnection implements IDatabaseConnection {
     const result = rows as mysql.ResultSetHeader;
     return {
       rows: [] as T[],
-      affectedRows: result.affectedRows || 0,
-      insertId: result.insertId,
+      rowsAffected: result.affectedRows || 0,
+      insertId: result.insertId ?? null,
       metadata: { fields },
     };
   }

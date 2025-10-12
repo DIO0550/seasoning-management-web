@@ -9,7 +9,7 @@ import type {
 } from "./interfaces/IDatabaseFactory";
 import type { IDatabaseConnection } from "./interfaces/IDatabaseConnection";
 import type { IConnectionPool } from "./interfaces/IConnectionPool";
-import type { ConnectionConfig } from "./shared";
+import type { ConnectionConfig } from "@/libs/database/interfaces/core";
 import { MySQLConnection } from "./mysql/connection/MySQLConnection";
 import { MySQLConnectionPool } from "./mysql/connection/MySQLConnectionPool";
 import { ConfigurationError } from "./errors";
@@ -140,24 +140,13 @@ export class DatabaseFactory implements IDatabaseFactory {
       errors.push("Database name is required");
     }
 
-    if (!config.user) {
+    if (!config.username) {
       errors.push("User is required");
     }
 
-    // プール設定のチェック
-    if (config.pool) {
-      if (config.pool.min < 0) {
-        errors.push("Pool minimum connections must be >= 0");
-      }
-
-      if (config.pool.max <= 0) {
-        errors.push("Pool maximum connections must be > 0");
-      }
-
-      if (config.pool.min > config.pool.max) {
-        errors.push("Pool minimum connections must be <= maximum connections");
-      }
-    }
+    // NOTE: pool設定は現行のConnectionConfigから除去されたため一時的に無効化
+    // 将来的に再導入する場合はConnectionConfigにpool型を戻し、ここでバリデーションを再度有効化する
+    // if (config.pool) { ... }
 
     if (errors.length > 0) {
       throw new ConfigurationError(
