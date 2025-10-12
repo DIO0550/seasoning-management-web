@@ -124,7 +124,7 @@ export class MySQLTransaction implements ITransaction {
       return {
         rows: rows as T[],
         rowsAffected: mysqlResult.affectedRows || rows.length,
-        insertId: mysqlResult.insertId || null,
+        insertId: mysqlResult.insertId ?? null,
         metadata: { fields },
       };
     }
@@ -134,7 +134,7 @@ export class MySQLTransaction implements ITransaction {
     return {
       rows: [] as T[],
       rowsAffected: result.affectedRows || 0,
-      insertId: result.insertId || null,
+      insertId: result.insertId ?? null,
       metadata: { fields },
     };
   }

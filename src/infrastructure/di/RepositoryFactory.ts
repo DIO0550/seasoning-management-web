@@ -20,6 +20,15 @@ import {
 /**
  * リポジトリファクトリー
  * データベース接続プロバイダーを使用してリポジトリを生成する
+ *
+ * @note 接続の解放について
+ * このファクトリーで取得する接続は、ConnectionManagerのプールから提供されます。
+ * 接続の解放は以下の責務分担により自動的に行われます:
+ * - 接続プール: プールされた接続の管理と自動解放
+ * - リポジトリ: 接続を使用してクエリを実行
+ * - 呼び出し側: トランザクション境界の管理
+ *
+ * 明示的な接続解放が必要な場合は、トランザクションを使用してください。
  */
 export class RepositoryFactory {
   constructor(
@@ -28,6 +37,7 @@ export class RepositoryFactory {
 
   /**
    * 調味料リポジトリを作成
+   * @note 接続はプールから自動管理されます
    */
   async createSeasoningRepository(): Promise<ISeasoningRepository> {
     const connection = await this.connectionProvider.getConnection();
@@ -36,6 +46,7 @@ export class RepositoryFactory {
 
   /**
    * 調味料種類リポジトリを作成
+   * @note 接続はプールから自動管理されます
    */
   async createSeasoningTypeRepository(): Promise<ISeasoningTypeRepository> {
     const connection = await this.connectionProvider.getConnection();
@@ -44,6 +55,7 @@ export class RepositoryFactory {
 
   /**
    * 調味料画像リポジトリを作成
+   * @note 接続はプールから自動管理されます
    */
   async createSeasoningImageRepository(): Promise<ISeasoningImageRepository> {
     const connection = await this.connectionProvider.getConnection();
@@ -52,6 +64,7 @@ export class RepositoryFactory {
 
   /**
    * 調味料テンプレートリポジトリを作成
+   * @note 接続はプールから自動管理されます
    */
   async createSeasoningTemplateRepository(): Promise<ISeasoningTemplateRepository> {
     const connection = await this.connectionProvider.getConnection();

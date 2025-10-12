@@ -9,6 +9,11 @@ import type { ConnectionConfig } from "@/libs/database/interfaces/core";
 import { databaseConfig, type DatabaseConfig } from "@/config/database";
 
 /**
+ * デフォルトの最小接続数
+ */
+const DEFAULT_MIN_CONNECTIONS = 2;
+
+/**
  * DatabaseConfigをConnectionConfigに変換する
  */
 const toConnectionConfig = (config: DatabaseConfig): ConnectionConfig => ({
@@ -18,7 +23,7 @@ const toConnectionConfig = (config: DatabaseConfig): ConnectionConfig => ({
   username: config.username,
   password: config.password,
   maxConnections: config.connectionLimit,
-  minConnections: 2, // デフォルト値
+  minConnections: DEFAULT_MIN_CONNECTIONS,
   connectTimeout: config.acquireTimeout,
   queryTimeout: config.timeout,
 });
