@@ -4,8 +4,8 @@
  */
 
 import type { IDatabaseConnection } from "@/libs/database/interfaces";
-import type { ISeasoningTemplateRepository } from "@/libs/database/interfaces/ISeasoningTemplateRepository";
-import { SeasoningTemplateRepository } from "../SeasoningTemplateRepository";
+import type { ISeasoningTemplateRepository } from "@/libs/database/interfaces/repositories/ISeasoningTemplateRepository";
+import { MySQLSeasoningTemplateRepository } from "@/infrastructure/database/repositories/mysql";
 
 /**
  * 調味料テンプレートリポジトリを作成
@@ -15,5 +15,5 @@ import { SeasoningTemplateRepository } from "../SeasoningTemplateRepository";
 export const createSeasoningTemplateRepository = (
   connection: IDatabaseConnection
 ): ISeasoningTemplateRepository => {
-  return new SeasoningTemplateRepository(connection);
+  return new MySQLSeasoningTemplateRepository(connection);
 };

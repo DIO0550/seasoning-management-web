@@ -4,8 +4,8 @@
  */
 
 import type { IDatabaseConnection } from "@/libs/database/interfaces";
-import type { ISeasoningImageRepository } from "@/libs/database/interfaces/ISeasoningImageRepository";
-import { SeasoningImageRepository } from "../SeasoningImageRepository";
+import type { ISeasoningImageRepository } from "@/libs/database/interfaces/repositories/ISeasoningImageRepository";
+import { MySQLSeasoningImageRepository } from "@/infrastructure/database/repositories/mysql";
 
 /**
  * 調味料画像リポジトリを作成
@@ -15,5 +15,5 @@ import { SeasoningImageRepository } from "../SeasoningImageRepository";
 export const createSeasoningImageRepository = (
   connection: IDatabaseConnection
 ): ISeasoningImageRepository => {
-  return new SeasoningImageRepository(connection);
+  return new MySQLSeasoningImageRepository(connection);
 };
