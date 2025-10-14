@@ -1,11 +1,15 @@
 /**
  * DIライブラリのエクスポート
  * @description 依存注入ライブラリの公開API
- */
-
-/**
- * DIライブラリのエクスポート
- * @description 依存注入ライブラリの公開API
+ *
+ * このモジュールはDomain層の抽象化を提供します。
+ * 具体的なバインディングと実装は `@/infrastructure/di` を使用してください。
+ *
+ * 使用方法:
+ * ```typescript
+ * import { DIContainer } from "@/libs/di"; // ドメイン層の抽象化
+ * import { configureInfrastructureForDevelopment } from "@/infrastructure/di"; // Infrastructure層の実装
+ * ```
  */
 
 // 型定義
@@ -25,21 +29,6 @@ export {
 
 // DIコンテナ
 export { DIContainer } from "./container";
-
-// サービス識別子とバインディング
-export { SERVICE_IDENTIFIERS } from "./bindings";
-export {
-  configureForDevelopment,
-  configureForProduction,
-  configureForTest,
-} from "./bindings";
-
-// 接続ファクトリー
-export {
-  createDevelopmentConnection,
-  createProductionConnection,
-  createTestConnection,
-} from "./factories";
 
 // 環境設定
 export type { Environment as EnvironmentType } from "./config";
