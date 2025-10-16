@@ -1,18 +1,15 @@
 /**
  * @fileoverview Repositories エクスポート設定
- * すべてのリポジトリクラスとファクトリ関数を一元的にエクスポート
+ * リポジトリファクトリ関数を一元的にエクスポート
+ *
+ * @deprecated 各リポジトリクラスは削除されました。
+ * Infrastructure層の具象実装を使用してください。
  */
 
-// 各リポジトリクラス
-export { SeasoningRepository } from "./SeasoningRepository";
-export { SeasoningTypeRepository } from "./SeasoningTypeRepository";
-export { SeasoningImageRepository } from "./SeasoningImageRepository";
-export { SeasoningTemplateRepository } from "./SeasoningTemplateRepository";
-
-// リポジトリ生成関数
+// リポジトリ生成関数（Infrastructure層から再エクスポート）
 export {
   createSeasoningRepository,
   createSeasoningTypeRepository,
   createSeasoningImageRepository,
   createSeasoningTemplateRepository,
-} from "./factories";
+} from "@/infrastructure/database/repositories/factories";
