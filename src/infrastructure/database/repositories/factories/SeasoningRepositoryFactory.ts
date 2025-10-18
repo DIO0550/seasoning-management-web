@@ -1,11 +1,11 @@
 /**
  * @fileoverview SeasoningRepositoryFactory
- * 調味料リポジトリ生成関数
+ * 調味料リポジトリ生成関数（Infrastructure層）
  */
 
 import type { IDatabaseConnection } from "@/libs/database/interfaces";
-import type { ISeasoningRepository } from "@/libs/database/interfaces/ISeasoningRepository";
-import { SeasoningRepository } from "../SeasoningRepository";
+import type { ISeasoningRepository } from "@/libs/database/interfaces/repositories/ISeasoningRepository";
+import { MySQLSeasoningRepository } from "@/infrastructure/database/repositories/mysql";
 
 /**
  * 調味料リポジトリを作成
@@ -15,5 +15,5 @@ import { SeasoningRepository } from "../SeasoningRepository";
 export const createSeasoningRepository = (
   connection: IDatabaseConnection
 ): ISeasoningRepository => {
-  return new SeasoningRepository(connection);
+  return new MySQLSeasoningRepository(connection);
 };
