@@ -19,7 +19,7 @@ describe("Database Configuration", () => {
       expect(databaseConfig).toBeDefined();
       expect(databaseConfig.host).toBeDefined();
       expect(databaseConfig.port).toBeDefined();
-      expect(databaseConfig.user).toBeDefined();
+      expect(databaseConfig.username).toBeDefined();
       expect(databaseConfig.password).toBeDefined();
       expect(databaseConfig.database).toBeDefined();
     });
@@ -82,7 +82,7 @@ describe("Database Configuration", () => {
       // 設定オブジェクトの不変性をテストするのではなく、設定値が適切であることをテスト
       expect(config.host).toBeDefined();
       expect(config.port).toBeDefined();
-      expect(config.user).toBeDefined();
+      expect(config.username).toBeDefined();
       expect(config.database).toBeDefined();
     });
 
@@ -90,7 +90,7 @@ describe("Database Configuration", () => {
       const requiredProperties = [
         "host",
         "port",
-        "user",
+        "username",
         "password",
         "database",
         "connectionLimit",

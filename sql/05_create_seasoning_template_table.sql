@@ -13,5 +13,8 @@ CREATE TABLE IF NOT EXISTS seasoning_template (
   updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   INDEX idx_type_id (type_id),
   INDEX idx_image_id (image_id),
-  INDEX idx_name (name)
+  INDEX idx_name (name),
+  UNIQUE KEY unique_name (name),
+  CONSTRAINT fk_template_type FOREIGN KEY (type_id) REFERENCES seasoning_type(id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT fk_template_image FOREIGN KEY (image_id) REFERENCES seasoning_image(id) ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

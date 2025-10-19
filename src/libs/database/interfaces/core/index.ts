@@ -10,7 +10,14 @@ export type {
   ConnectionConfig,
   IConnectionPool,
   PoolStats,
+  PoolConfig,
+  TransactionOptions,
+  IsolationLevel,
+  TransactionStatus,
 } from "./IDatabaseConnection";
+
+// 接続プロバイダ
+export type { IDatabaseConnectionProvider } from "./IDatabaseConnectionProvider";
 
 // データベースプール
 export type { IDatabasePool } from "./IDatabasePool";
@@ -19,4 +26,4 @@ export type { IDatabasePool } from "./IDatabasePool";
 export type { IConnectionAdapter } from "./IConnectionAdapter";
 
 // トランザクション
-export type { ITransaction, TransactionOptions } from "./ITransaction";
+export type { ITransaction } from "./ITransaction";

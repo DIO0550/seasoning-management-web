@@ -1,4 +1,4 @@
-import type { QueryResult } from "./IDatabaseConnection";
+import type { QueryResult, TransactionStatus } from "./IDatabaseConnection";
 
 /**
  * データベーストランザクションのインターフェース
@@ -25,28 +25,16 @@ export interface ITransaction {
    * @throws {TransactionError} ロールバックに失敗した場合
    */
   rollback(): Promise<void>;
-}
-
-/**
- * トランザクション操作のオプション
- */
-export interface TransactionOptions {
-  /**
-   * トランザクションのタイムアウト時間（ミリ秒）
-   */
-  timeout?: number;
 
   /**
-   * 分離レベル
+   * トランザクションの状態を取得する
+   * @returns 現在のトランザクション状態
    */
-  isolationLevel?:
-    | "READ_UNCOMMITTED"
-    | "READ_COMMITTED"
-    | "REPEATABLE_READ"
-    | "SERIALIZABLE";
+  getStatus(): TransactionStatus;
 
   /**
-   * 読み取り専用トランザクションかどうか
+   * トランザクションが有効かどうかを確認する
+   * @returns 有効な場合はtrue
    */
-  readOnly?: boolean;
+  isActive(): boolean;
 }

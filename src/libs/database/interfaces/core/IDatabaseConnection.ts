@@ -34,10 +34,11 @@ export interface IDatabaseConnection {
 
   /**
    * トランザクションを開始する
+   * @param options トランザクションオプション
    * @returns トランザクションオブジェクト
    * @throws {TransactionError} トランザクション開始に失敗した場合
    */
-  beginTransaction(): Promise<ITransaction>;
+  beginTransaction(options?: TransactionOptions): Promise<ITransaction>;
 
   /**
    * データベース接続の生存確認を行う
@@ -141,7 +142,7 @@ export interface ConnectionConfig {
   /**
    * パスワード
    */
-  password: string;
+  password?: string;
 
   /**
    * 接続タイムアウト（ミリ秒）
@@ -176,9 +177,54 @@ export interface ConnectionConfig {
       };
 
   /**
+   * プール設定（利用する場合）
+   */
+  pool?: Partial<PoolConfig>;
+
+  /**
    * 追加オプション
    */
   options?: Record<string, unknown>;
+}
+
+/**
+ * コネクションプール設定
+ */
+export interface PoolConfig {
+  /**
+   * 最小接続数
+   */
+  min: number;
+
+  /**
+   * 最大接続数
+   */
+  max: number;
+
+  /**
+   * 取得タイムアウト（ミリ秒）
+   */
+  acquireTimeout: number;
+
+  /**
+   * 作成タイムアウト（ミリ秒）
+   */
+  createTimeout: number;
+
+  /**
+   * 破棄タイムアウト（ミリ秒）
+   */
+  destroyTimeout: number;
+
+  /**
+   * アイドルタイムアウト（ミリ秒）
+   */
+  idle: number;
+
+  /**
+   * 刈り取り間隔（ミリ秒）
+   */
+  reapInterval: number;
 }
 
 /**
@@ -230,3 +276,42 @@ export interface PoolStats {
    */
   pendingRequests: number;
 }
+
+/**
+ * データベース分離レベル
+ */
+export type IsolationLevel =
+  | "READ_UNCOMMITTED"
+  | "READ_COMMITTED"
+  | "REPEATABLE_READ"
+  | "SERIALIZABLE";
+
+/**
+ * トランザクションオプション
+ */
+export interface TransactionOptions {
+  /**
+   * 分離レベル
+   */
+  isolationLevel?: IsolationLevel;
+
+  /**
+   * 読み取り専用フラグ
+   */
+  readOnly?: boolean;
+
+  /**
+   * タイムアウト（ミリ秒）
+   */
+  timeout?: number;
+}
+
+/**
+ * トランザクション状態
+ */
+export type TransactionStatus =
+  | "PENDING" // 開始待ち
+  | "ACTIVE" // 実行中
+  | "COMMITTED" // コミット済み
+  | "ROLLED_BACK" // ロールバック済み
+  | "ERROR"; // エラー状態
