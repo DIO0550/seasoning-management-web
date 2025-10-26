@@ -3,6 +3,18 @@ import { seasoningAddRequestSchema } from "@/types/api/seasoning/add/schemas";
 import { SeasoningAddErrorCode } from "@/types/api/seasoning/add/errorCode";
 import type { SeasoningAddErrorCode as SeasoningAddErrorCodeType } from "@/types/api/seasoning/add/errorCode";
 import type { ErrorResponse } from "@/types/api/common/types";
+import {
+  SeasoningListQuerySchema,
+  type SeasoningListResponse,
+  type ErrorResponse as ApiErrorResponse,
+} from "@/types/api/seasoning/list/types";
+import {
+  calculateDaysUntilExpiry,
+  ExpiryStatusUtils,
+} from "@/features/seasoning/utils/expiry-status";
+import { SeasoningCollections } from "@/domain/collections/SeasoningCollection";
+import { SeasoningApiErrorCodes } from "@/constants/api/seasonings/error-codes";
+import type { SeasoningListItem } from "@/types/seasoning";
 
 // 調味料の型定義（新しい形式）
 interface Seasoning {
@@ -14,23 +26,105 @@ interface Seasoning {
 }
 
 // モックデータ（本来はDBから取得）
-const seasonings: Seasoning[] = [];
-
-// テスト用にseasoningsを公開
-export { seasonings };
+// Note: テスト用にexportしているが、本番ではリポジトリから取得する
+export const seasonings: Seasoning[] = [];
 
 /**
  * GET /api/seasonings - 調味料一覧を取得
+ * OpenAPI仕様に準拠
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    return NextResponse.json(seasonings, { status: 200 });
+    // クエリパラメータの取得とバリデーション
+    const { searchParams } = new URL(request.url);
+    const queryParams = Object.fromEntries(searchParams);
+
+    const validationResult = SeasoningListQuerySchema.safeParse(queryParams);
+
+    if (!validationResult.success) {
+      const errorResponse: ApiErrorResponse = {
+        code: SeasoningApiErrorCodes.validation,
+        message: "入力内容を確認してください",
+        details: validationResult.error.errors.map((err) => ({
+          field: err.path.join("."),
+          message: err.message,
+        })),
+      };
+
+      return NextResponse.json(errorResponse, { status: 400 });
+    }
+
+    const query = validationResult.data;
+    const { page, pageSize } = query;
+
+    // TODO: リポジトリからデータ取得（現在はモックデータ）
+    // モックデータを SeasoningListItem 形式に変換
+    const seasoningItems: SeasoningListItem[] = seasonings.map((s) => {
+      const expiryDate = null; // モックデータには期限情報がない
+      const daysUntilExpiry = calculateDaysUntilExpiry(expiryDate);
+      const expiryStatus = ExpiryStatusUtils.fromDays(daysUntilExpiry);
+
+      return {
+        id: Number.parseInt(s.id.split("_")[1] || "1"),
+        name: s.name,
+        typeId: s.seasoningTypeId,
+        bestBeforeAt: undefined,
+        expiresAt: undefined,
+        purchasedAt: undefined,
+        daysUntilExpiry: daysUntilExpiry ?? undefined,
+        expiryStatus,
+      };
+    });
+
+    const baseCollection = SeasoningCollections.from(seasoningItems);
+    const collection = SeasoningCollections.applyQuery(baseCollection, query);
+
+    // サマリー計算（フィルタリング前の全データから）
+    const summary = SeasoningCollections.calculateSummary(baseCollection);
+
+    // ページネーション
+    const paginationResult = SeasoningCollections.paginate(
+      collection,
+      page,
+      pageSize
+    );
+
+    // ドメイン型からAPI型への変換
+    const apiItems = paginationResult.items.map((item) => ({
+      id: item.id,
+      name: item.name,
+      typeId: item.typeId,
+      imageId: null, // モックデータには画像情報がない
+      bestBeforeAt: item.bestBeforeAt?.toISOString() ?? null,
+      expiresAt: item.expiresAt?.toISOString() ?? null,
+      purchasedAt: item.purchasedAt?.toISOString() ?? null,
+      daysUntilExpiry: item.daysUntilExpiry ?? null,
+      expiryStatus: item.expiryStatus,
+    }));
+
+    const response: SeasoningListResponse = {
+      data: apiItems,
+      meta: {
+        page: paginationResult.page,
+        pageSize: paginationResult.pageSize,
+        totalItems: paginationResult.totalItems,
+        totalPages: paginationResult.totalPages,
+        hasNext: paginationResult.hasNext,
+        hasPrevious: paginationResult.hasPrevious,
+      },
+      summary,
+    };
+
+    return NextResponse.json(response, { status: 200 });
   } catch (error) {
     console.error("調味料一覧取得エラー:", error);
-    return NextResponse.json(
-      { error: "システムエラーが発生しました" },
-      { status: 500 }
-    );
+
+    const errorResponse: ApiErrorResponse = {
+      code: SeasoningApiErrorCodes.internal,
+      message: "システムエラーが発生しました",
+    };
+
+    return NextResponse.json(errorResponse, { status: 500 });
   }
 }
 
@@ -88,13 +182,13 @@ export async function POST(request: NextRequest) {
     // JSON解析エラーなどの場合
     if (error instanceof SyntaxError) {
       const errorResponse: ErrorResponse<SeasoningAddErrorCodeType> = {
-        result_code: "INTERNAL_ERROR",
+        result_code: SeasoningAddErrorCode.INTERNAL_ERROR,
       };
       return NextResponse.json(errorResponse, { status: 400 });
     }
 
     const errorResponse: ErrorResponse<SeasoningAddErrorCodeType> = {
-      result_code: "INTERNAL_ERROR",
+      result_code: SeasoningAddErrorCode.INTERNAL_ERROR,
     };
     return NextResponse.json(errorResponse, { status: 500 });
   }
