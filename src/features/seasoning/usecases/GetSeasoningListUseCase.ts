@@ -1,5 +1,6 @@
 import type { ISeasoningRepository } from "@/libs/database/interfaces";
 import type { ISeasoningTypeRepository } from "@/libs/database/interfaces";
+import type { SeasoningListItem } from "@/types/seasoning";
 import { SeasoningService } from "@/features/seasoning/services/SeasoningService";
 import { sortSeasoningsByExpiry } from "@/utils/seasoningSort";
 import { calculateExpiryStatus } from "@/utils/expiryCalculation";
@@ -15,19 +16,6 @@ interface Dependencies {
  * - 期限切れ状況を含む調味料リストを提供
  * - 並び順は期限が近い順
  */
-/**
- * 調味料リスト項目の型定義
- */
-export interface SeasoningListItem {
-  id: number;
-  name: string;
-  typeId: number;
-  expiresAt?: Date;
-  bestBeforeAt?: Date;
-  purchasedAt?: Date;
-  daysUntilExpiry?: number;
-  expiryStatus: "fresh" | "expiring_soon" | "expired" | "unknown";
-}
 
 interface SeasoningListSummary {
   seasonings: SeasoningListItem[];
