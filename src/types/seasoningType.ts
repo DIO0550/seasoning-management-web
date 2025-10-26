@@ -1,21 +1,6 @@
 /**
- * 調味料の種類を表す型
+ * @deprecated このファイルは非推奨です。代わりに @/types/seasoning を使用してください。
+ * 後方互換性のために残されています。
  */
-export interface SeasoningType {
-  /** 一意識別子 */
-  id: string;
-  /** 調味料の種類名 */
-  name: string;
-  /** 作成日時 */
-  createdAt?: Date;
-  /** 更新日時 */
-  updatedAt?: Date;
-}
 
-/**
- * 調味料の種類追加時のフォームデータ
- */
-export interface SeasoningTypeFormData {
-  /** 調味料の種類名 */
-  name: string;
-}
+export type { SeasoningType, SeasoningTypeFormData } from "./seasoning";
