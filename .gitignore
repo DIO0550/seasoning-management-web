@@ -1,3 +1,11 @@
+# Ignore docs folder (keep local, remove from git tracking)
+/docs/
+
+# Node / Next standard ignores (partial, keep minimal)
+node_modules/
+/.next/
+dist/
+coverage/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
