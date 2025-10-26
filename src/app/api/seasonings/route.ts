@@ -65,6 +65,7 @@ export async function GET(request: NextRequest) {
       const expiryStatus = ExpiryStatusUtils.fromDays(daysUntilExpiry);
 
       return {
+        // TODO: リポジトリ実装時に削除（モックデータ専用のID解析ロジック）
         id: Number.parseInt(s.id.split("_")[1] || "1"),
         name: s.name,
         typeId: s.seasoningTypeId,
