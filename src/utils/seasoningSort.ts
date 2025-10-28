@@ -1,9 +1,8 @@
 /**
- * @fileoverview 調味料リスト並び替えユーティリティ
- * 期限ステータスに基づく並び替えロジックを提供
+ * @fileoverview 調味料の並び替えユーティリティ
  */
 
-import type { SeasoningListItem } from "@/features/seasoning/usecases/GetSeasoningListUseCase";
+import type { SeasoningListItem } from "@/types/seasoning";
 
 /**
  * 調味料リストを期限ステータスに基づいて並び替える

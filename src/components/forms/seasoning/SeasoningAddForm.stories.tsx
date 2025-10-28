@@ -4,9 +4,6 @@ import { FormData } from "@/hooks/useSeasoningSubmit";
 import {
   STORYBOOK_DELAY_SHORT,
   STORYBOOK_DELAY_MEDIUM,
-  STORYBOOK_DELAY_LONG,
-  STORYBOOK_DELAY_VERY_LONG,
-  STORYBOOK_DELAY_EXTRA_LONG,
 } from "@/constants/ui";
 
 const meta: Meta<typeof SeasoningAddForm> = {
