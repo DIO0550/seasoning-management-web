@@ -1,39 +1,19 @@
----
-applyTo: "**"
----
+# Repository Guidelines
 
-# GitHub Copilot Development Guidelines
-
-## 作業開始前の必須手順
-
-- 作業やレビューを始める際は、最初に `prompt-mcp-server` を利用して関連ルール(特に `prompt-mcp-server__get_implementation_workflow`)を確認してください。
-- Linter の無効化(`eslint-disable` など)は使用せず、ルール違反は設定やコード修正で解消してください。
-- main ブランチで直接作業せず、必ず目的に応じた新しいブランチへ切り替えてください。
+- 必ず日本語で応答してください
 
 ## プロジェクト構成とモジュール整理
 
 - Next.js 15 + TypeScript を前提に、UI は `src/app`・`src/components`、機能別ロジックは `src/features`、ドメインモデルは `src/domain` に配置します。
 - データアクセスは `src/infrastructure`、共通ユーティリティは `src/utils`、共通型は `src/types` に集約し、インポートは `@/` エイリアスを優先してください。
 - 定数と設定値は `src/constants` と `src/config` にまとめ、Storybook 関連は `src/stories`、自動生成物は `coverage/`、SQL は `sql/` へ保存します。
-- 仕様や設計は `docs/`・`Specification/`・`openapi-spec.md`、進行中の計画は `implementation-plan/` と `seasoning-management-design-doc.md` を参照します。
+- 仕様や設計は `docs/`・`docs/specification/`・`openapi-spec.md`、進行中の計画は `design/proposals/` と `design/current/` を参照します。
 
-## 技術スタック
+## 作業開始前の必須手順
 
-### フロントエンド
-
-- TypeScript
-- Next.js 15 (App Router)
-- Vite
-- Storybook
-- Tailwind CSS
-- Prettier / ESLint
-
-### バックエンド
-
-- Next.js (API Routes)
-- MySQL
-- GraphQL
-- OpenAPI / Swagger
+- 作業やレビューを始める際は、最初に `prompt-mcp-server` を利用して関連ルール（特に `prompt-mcp-server__get_implementation_workflow`）を確認してください。
+- Linter の無効化（`eslint-disable` など）は使用せず、ルール違反は設定やコード修正で解消してください。
+- main ブランチで直接作業せず、必ず目的に応じた新しいブランチへ切り替えてください。
 
 ## ビルド・テスト・開発コマンド
 
@@ -58,36 +38,57 @@ applyTo: "**"
 
 ## コーディング規約と命名
 
-- Prettier 互換(2 スペース、ダブルクォート)と `eslint.config.mjs` のルールを守り、保存時に整形します。
-- 早期 return を意識し、マジックナンバーは定数へ切り出してください。
-- クラスは使用せず、インターフェースは `interface`、その他は `type` を用います。
-- コンパニオンオブジェクトパターンを意識して実装すること。
+- Prettier 互換 (2 スペース、ダブルクォート) と `eslint.config.mjs` のルールを守り、保存時に整形します。
+- 早期 return を意識し、マジックナンバーは定数へ切り出してください。クラスは使用せず、インターフェースは `interface`、その他は `type` を用います。
+- 後方互換を目的とした実装は原則として行わず、新仕様への移行を優先してください。
 - コンポーネントは PascalCase、フックは `useXxx`、ユーティリティ関数は `camelCase`、ファイルは `kebab-case.ts` で命名します。
 - Tailwind クラスはレイアウト → サイズ → 配色 → 状態の順に並べ、ブラウザ API 依存はドメイン層から排除します。
-- **後方互換性サポートは基本的に行わない。** リファクタリング時は既存コードを直接更新し、非推奨 API や互換レイヤーを残さないこと。
-
-## import ルール
-
-- 必ず `@/` エイリアスを利用して import すること。
-- 相対パスでの import は使用しないこと。
 
 ## テスト指針
 
 - テストは対象モジュールと同階層に `.test.ts` / `.test.tsx` を置き、Vitest + Testing Library でシナリオを記述します。
+- ドメイン / 機能フォルダでは、テスト関連ファイルを `__tests__/` ディレクトリにまとめ、フラットな `*.test.ts` 構成で管理します。
 - データベース関連は `src/infrastructure/database/**/__tests__` を参照し、コネクションはモック化して検証します。
 - 重要変更は `npm run test:coverage` で 80% 以上の維持を確認し、共通セットアップやモックは `vitest.setup.ts` に集約します。
 
 ## コミットとプルリクエスト方針
 
-- コミットは `type: 説明`(必要に応じて絵文字)の Conventional Commits 互換形式を保持し、Issue 連携は本文や末尾に `(#123)` で明記します。
+- コミットは `type: 説明` (必要に応じて絵文字) の Conventional Commits 互換形式を保持し、Issue 連携は本文や末尾に `(#123)` で明記します。
 - 1 コミット 1 責務を意識し、生成物や秘密情報は含めません。UI 変更はスクリーンショットを添付してください。
-- プルリクエストでは概要、影響範囲、テスト結果(`npm test` + `npm run lint` 等)を記録し、SQL 変更は `sql/` のファイル番号と適用・ロールバック手順を説明します。
+- プルリクエストでは概要、影響範囲、テスト結果 (`npm test` + `npm run lint` 等) を記録し、SQL 変更は `sql/` のファイル番号と適用・ロールバック手順を説明します。
 
 ## ドキュメントと設計参照
 
-- 実装前後で `docs/`・`Specification/`・`openapi-spec.md` を確認し、差分が生じた場合は同時更新します。
+- 実装前後で `docs/`・`docs/specification/`・`openapi-spec.md` を確認し、差分が生じた場合は同時更新します。
 - `implementation-plan.md` と `seasoning-management-design-doc.md` に意思決定や残課題を追記し、ナレッジを共有します。
 - README の定数管理ポリシーに従い、バリデーション値は `src/constants/validation/` に集約してください。
+
+## docs/ フォルダ運用ガイド
+
+- ドキュメントはすべて `docs/` に集約し、以下の構成を基準に管理します。
+  ```
+  docs/
+  ├── implementation/          # 実装予定・実装中（WIP）のドキュメント
+  │   └── {機能カテゴリ名}/    # 機能単位で柔軟にフォルダを追加
+  ├── design/                  # 設計検討中の資料
+  │   ├── proposals/           # 提案・検討段階の設計
+  │   └── current/             # 採用済みの設計
+  ├── completed/               # 実装完了したドキュメント（参照価値あり）
+  │   └── {機能カテゴリ名}/
+  ├── adr/                     # Architecture Decision Record
+  │   └── template.md          # ADR テンプレート
+  ├── archive/                 # 参照頻度の低い文書の保管庫
+  │   ├── completed/           # 役目を終えた完了ドキュメント
+  │   ├── deprecated/          # 非推奨になったドキュメント
+  │   └── rejected/            # 却下した提案
+  └── guides/                  # 開発ガイドやチュートリアル
+  ```
+- `implementation/` は実装予定・実装中（WIP）の計画・タスク・仕様のドラフトを配置します。完了後は `completed/` へ必ず移動します。
+- `design/` で検討した文書は採用判断をした時点で `design/current/` へ移し、実装が完了したら `completed/` へ移動します（移動履歴と理由を追記）。
+- `adr/` は `0001-決定名.md` のように連番で管理し、背景・決定内容・影響範囲を明記します。テンプレートは `adr/template.md` を利用してください。
+- 利用しなくなった資料は削除せず `archive/` に移し、冒頭に非推奨または却下の理由と日付を記載します。
+- 開発ガイドラインや手順書、チュートリアルは `guides/` に集約し、更新時は関連する実装・設計ドキュメントとの整合を確認します。
+- 文書更新は `implementation-plan/` や進捗レポートと連携して行い、意思決定や残課題を必ず記録します。
 
 ## 開発ルールチェックとセキュリティ
 
@@ -95,10 +96,3 @@ applyTo: "**"
 - 機密情報は `.env.local` に限定し、`src/config` の読み取りユーティリティを経由させます。ログや例外へ認証情報を残さないよう注意してください。
 - MySQL 設定を変更する際は `src/config/database.ts` と `src/infrastructure/database` の整合を取り、スキーマ変更は `sql/` とドキュメントで告知します。
 - 依存更新や大規模変更時は `npm run lint` と `npm test` をセットで実行し、破壊的変更の有無をレビューで共有してください。
-
-## レビュー言語設定
-
-- **すべてのレビューコメントは日本語で記述してください**
-- 技術用語は適切に日本語化するか、必要に応じて英語併記してください
-- コード例は英語のまま記載して構いません
-- 絵文字を使用したコミットメッセージ形式を理解し、適切に評価してください
