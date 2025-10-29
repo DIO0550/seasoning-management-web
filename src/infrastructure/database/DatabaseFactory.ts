@@ -7,7 +7,7 @@ import type {
   IDatabaseFactory,
   DatabaseType,
 } from "./interfaces/IDatabaseFactory";
-import type { IDatabaseConnection } from "./interfaces/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces/core";
 import type { IConnectionPool } from "./interfaces/IConnectionPool";
 import type { ConnectionConfig } from "@/libs/database/interfaces/core";
 import { MySQLConnection } from "./mysql/connection/MySQLConnection";

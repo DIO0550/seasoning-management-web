@@ -5,7 +5,7 @@
  * 各リポジトリはドメイン層のインターフェースを実装しています。
  */
 
-export { MySQLSeasoningRepository } from "./MySQLSeasoningRepository";
+export { MySQLSeasoningRepository } from "./MySQLSeasoningRepository/index";
 export { MySQLSeasoningTypeRepository } from "./MySQLSeasoningTypeRepository";
 export { MySQLSeasoningImageRepository } from "./MySQLSeasoningImageRepository";
 export { MySQLSeasoningTemplateRepository } from "./MySQLSeasoningTemplateRepository";
