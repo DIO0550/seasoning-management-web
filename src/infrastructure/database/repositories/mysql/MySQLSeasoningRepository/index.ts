@@ -21,6 +21,12 @@ import { Seasoning } from "@/libs/database/entities/Seasoning";
 import type { IDatabaseConnection } from "@/libs/database/interfaces/core";
 
 /**
+ * LIKE 検索用のパターンをエスケープする
+ */
+const escapeLikePattern = (value: string): string =>
+  value.replace(/([\\%_])/g, "\\$1");
+
+/**
  * データベースから取得した生データの型定義
  */
 interface SeasoningRow {
@@ -141,9 +147,10 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
    * 名前で調味料を検索
    */
   async findByName(name: string): Promise<Seasoning[]> {
-    const like = `%${name}%`;
+    const sanitized = escapeLikePattern(name);
+    const like = `%${sanitized}%`;
     const sql =
-      "SELECT * FROM seasoning WHERE name LIKE ? ORDER BY created_at DESC";
+      "SELECT * FROM seasoning WHERE name LIKE ? ESCAPE '\\' ORDER BY created_at DESC";
     const result = await this.connection.query<SeasoningRow>(sql, [like]);
     return result.rows.map((row) => this.rowToEntity(row));
   }
@@ -182,7 +189,7 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
    * 調味料の総数を取得
    */
   async count(): Promise<number> {
-    const sql = "SELECT COUNT(*) as cnt FROM seasoning";
+    const sql = "SELECT COUNT(*) AS cnt FROM seasoning";
     const result = await this.connection.query<{ cnt: number }>(sql);
     const row = result.rows[0];
     return row ? Number(row.cnt) : 0;

@@ -21,7 +21,19 @@ test("[queries] findByName は LIKE 検索SQLを発行する", async () => {
   expect(spy).toHaveBeenCalledTimes(1);
   const [sql, params] = spy.mock.calls[0];
   expect(String(sql)).toMatch(/WHERE\s+name\s+LIKE\s+\?/i);
+  expect(String(sql)).toContain("ESCAPE '\\'");
   expect(params).toEqual(["%sho%"]);
+});
+
+test("[queries] findByName はワイルドカードをエスケープする", async () => {
+  const spy = vi.spyOn(conn, "query").mockResolvedValue({
+    rows: [],
+    rowsAffected: 0,
+    insertId: null,
+  });
+  await repo.findByName("100% match_");
+  const [, params] = spy.mock.calls[0];
+  expect(params).toEqual(["%100\\% match\\_%"]);
 });
 
 test("[queries] findByTypeId は type_id 絞り込みSQLを発行する", async () => {
