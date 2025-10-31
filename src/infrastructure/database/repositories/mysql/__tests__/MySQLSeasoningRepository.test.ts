@@ -7,7 +7,8 @@ import { MySQLSeasoningRepository } from "../MySQLSeasoningRepository";
 import type { IDatabaseConnection } from "@/libs/database/interfaces/core";
 import { MockDatabaseConnection } from "@/libs/database/__tests__/mocks";
 
-describe("MySQLSeasoningRepository", () => {
+// moved: Use tests colocated with implementation under MySQLSeasoningRepository/__tests__
+describe.skip("MySQLSeasoningRepository (moved)", () => {
   let mockConnection: IDatabaseConnection;
   let repository: MySQLSeasoningRepository;
 

@@ -20,6 +20,17 @@ import type {
 import { Seasoning } from "@/libs/database/entities/Seasoning";
 import type { IDatabaseConnection } from "@/libs/database/interfaces/core";
 
+const SELECT_COLUMNS = `id, name, type_id, image_id, best_before_at, expires_at, purchased_at, created_at, updated_at`;
+
+/**
+ * LIKE 検索用のパターンをエスケープする。
+ *
+ * この関数は LIKE のワイルドカード記号のみをエスケープする責務を持ち、
+ * SQL インジェクション対策としては必ずプレースホルダー付きクエリと組み合わせて使用する。
+ */
+const escapeLikePattern = (value: string): string =>
+  value.replace(/([\\%_])/g, "\\$1");
+
 /**
  * データベースから取得した生データの型定義
  */
@@ -88,7 +99,7 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
    * IDで調味料を検索
    */
   async findById(id: number): Promise<Seasoning | null> {
-    const sql = "SELECT * FROM seasoning WHERE id = ?";
+    const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning WHERE id = ?`;
     const result = await this.connection.query<SeasoningRow>(sql, [id]);
 
     if (result.rows.length === 0) {
@@ -104,7 +115,7 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
   async findAll(
     _options?: SeasoningSearchOptions
   ): Promise<PaginatedResult<Seasoning>> {
-    const sql = "SELECT * FROM seasoning ORDER BY created_at DESC";
+    const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning ORDER BY created_at DESC`;
     const result = await this.connection.query<SeasoningRow>(sql);
 
     const seasonings = result.rows.map((row) => this.rowToEntity(row));
@@ -140,36 +151,50 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
   /**
    * 名前で調味料を検索
    */
-  async findByName(_name: string): Promise<Seasoning[]> {
-    // 最小限の実装
-    throw new Error("Method not implemented.");
+  async findByName(name: string): Promise<Seasoning[]> {
+    const sanitized = escapeLikePattern(name);
+    const like = `%${sanitized}%`;
+    const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning WHERE name LIKE ? ESCAPE '\\' ORDER BY created_at DESC`;
+    const result = await this.connection.query<SeasoningRow>(sql, [like]);
+    return result.rows.map((row) => this.rowToEntity(row));
   }
 
   /**
    * タイプIDで調味料を検索
    */
   async findByTypeId(
-    _typeId: number,
+    typeId: number,
     _options?: SeasoningSearchOptions
   ): Promise<PaginatedResult<Seasoning>> {
-    // 最小限の実装
-    throw new Error("Method not implemented.");
+    const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning WHERE type_id = ? ORDER BY created_at DESC`;
+    const result = await this.connection.query<SeasoningRow>(sql, [typeId]);
+    const items = result.rows.map((row) => this.rowToEntity(row));
+    return {
+      items,
+      total: items.length,
+      page: 1,
+      limit: items.length,
+      totalPages: 1,
+    };
   }
 
   /**
    * 期限切れ間近の調味料を検索
    */
-  async findExpiringSoon(_days: number): Promise<Seasoning[]> {
-    // 最小限の実装
-    throw new Error("Method not implemented.");
+  async findExpiringSoon(days: number): Promise<Seasoning[]> {
+    const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning WHERE expires_at IS NOT NULL AND expires_at <= DATE_ADD(CURDATE(), INTERVAL ? DAY) ORDER BY expires_at ASC`;
+    const result = await this.connection.query<SeasoningRow>(sql, [days]);
+    return result.rows.map((row) => this.rowToEntity(row));
   }
 
   /**
    * 調味料の総数を取得
    */
   async count(): Promise<number> {
-    // 最小限の実装
-    throw new Error("Method not implemented.");
+    const sql = "SELECT COUNT(*) AS cnt FROM seasoning";
+    const result = await this.connection.query<{ cnt: number }>(sql);
+    const row = result.rows[0];
+    return row ? Number(row.cnt) : 0;
   }
 
   /**

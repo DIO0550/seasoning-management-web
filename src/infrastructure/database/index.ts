@@ -6,9 +6,11 @@
 // 共通型定義
 export type * from "./shared";
 
-// インターフェース定義
-export type { IDatabaseConnection } from "./interfaces/IDatabaseConnection";
-export type { ITransaction } from "./interfaces/ITransaction";
+// インターフェース定義（コアの型を再エクスポート）
+export type {
+  IDatabaseConnection,
+  ITransaction,
+} from "@/libs/database/interfaces/core";
 export type {
   IConnectionPool,
   PoolStats,
