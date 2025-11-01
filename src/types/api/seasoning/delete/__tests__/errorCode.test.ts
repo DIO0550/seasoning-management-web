@@ -1,7 +1,7 @@
 import { ZodError } from "zod";
-import { TemplateDeleteErrorCode } from "./errorCode";
+import { SeasoningDeleteErrorCode } from "../errorCode";
 
-describe("TemplateDeleteErrorCode", () => {
+describe("SeasoningDeleteErrorCode", () => {
   describe("fromValidationError", () => {
     it("idフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_ID_REQUIREDを返す", () => {
       const zodError = new ZodError([
@@ -14,7 +14,7 @@ describe("TemplateDeleteErrorCode", () => {
         },
       ]);
 
-      const result = TemplateDeleteErrorCode.fromValidationError(zodError);
+      const result = SeasoningDeleteErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_ID_REQUIRED");
     });
@@ -32,7 +32,7 @@ describe("TemplateDeleteErrorCode", () => {
         },
       ]);
 
-      const result = TemplateDeleteErrorCode.fromValidationError(zodError);
+      const result = SeasoningDeleteErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_ID_REQUIRED");
     });
@@ -46,7 +46,7 @@ describe("TemplateDeleteErrorCode", () => {
         },
       ]);
 
-      const result = TemplateDeleteErrorCode.fromValidationError(zodError);
+      const result = SeasoningDeleteErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_ID_INVALID");
     });
@@ -62,7 +62,7 @@ describe("TemplateDeleteErrorCode", () => {
         },
       ]);
 
-      const result = TemplateDeleteErrorCode.fromValidationError(zodError);
+      const result = SeasoningDeleteErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_ID_REQUIRED");
     });
@@ -70,7 +70,7 @@ describe("TemplateDeleteErrorCode", () => {
     it("空のissuesの場合、デフォルトエラーコードを返す", () => {
       const zodError = new ZodError([]);
 
-      const result = TemplateDeleteErrorCode.fromValidationError(zodError);
+      const result = SeasoningDeleteErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_ID_REQUIRED");
     });
@@ -78,23 +78,26 @@ describe("TemplateDeleteErrorCode", () => {
 
   describe("定数定義の確認", () => {
     it("すべてのエラーコード定数が正しく定義されている", () => {
-      expect(TemplateDeleteErrorCode.ID_REQUIRED).toBe(
+      expect(SeasoningDeleteErrorCode.ID_REQUIRED).toBe(
         "VALIDATION_ERROR_ID_REQUIRED"
       );
-      expect(TemplateDeleteErrorCode.ID_INVALID).toBe(
+      expect(SeasoningDeleteErrorCode.ID_INVALID).toBe(
         "VALIDATION_ERROR_ID_INVALID"
       );
-      expect(TemplateDeleteErrorCode.TEMPLATE_NOT_FOUND).toBe(
-        "TEMPLATE_NOT_FOUND"
+      expect(SeasoningDeleteErrorCode.SEASONING_NOT_FOUND).toBe(
+        "SEASONING_NOT_FOUND"
       );
-      expect(TemplateDeleteErrorCode.PERMISSION_DENIED).toBe(
+      expect(SeasoningDeleteErrorCode.SEASONING_IN_USE).toBe(
+        "SEASONING_IN_USE"
+      );
+      expect(SeasoningDeleteErrorCode.PERMISSION_DENIED).toBe(
         "PERMISSION_DENIED"
       );
-      expect(TemplateDeleteErrorCode.INTERNAL_ERROR).toBe("INTERNAL_ERROR");
+      expect(SeasoningDeleteErrorCode.INTERNAL_ERROR).toBe("INTERNAL_ERROR");
     });
 
     it("デフォルトエラーコードが正しく設定されている", () => {
-      expect(TemplateDeleteErrorCode.DEFAULT).toBe(
+      expect(SeasoningDeleteErrorCode.DEFAULT).toBe(
         "VALIDATION_ERROR_ID_REQUIRED"
       );
     });

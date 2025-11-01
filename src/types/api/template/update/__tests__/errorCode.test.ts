@@ -1,8 +1,42 @@
 import { ZodError } from "zod";
-import { TemplateAddErrorCode } from "./errorCode";
+import { TemplateUpdateErrorCode } from "../errorCode";
 
-describe("TemplateAddErrorCode", () => {
+describe("TemplateUpdateErrorCode", () => {
   describe("fromValidationError", () => {
+    it("idフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_ID_REQUIREDを返す", () => {
+      const zodError = new ZodError([
+        {
+          code: "invalid_type",
+          expected: "number",
+          received: "string",
+          message: "IDは数値である必要があります",
+          path: ["id"],
+        },
+      ]);
+
+      const result = TemplateUpdateErrorCode.fromValidationError(zodError);
+
+      expect(result).toBe("VALIDATION_ERROR_ID_REQUIRED");
+    });
+
+    it("idフィールドのtoo_smallエラーの場合、VALIDATION_ERROR_ID_REQUIREDを返す", () => {
+      const zodError = new ZodError([
+        {
+          code: "too_small",
+          minimum: 1,
+          type: "number",
+          inclusive: true,
+          exact: false,
+          message: "IDは1以上である必要があります",
+          path: ["id"],
+        },
+      ]);
+
+      const result = TemplateUpdateErrorCode.fromValidationError(zodError);
+
+      expect(result).toBe("VALIDATION_ERROR_ID_REQUIRED");
+    });
+
     it("nameフィールドのtoo_smallエラーの場合、VALIDATION_ERROR_NAME_REQUIREDを返す", () => {
       const zodError = new ZodError([
         {
@@ -16,7 +50,7 @@ describe("TemplateAddErrorCode", () => {
         },
       ]);
 
-      const result = TemplateAddErrorCode.fromValidationError(zodError);
+      const result = TemplateUpdateErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_NAME_REQUIRED");
     });
@@ -34,7 +68,7 @@ describe("TemplateAddErrorCode", () => {
         },
       ]);
 
-      const result = TemplateAddErrorCode.fromValidationError(zodError);
+      const result = TemplateUpdateErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_NAME_TOO_LONG");
     });
@@ -48,7 +82,7 @@ describe("TemplateAddErrorCode", () => {
         },
       ]);
 
-      const result = TemplateAddErrorCode.fromValidationError(zodError);
+      const result = TemplateUpdateErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_NAME_INVALID_FORMAT");
     });
@@ -66,7 +100,7 @@ describe("TemplateAddErrorCode", () => {
         },
       ]);
 
-      const result = TemplateAddErrorCode.fromValidationError(zodError);
+      const result = TemplateUpdateErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_DESCRIPTION_TOO_LONG");
     });
@@ -82,7 +116,7 @@ describe("TemplateAddErrorCode", () => {
         },
       ]);
 
-      const result = TemplateAddErrorCode.fromValidationError(zodError);
+      const result = TemplateUpdateErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_SEASONING_IDS_INVALID");
     });
@@ -100,7 +134,7 @@ describe("TemplateAddErrorCode", () => {
         },
       ]);
 
-      const result = TemplateAddErrorCode.fromValidationError(zodError);
+      const result = TemplateUpdateErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_SEASONING_IDS_EMPTY");
     });
@@ -116,53 +150,65 @@ describe("TemplateAddErrorCode", () => {
         },
       ]);
 
-      const result = TemplateAddErrorCode.fromValidationError(zodError);
+      const result = TemplateUpdateErrorCode.fromValidationError(zodError);
 
-      expect(result).toBe("VALIDATION_ERROR_NAME_REQUIRED");
+      expect(result).toBe("VALIDATION_ERROR_ID_REQUIRED");
     });
 
     it("空のissuesの場合、デフォルトエラーコードを返す", () => {
       const zodError = new ZodError([]);
 
-      const result = TemplateAddErrorCode.fromValidationError(zodError);
+      const result = TemplateUpdateErrorCode.fromValidationError(zodError);
 
-      expect(result).toBe("VALIDATION_ERROR_NAME_REQUIRED");
+      expect(result).toBe("VALIDATION_ERROR_ID_REQUIRED");
     });
   });
 
   describe("定数定義の確認", () => {
     it("すべてのエラーコード定数が正しく定義されている", () => {
-      expect(TemplateAddErrorCode.NAME_REQUIRED).toBe(
+      expect(TemplateUpdateErrorCode.ID_REQUIRED).toBe(
+        "VALIDATION_ERROR_ID_REQUIRED"
+      );
+      expect(TemplateUpdateErrorCode.ID_INVALID).toBe(
+        "VALIDATION_ERROR_ID_INVALID"
+      );
+      expect(TemplateUpdateErrorCode.NAME_REQUIRED).toBe(
         "VALIDATION_ERROR_NAME_REQUIRED"
       );
-      expect(TemplateAddErrorCode.NAME_TOO_LONG).toBe(
+      expect(TemplateUpdateErrorCode.NAME_TOO_LONG).toBe(
         "VALIDATION_ERROR_NAME_TOO_LONG"
       );
-      expect(TemplateAddErrorCode.NAME_INVALID_FORMAT).toBe(
+      expect(TemplateUpdateErrorCode.NAME_INVALID_FORMAT).toBe(
         "VALIDATION_ERROR_NAME_INVALID_FORMAT"
       );
-      expect(TemplateAddErrorCode.DESCRIPTION_TOO_LONG).toBe(
+      expect(TemplateUpdateErrorCode.DESCRIPTION_TOO_LONG).toBe(
         "VALIDATION_ERROR_DESCRIPTION_TOO_LONG"
       );
-      expect(TemplateAddErrorCode.SEASONING_IDS_REQUIRED).toBe(
+      expect(TemplateUpdateErrorCode.SEASONING_IDS_REQUIRED).toBe(
         "VALIDATION_ERROR_SEASONING_IDS_REQUIRED"
       );
-      expect(TemplateAddErrorCode.SEASONING_IDS_INVALID).toBe(
+      expect(TemplateUpdateErrorCode.SEASONING_IDS_INVALID).toBe(
         "VALIDATION_ERROR_SEASONING_IDS_INVALID"
       );
-      expect(TemplateAddErrorCode.SEASONING_IDS_EMPTY).toBe(
+      expect(TemplateUpdateErrorCode.SEASONING_IDS_EMPTY).toBe(
         "VALIDATION_ERROR_SEASONING_IDS_EMPTY"
       );
-      expect(TemplateAddErrorCode.DUPLICATE_NAME).toBe("DUPLICATE_NAME");
-      expect(TemplateAddErrorCode.SEASONING_NOT_FOUND).toBe(
+      expect(TemplateUpdateErrorCode.TEMPLATE_NOT_FOUND).toBe(
+        "TEMPLATE_NOT_FOUND"
+      );
+      expect(TemplateUpdateErrorCode.DUPLICATE_NAME).toBe("DUPLICATE_NAME");
+      expect(TemplateUpdateErrorCode.SEASONING_NOT_FOUND).toBe(
         "SEASONING_NOT_FOUND"
       );
-      expect(TemplateAddErrorCode.INTERNAL_ERROR).toBe("INTERNAL_ERROR");
+      expect(TemplateUpdateErrorCode.PERMISSION_DENIED).toBe(
+        "PERMISSION_DENIED"
+      );
+      expect(TemplateUpdateErrorCode.INTERNAL_ERROR).toBe("INTERNAL_ERROR");
     });
 
     it("デフォルトエラーコードが正しく設定されている", () => {
-      expect(TemplateAddErrorCode.DEFAULT).toBe(
-        "VALIDATION_ERROR_NAME_REQUIRED"
+      expect(TemplateUpdateErrorCode.DEFAULT).toBe(
+        "VALIDATION_ERROR_ID_REQUIRED"
       );
     });
   });

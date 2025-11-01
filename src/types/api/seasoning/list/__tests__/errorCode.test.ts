@@ -1,7 +1,7 @@
 import { ZodError } from "zod";
-import { TemplateListErrorCode } from "./errorCode";
+import { SeasoningListErrorCode } from "../errorCode";
 
-describe("TemplateListErrorCode", () => {
+describe("SeasoningListErrorCode", () => {
   describe("fromValidationError", () => {
     it("pageフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_PAGE_INVALIDを返す", () => {
       const zodError = new ZodError([
@@ -14,7 +14,7 @@ describe("TemplateListErrorCode", () => {
         },
       ]);
 
-      const result = TemplateListErrorCode.fromValidationError(zodError);
+      const result = SeasoningListErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_PAGE_INVALID");
     });
@@ -32,7 +32,7 @@ describe("TemplateListErrorCode", () => {
         },
       ]);
 
-      const result = TemplateListErrorCode.fromValidationError(zodError);
+      const result = SeasoningListErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_PAGE_TOO_SMALL");
     });
@@ -48,7 +48,7 @@ describe("TemplateListErrorCode", () => {
         },
       ]);
 
-      const result = TemplateListErrorCode.fromValidationError(zodError);
+      const result = SeasoningListErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_LIMIT_INVALID");
     });
@@ -66,7 +66,7 @@ describe("TemplateListErrorCode", () => {
         },
       ]);
 
-      const result = TemplateListErrorCode.fromValidationError(zodError);
+      const result = SeasoningListErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_LIMIT_TOO_SMALL");
     });
@@ -84,9 +84,25 @@ describe("TemplateListErrorCode", () => {
         },
       ]);
 
-      const result = TemplateListErrorCode.fromValidationError(zodError);
+      const result = SeasoningListErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_LIMIT_TOO_LARGE");
+    });
+
+    it("seasoningTypeIdフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_SEASONING_TYPE_ID_INVALIDを返す", () => {
+      const zodError = new ZodError([
+        {
+          code: "invalid_type",
+          expected: "number",
+          received: "string",
+          message: "調味料タイプIDは数値である必要があります",
+          path: ["seasoningTypeId"],
+        },
+      ]);
+
+      const result = SeasoningListErrorCode.fromValidationError(zodError);
+
+      expect(result).toBe("VALIDATION_ERROR_SEASONING_TYPE_ID_INVALID");
     });
 
     it("searchフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_SEARCH_INVALIDを返す", () => {
@@ -100,7 +116,7 @@ describe("TemplateListErrorCode", () => {
         },
       ]);
 
-      const result = TemplateListErrorCode.fromValidationError(zodError);
+      const result = SeasoningListErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_SEARCH_INVALID");
     });
@@ -116,7 +132,7 @@ describe("TemplateListErrorCode", () => {
         },
       ]);
 
-      const result = TemplateListErrorCode.fromValidationError(zodError);
+      const result = SeasoningListErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_PAGE_INVALID");
     });
@@ -124,7 +140,7 @@ describe("TemplateListErrorCode", () => {
     it("空のissuesの場合、デフォルトエラーコードを返す", () => {
       const zodError = new ZodError([]);
 
-      const result = TemplateListErrorCode.fromValidationError(zodError);
+      const result = SeasoningListErrorCode.fromValidationError(zodError);
 
       expect(result).toBe("VALIDATION_ERROR_PAGE_INVALID");
     });
@@ -132,29 +148,35 @@ describe("TemplateListErrorCode", () => {
 
   describe("定数定義の確認", () => {
     it("すべてのエラーコード定数が正しく定義されている", () => {
-      expect(TemplateListErrorCode.PAGE_INVALID).toBe(
+      expect(SeasoningListErrorCode.PAGE_INVALID).toBe(
         "VALIDATION_ERROR_PAGE_INVALID"
       );
-      expect(TemplateListErrorCode.PAGE_TOO_SMALL).toBe(
+      expect(SeasoningListErrorCode.PAGE_TOO_SMALL).toBe(
         "VALIDATION_ERROR_PAGE_TOO_SMALL"
       );
-      expect(TemplateListErrorCode.LIMIT_INVALID).toBe(
+      expect(SeasoningListErrorCode.LIMIT_INVALID).toBe(
         "VALIDATION_ERROR_LIMIT_INVALID"
       );
-      expect(TemplateListErrorCode.LIMIT_TOO_SMALL).toBe(
+      expect(SeasoningListErrorCode.LIMIT_TOO_SMALL).toBe(
         "VALIDATION_ERROR_LIMIT_TOO_SMALL"
       );
-      expect(TemplateListErrorCode.LIMIT_TOO_LARGE).toBe(
+      expect(SeasoningListErrorCode.LIMIT_TOO_LARGE).toBe(
         "VALIDATION_ERROR_LIMIT_TOO_LARGE"
       );
-      expect(TemplateListErrorCode.SEARCH_INVALID).toBe(
+      expect(SeasoningListErrorCode.SEASONING_TYPE_ID_INVALID).toBe(
+        "VALIDATION_ERROR_SEASONING_TYPE_ID_INVALID"
+      );
+      expect(SeasoningListErrorCode.SEARCH_INVALID).toBe(
         "VALIDATION_ERROR_SEARCH_INVALID"
       );
-      expect(TemplateListErrorCode.INTERNAL_ERROR).toBe("INTERNAL_ERROR");
+      expect(SeasoningListErrorCode.SEASONING_TYPE_NOT_FOUND).toBe(
+        "SEASONING_TYPE_NOT_FOUND"
+      );
+      expect(SeasoningListErrorCode.INTERNAL_ERROR).toBe("INTERNAL_ERROR");
     });
 
     it("デフォルトエラーコードが正しく設定されている", () => {
-      expect(TemplateListErrorCode.DEFAULT).toBe(
+      expect(SeasoningListErrorCode.DEFAULT).toBe(
         "VALIDATION_ERROR_PAGE_INVALID"
       );
     });
