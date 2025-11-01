@@ -9,7 +9,7 @@
  */
 
 import { test, expect } from "vitest";
-import { calculateDaysUntilExpiry, ExpiryStatusUtils } from "./expiry-status";
+import { calculateDaysUntilExpiry, ExpiryStatusUtils } from "../expiry-status";
 
 // calculateDaysUntilExpiry のテスト
 test.concurrent(
