@@ -133,8 +133,7 @@ describe("ErrorTracker", () => {
   });
 
   test("指定した時間範囲のエラーを取得できる", () => {
-    const now = new Date();
-    const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+    const rangeStart = new Date(Date.now() - 60 * 60 * 1000);
 
     // 古いエラーを手動で追加（実際の実装では内部的にタイムスタンプを管理）
     const oldError = new DatabaseError(
@@ -152,7 +151,8 @@ describe("ErrorTracker", () => {
     tracker.trackError(recentError);
 
     // 1時間以内のエラーを取得
-    const recentErrorsInHour = tracker.getErrorsInTimeRange(oneHourAgo, now);
+    const rangeEnd = new Date();
+    const recentErrorsInHour = tracker.getErrorsInTimeRange(rangeStart, rangeEnd);
 
     expect(recentErrorsInHour.length).toBeGreaterThan(0);
   });
