@@ -3,8 +3,8 @@
  * @description インフラストラクチャの具象実装をバインドするための識別子
  */
 
-import type { ServiceIdentifier } from "@/libs/di/types";
-import type { IDatabaseConnectionProvider } from "@/libs/database/interfaces/core";
+import type { ServiceIdentifier } from "./types";
+import type { IDatabaseConnectionProvider } from "@/infrastructure/database/interfaces";
 import type { RepositoryFactory } from "./RepositoryFactory";
 
 /**

@@ -3,7 +3,7 @@
  * @description 新しいMySQL実装を使用したコンポジションルート
  */
 
-import type { DIContainer } from "@/libs/di/container";
+import type { DIContainer } from "./container";
 import { INFRASTRUCTURE_IDENTIFIERS } from "./identifiers";
 import {
   createDevelopmentConnectionProvider,
