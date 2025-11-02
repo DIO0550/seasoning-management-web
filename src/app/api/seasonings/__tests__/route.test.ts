@@ -1,6 +1,7 @@
 import { test, expect, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
 import { GET, POST } from "@/app/api/seasonings/route";
+// Note: 将来的には createSeasoningStore() を使用してテストごとに独立したストアを作成することを推奨
 import { seasoningStore } from "@/app/api/seasonings/store";
 
 // テスト用のモックリクエスト作成関数
