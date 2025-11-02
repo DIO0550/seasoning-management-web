@@ -9,7 +9,7 @@ import type {
   ISeasoningTypeRepository,
   ISeasoningImageRepository,
   ISeasoningTemplateRepository,
-} from "@/libs/database/interfaces";
+} from "@/infrastructure/database/interfaces";
 import {
   MySQLSeasoningRepository,
   MySQLSeasoningTypeRepository,

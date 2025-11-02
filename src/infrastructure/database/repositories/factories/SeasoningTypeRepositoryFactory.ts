@@ -3,8 +3,10 @@
  * 調味料種類リポジトリ生成関数（Infrastructure層）
  */
 
-import type { IDatabaseConnection } from "@/libs/database/interfaces";
-import type { ISeasoningTypeRepository } from "@/libs/database/interfaces/repositories/ISeasoningTypeRepository";
+import type {
+  IDatabaseConnection,
+  ISeasoningTypeRepository,
+} from "@/infrastructure/database/interfaces";
 import { MySQLSeasoningTypeRepository } from "@/infrastructure/database/repositories/mysql";
 
 /**

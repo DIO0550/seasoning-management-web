@@ -3,8 +3,10 @@
  * 調味料画像リポジトリ生成関数（Infrastructure層）
  */
 
-import type { IDatabaseConnection } from "@/libs/database/interfaces";
-import type { ISeasoningImageRepository } from "@/libs/database/interfaces/repositories/ISeasoningImageRepository";
+import type {
+  IDatabaseConnection,
+  ISeasoningImageRepository,
+} from "@/infrastructure/database/interfaces";
 import { MySQLSeasoningImageRepository } from "@/infrastructure/database/repositories/mysql";
 
 /**
