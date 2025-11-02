@@ -4,10 +4,10 @@ import type {
   ITransactionAdapter,
 } from "@/infrastructure/database/interfaces/IConnectionAdapter";
 import type {
-  QueryResult,
   ConnectionConfig,
   PoolStats,
-} from "@/libs/database/interfaces/core";
+  QueryResult,
+} from "@/infrastructure/database/interfaces";
 import { MySQL2TransactionAdapter } from "./MySQL2TransactionAdapter";
 
 /**

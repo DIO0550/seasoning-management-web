@@ -1,6 +1,6 @@
 import type { Connection } from "mysql2/promise";
 import type { ITransactionAdapter } from "@/infrastructure/database/interfaces/IConnectionAdapter";
-import type { QueryResult } from "@/libs/database/interfaces/core";
+import type { QueryResult } from "@/infrastructure/database/interfaces";
 
 /**
  * mysql2 のコネクションをトランザクション操作向けにラップするアダプター

@@ -7,18 +7,16 @@
  */
 
 import type {
-  ISeasoningRepository,
-  SeasoningCreateInput,
-  SeasoningUpdateInput,
-  SeasoningSearchOptions,
-} from "@/libs/database/interfaces/repositories/ISeasoningRepository";
-import type {
-  UpdateResult,
   DeleteResult,
+  IDatabaseConnection,
+  ISeasoningRepository,
   PaginatedResult,
-} from "@/libs/database/interfaces/common/types";
+  SeasoningCreateInput,
+  SeasoningSearchOptions,
+  SeasoningUpdateInput,
+  UpdateResult,
+} from "@/infrastructure/database/interfaces";
 import { Seasoning } from "@/libs/database/entities/Seasoning";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/core";
 
 const SELECT_COLUMNS = `id, name, type_id, image_id, best_before_at, expires_at, purchased_at, created_at, updated_at`;
 

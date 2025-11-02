@@ -27,7 +27,7 @@ src/infrastructure/di/
 ### 基本的な使用
 
 ```typescript
-import { DIContainer } from "@/libs/di";
+import { DIContainer } from "@/infrastructure/di";
 import {
   INFRASTRUCTURE_IDENTIFIERS,
   configureInfrastructureForDevelopment,
@@ -53,7 +53,7 @@ const typeRepo = await factory.createSeasoningTypeRepository();
 
 ```typescript
 // app/api/seasonings/route.ts
-import { DIContainer } from "@/libs/di";
+import { DIContainer } from "@/infrastructure/di";
 import {
   INFRASTRUCTURE_IDENTIFIERS,
   configureInfrastructureForDevelopment,
@@ -177,7 +177,7 @@ await manager.initialize(config);
 ### モックを使ったテスト
 
 ```typescript
-import { DIContainer } from "@/libs/di";
+import { DIContainer } from "@/infrastructure/di";
 import { INFRASTRUCTURE_IDENTIFIERS } from "@/infrastructure/di";
 import { MockDatabaseConnectionProvider } from "@/libs/database/__tests__/mocks";
 
@@ -207,8 +207,11 @@ describe("API with DI", () => {
 #### Before
 
 ```typescript
-// ❌ ドメイン層がインフラ実装に依存
-import { configureForDevelopment, SERVICE_IDENTIFIERS } from "@/libs/di";
+// ❌ libs/di 時代の直接バインド
+import {
+  configureForDevelopment,
+  SERVICE_IDENTIFIERS,
+} from "@/libs/di";
 
 const container = new DIContainer();
 configureForDevelopment(container);
@@ -219,7 +222,7 @@ const repo = container.resolve(SERVICE_IDENTIFIERS.SEASONING_REPOSITORY);
 
 ```typescript
 // ✅ 正しい依存方向
-import { DIContainer } from "@/libs/di";
+import { DIContainer } from "@/infrastructure/di";
 import {
   configureInfrastructureForDevelopment,
   INFRASTRUCTURE_IDENTIFIERS,

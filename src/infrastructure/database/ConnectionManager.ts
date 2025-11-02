@@ -9,7 +9,7 @@ import type { IDatabaseConnection } from "./interfaces/IDatabaseConnection";
 import type {
   ConnectionConfig,
   IDatabaseConnectionProvider,
-} from "@/libs/database/interfaces/core";
+} from "@/infrastructure/database/interfaces";
 import { DatabaseFactory } from "./DatabaseFactory";
 import { ConfigurationError, ConnectionError } from "./errors";
 
