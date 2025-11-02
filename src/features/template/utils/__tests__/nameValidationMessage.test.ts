@@ -11,10 +11,10 @@ describe("getTemplateNameValidationMessage", () => {
     );
   });
 
-  test("21文字以上の場合は文字数制限メッセージを返す", () => {
-    const longName = "あ".repeat(21);
+  test("257文字以上の場合は文字数制限メッセージを返す", () => {
+    const longName = "あ".repeat(257);
     expect(getTemplateNameValidationMessage(longName)).toBe(
-      "テンプレート名は20文字以内で入力してください。"
+      "テンプレート名は256文字以内で入力してください。"
     );
   });
 });

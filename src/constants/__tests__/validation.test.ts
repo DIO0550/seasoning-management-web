@@ -65,7 +65,7 @@ describe("validation constants", () => {
 
   describe("VALIDATION_CONSTANTS", () => {
     test("定数が適切に定義されている", () => {
-      expect(VALIDATION_CONSTANTS.NAME_MAX_LENGTH).toBe(20);
+      expect(VALIDATION_CONSTANTS.NAME_MAX_LENGTH).toBe(256);
       expect(VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_MB).toBe(5);
       expect(VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_BYTES).toBe(5 * 1024 * 1024);
       expect(VALIDATION_CONSTANTS.IMAGE_VALID_TYPES).toEqual([
@@ -113,7 +113,7 @@ describe("validation constants", () => {
 
     describe("後方互換性の検証", () => {
       test("非推奨定数が正しい値を持っている", () => {
-        expect(VALIDATION_CONSTANTS.NAME_MAX_LENGTH).toBe(20);
+        expect(VALIDATION_CONSTANTS.NAME_MAX_LENGTH).toBe(256);
         expect(VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_BYTES).toBe(5242880);
         expect(VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_MB).toBe(5);
         expect(VALIDATION_CONSTANTS.IMAGE_VALID_TYPES).toEqual([

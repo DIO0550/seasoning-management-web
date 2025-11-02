@@ -34,9 +34,9 @@ describe("useTemplateNameInput", () => {
     expect(result.current.isValid).toBe(false);
   });
 
-  test("21文字以上を入力した場合", () => {
+  test("257文字以上を入力した場合", () => {
     const { result } = renderHook(() => useTemplateNameInput());
-    const longName = "あ".repeat(21);
+    const longName = "あ".repeat(257);
 
     act(() => {
       result.current.handleChange(longName);
@@ -44,7 +44,7 @@ describe("useTemplateNameInput", () => {
 
     expect(result.current.value).toBe(longName);
     expect(result.current.error).toBe(
-      "テンプレート名は20文字以内で入力してください。"
+      "テンプレート名は256文字以内で入力してください。"
     );
     expect(result.current.isValid).toBe(false);
   });

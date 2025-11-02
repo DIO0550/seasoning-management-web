@@ -8,7 +8,7 @@ describe("nameValidationErrorMessage", () => {
 
   test("LENGTH_EXCEEDED エラーの場合、文字数制限メッセージを返す", () => {
     const result = nameValidationErrorMessage("LENGTH_EXCEEDED");
-    expect(result).toBe("調味料名は 20 文字以内で入力してください");
+    expect(result).toBe("調味料名は 256 文字以内で入力してください");
   });
 
   test("INVALID_FORMAT エラーの場合、形式エラーメッセージを返す", () => {
