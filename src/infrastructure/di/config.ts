@@ -54,17 +54,40 @@ export const createContainer = async (
 };
 
 let globalContainerPromise: Promise<DIContainer> | null = null;
+let isInitializing = false;
 
 export const getContainer = async (): Promise<DIContainer> => {
-  if (!globalContainerPromise) {
-    globalContainerPromise = createContainer();
+  // すでに初期化済みの場合はそのまま返す
+  if (globalContainerPromise) {
+    return globalContainerPromise;
   }
 
-  return globalContainerPromise;
+  // 初期化中の場合は完了を待つ
+  if (isInitializing) {
+    // 短い間隔でポーリングして初期化完了を待つ
+    while (isInitializing) {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+    // 初期化完了後にPromiseが設定されているはず
+    if (globalContainerPromise) {
+      return globalContainerPromise;
+    }
+  }
+
+  // 初期化開始
+  isInitializing = true;
+  try {
+    globalContainerPromise = createContainer();
+    await globalContainerPromise; // 初期化完了を待つ
+    return globalContainerPromise;
+  } finally {
+    isInitializing = false;
+  }
 };
 
 export const resetContainer = (): void => {
   globalContainerPromise = null;
+  isInitializing = false;
 };
 
 export const initializeContainer = async (
