@@ -8,8 +8,8 @@ describe("統合されたvalidation constants", () => {
   describe("VALIDATION_CONSTANTS オブジェクト", () => {
     test("名前系定数が正しく統合されている", () => {
       expect(VALIDATION_CONSTANTS.NAME).toBeDefined();
-      expect(VALIDATION_CONSTANTS.NAME.SEASONING_NAME_MAX_LENGTH).toBe(20);
-      expect(VALIDATION_CONSTANTS.NAME.TEMPLATE_NAME_MAX_LENGTH).toBe(20);
+      expect(VALIDATION_CONSTANTS.NAME.SEASONING_NAME_MAX_LENGTH).toBe(256);
+      expect(VALIDATION_CONSTANTS.NAME.TEMPLATE_NAME_MAX_LENGTH).toBe(256);
       expect(VALIDATION_CONSTANTS.NAME.SEASONING_TYPE_NAME_MAX_LENGTH).toBe(50);
     });
 
@@ -32,7 +32,7 @@ describe("統合されたvalidation constants", () => {
     });
 
     test("後方互換性のための定数が正しく設定されている", () => {
-      expect(VALIDATION_CONSTANTS.NAME_MAX_LENGTH).toBe(20);
+      expect(VALIDATION_CONSTANTS.NAME_MAX_LENGTH).toBe(256);
       expect(VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_BYTES).toBe(5242880);
       expect(VALIDATION_CONSTANTS.IMAGE_MAX_SIZE_MB).toBe(5);
       expect(VALIDATION_CONSTANTS.IMAGE_VALID_TYPES).toEqual([
