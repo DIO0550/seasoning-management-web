@@ -13,6 +13,7 @@ services:
       - db
     networks:
       - seasoning_management_network
+      - mcp-network
 
   db:
     build:
@@ -30,6 +31,7 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - seasoning_management_network
+      - mcp-network
 
 volumes:
   mysql_data:
@@ -37,3 +39,6 @@ volumes:
 networks:
   seasoning_management_network:
     driver: bridge
+  mcp-network:
+    driver: bridge
+    name: mcp-network
