@@ -11,7 +11,7 @@ import type {
   PoolConfig,
   QueryResult,
   TransactionOptions,
-} from "@/libs/database/interfaces/core";
+} from "@/infrastructure/database/interfaces";
 import { PoolError, ConnectionError } from "../../errors";
 
 /**

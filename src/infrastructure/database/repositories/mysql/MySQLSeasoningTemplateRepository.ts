@@ -4,20 +4,18 @@
  */
 
 import type {
-  ISeasoningTemplateRepository,
-  SeasoningTemplateCreateInput,
-  SeasoningTemplateUpdateInput,
-  SeasoningTemplateSearchOptions,
-  CreateSeasoningFromTemplateInput,
-} from "@/libs/database/interfaces/repositories/ISeasoningTemplateRepository";
-import type {
   CreateResult,
-  UpdateResult,
+  CreateSeasoningFromTemplateInput,
   DeleteResult,
+  IDatabaseConnection,
+  ISeasoningTemplateRepository,
   PaginatedResult,
-} from "@/libs/database/interfaces/common/types";
+  SeasoningTemplateCreateInput,
+  SeasoningTemplateSearchOptions,
+  SeasoningTemplateUpdateInput,
+  UpdateResult,
+} from "@/infrastructure/database/interfaces";
 import { SeasoningTemplate } from "@/libs/database/entities/SeasoningTemplate";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/core";
 
 /**
  * データベースから取得した生データの型定義

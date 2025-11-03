@@ -2,10 +2,10 @@ import * as mysql from "mysql2/promise";
 import type { IDatabaseConnection } from "../../interfaces/IDatabaseConnection";
 import type { ITransaction } from "../../interfaces/ITransaction";
 import type {
-  QueryResult,
   ConnectionConfig,
+  QueryResult,
   TransactionOptions,
-} from "@/libs/database/interfaces/core";
+} from "@/infrastructure/database/interfaces";
 import { ConnectionError, QueryError, TransactionError } from "../../errors";
 import { MySQLTransaction } from "./MySQLTransaction";
 

@@ -1,6 +1,6 @@
 import { test, expect, beforeEach } from "vitest";
 import { MySQLSeasoningRepository } from "..";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/core";
+import type { IDatabaseConnection } from "@/infrastructure/database/interfaces";
 import { createMockConnection } from "@/libs/database/__tests__/config/test-db-config";
 
 let mockConnection: IDatabaseConnection;

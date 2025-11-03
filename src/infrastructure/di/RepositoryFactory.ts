@@ -3,13 +3,13 @@
  * @description データベース接続プロバイダーからリポジトリインスタンスを生成
  */
 
-import type { IDatabaseConnectionProvider } from "@/libs/database/interfaces/core";
 import type {
+  IDatabaseConnectionProvider,
   ISeasoningRepository,
   ISeasoningTypeRepository,
   ISeasoningImageRepository,
   ISeasoningTemplateRepository,
-} from "@/libs/database/interfaces";
+} from "@/infrastructure/database/interfaces";
 import {
   MySQLSeasoningRepository,
   MySQLSeasoningTypeRepository,

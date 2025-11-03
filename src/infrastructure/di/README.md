@@ -24,10 +24,24 @@ src/infrastructure/di/
 
 ## 使用方法
 
+### ⚠️ 重要: 非同期初期化の必須化
+
+**このバージョンから、`createContainer()` と `getContainer()` は非同期関数になりました。**
+
+```typescript
+// ❌ NG: await を忘れるとエラーが発生します
+const container = getContainer();
+
+// ✅ OK: 必ず await を使用してください
+const container = await getContainer();
+```
+
+**理由**: データベース接続プールの初期化や設定の読み込みなど、非同期処理が含まれるため、確実に初期化が完了してから使用する必要があります。
+
 ### 基本的な使用
 
 ```typescript
-import { DIContainer } from "@/libs/di";
+import { DIContainer } from "@/infrastructure/di";
 import {
   INFRASTRUCTURE_IDENTIFIERS,
   configureInfrastructureForDevelopment,
@@ -36,7 +50,7 @@ import {
 // 1. コンテナを作成
 const container = new DIContainer();
 
-// 2. Infrastructure層のバインディングを設定
+// 2. Infrastructure層のバインディングを設定（必ず await を使用）
 await configureInfrastructureForDevelopment(container);
 
 // 3. リポジトリファクトリーを取得
@@ -49,11 +63,28 @@ const seasoningRepo = await factory.createSeasoningRepository();
 const typeRepo = await factory.createSeasoningTypeRepository();
 ```
 
+### 簡易的な使用（推奨）
+
+`config.ts` のヘルパー関数を使用すると、環境に応じた自動設定が可能です:
+
+```typescript
+import { getContainer } from "@/infrastructure/di/config";
+
+// 環境に応じて自動的に設定されたコンテナを取得（必ず await）
+const container = await getContainer();
+
+// すぐに使用可能
+const factory = container.resolve(
+  INFRASTRUCTURE_IDENTIFIERS.REPOSITORY_FACTORY
+);
+const repo = await factory.createSeasoningRepository();
+```
+
 ### API Route での使用例
 
 ```typescript
 // app/api/seasonings/route.ts
-import { DIContainer } from "@/libs/di";
+import { DIContainer } from "@/infrastructure/di";
 import {
   INFRASTRUCTURE_IDENTIFIERS,
   configureInfrastructureForDevelopment,
@@ -177,7 +208,7 @@ await manager.initialize(config);
 ### モックを使ったテスト
 
 ```typescript
-import { DIContainer } from "@/libs/di";
+import { DIContainer } from "@/infrastructure/di";
 import { INFRASTRUCTURE_IDENTIFIERS } from "@/infrastructure/di";
 import { MockDatabaseConnectionProvider } from "@/libs/database/__tests__/mocks";
 
@@ -207,7 +238,7 @@ describe("API with DI", () => {
 #### Before
 
 ```typescript
-// ❌ ドメイン層がインフラ実装に依存
+// ❌ libs/di 時代の直接バインド
 import { configureForDevelopment, SERVICE_IDENTIFIERS } from "@/libs/di";
 
 const container = new DIContainer();
@@ -219,7 +250,7 @@ const repo = container.resolve(SERVICE_IDENTIFIERS.SEASONING_REPOSITORY);
 
 ```typescript
 // ✅ 正しい依存方向
-import { DIContainer } from "@/libs/di";
+import { DIContainer } from "@/infrastructure/di";
 import {
   configureInfrastructureForDevelopment,
   INFRASTRUCTURE_IDENTIFIERS,
@@ -268,6 +299,20 @@ configureInfrastructureForDevelopment(container);
 
 // ✅ OK
 await configureInfrastructureForDevelopment(container);
+```
+
+### Q: `createContainer()` や `getContainer()` で await を忘れた
+
+A: **必ず await を付けてください。** 非同期関数になったため、await なしで呼び出すと Promise オブジェクトが返されます。
+
+```typescript
+// ❌ NG: Promise<DIContainer> が返される
+const container = getContainer();
+container.resolve(...); // エラー: resolve is not a function
+
+// ✅ OK: DIContainer が返される
+const container = await getContainer();
+container.resolve(...); // 正常に動作
 ```
 
 ### Q: リポジトリが取得できない

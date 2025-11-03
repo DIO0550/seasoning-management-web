@@ -23,14 +23,8 @@
       }
     },
     "prompt-mcp-server": {
-      "command": "docker",
-      "args": [
-        "exec",
-        "-i",
-        "prompt-mcp-server",
-        "node",
-        "/workspace/McpServer/dist/server.js"
-      ]
+      "type": "sse",
+      "url": "http://prompt-mcp-server:3002/sse"
     }
   }
 }

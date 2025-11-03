@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "prompt-mcp-server": {
+      "type": "http",
+      "url": "http://prompt-mcp-server:3002/mcp"
+    }
+  }
+}

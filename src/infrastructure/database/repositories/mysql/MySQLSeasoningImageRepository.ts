@@ -4,20 +4,18 @@
  */
 
 import type {
-  ISeasoningImageRepository,
-  SeasoningImageCreateInput,
-  SeasoningImageUpdateInput,
-  SeasoningImageSearchOptions,
-  ImagePathResult,
-} from "@/libs/database/interfaces/repositories/ISeasoningImageRepository";
-import type {
   CreateResult,
-  UpdateResult,
   DeleteResult,
+  IDatabaseConnection,
+  ISeasoningImageRepository,
+  ImagePathResult,
   PaginatedResult,
-} from "@/libs/database/interfaces/common/types";
+  SeasoningImageCreateInput,
+  SeasoningImageSearchOptions,
+  SeasoningImageUpdateInput,
+  UpdateResult,
+} from "@/infrastructure/database/interfaces";
 import { SeasoningImage } from "@/libs/database/entities/SeasoningImage";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/core";
 
 /**
  * データベースから取得した生データの型定義

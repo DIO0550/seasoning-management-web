@@ -1,5 +1,7 @@
-import type { ISeasoningRepository } from "@/libs/database/interfaces";
-import type { ISeasoningTypeRepository } from "@/libs/database/interfaces";
+import type {
+  ISeasoningRepository,
+  ISeasoningTypeRepository,
+} from "@/infrastructure/database/interfaces";
 import { SeasoningService } from "@/features/seasoning/services/SeasoningService";
 import type { Seasoning } from "@/libs/database/entities/Seasoning";
 

@@ -3,7 +3,7 @@ import type { ITransaction } from "../../interfaces/ITransaction";
 import type {
   QueryResult,
   TransactionStatus,
-} from "@/libs/database/interfaces/core";
+} from "@/infrastructure/database/interfaces";
 import { TransactionError, QueryError } from "../../errors";
 
 /**

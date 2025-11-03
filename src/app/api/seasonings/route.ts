@@ -15,19 +15,10 @@ import {
 import { SeasoningCollections } from "@/domain/collections/SeasoningCollection";
 import { SeasoningApiErrorCodes } from "@/constants/api/seasonings/error-codes";
 import type { SeasoningListItem } from "@/types/seasoning";
-
-// 調味料の型定義（新しい形式）
-interface Seasoning {
-  id: string;
-  name: string;
-  seasoningTypeId: number;
-  image?: string;
-  createdAt: string;
-}
-
-// モックデータ（本来はDBから取得）
-// Note: テスト用にexportしているが、本番ではリポジトリから取得する
-export const seasonings: Seasoning[] = [];
+import {
+  seasoningStore,
+  type SeasoningRecord,
+} from "@/app/api/seasonings/store";
 
 /**
  * GET /api/seasonings - 調味料一覧を取得
@@ -59,12 +50,14 @@ export async function GET(request: NextRequest) {
 
     // TODO: リポジトリからデータ取得（現在はモックデータ）
     // モックデータを SeasoningListItem 形式に変換
-    const seasoningItems: SeasoningListItem[] = seasonings.map((s) => {
-      const expiryDate = null; // モックデータには期限情報がない
-      const daysUntilExpiry = calculateDaysUntilExpiry(expiryDate);
-      const expiryStatus = ExpiryStatusUtils.fromDays(daysUntilExpiry);
+    const seasoningItems: SeasoningListItem[] = seasoningStore
+      .list()
+      .map((s) => {
+        const expiryDate = null; // モックデータには期限情報がない
+        const daysUntilExpiry = calculateDaysUntilExpiry(expiryDate);
+        const expiryStatus = ExpiryStatusUtils.fromDays(daysUntilExpiry);
 
-      return {
+        return {
         // TODO: リポジトリ実装時に削除（モックデータ専用のID解析ロジック）
         id: Number.parseInt(s.id.split("_")[1] || "1"),
         name: s.name,
@@ -155,7 +148,7 @@ export async function POST(request: NextRequest) {
     const { name, seasoningTypeId, image } = validationResult.data;
 
     // 重複チェック（名前が同じものがないかチェック）
-    const existingSeasoning = seasonings.find((s) => s.name === name);
+    const existingSeasoning = seasoningStore.findByName(name);
     if (existingSeasoning) {
       const errorResponse: ErrorResponse<SeasoningAddErrorCodeType> = {
         result_code: "DUPLICATE_NAME",
@@ -165,7 +158,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 新しい調味料を作成
-    const newSeasoning: Seasoning = {
+    const newSeasoning: SeasoningRecord = {
       id: `seasoning_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
       name: name,
       seasoningTypeId: seasoningTypeId,
@@ -174,7 +167,7 @@ export async function POST(request: NextRequest) {
     };
 
     // モックデータに追加
-    seasonings.push(newSeasoning);
+    seasoningStore.add(newSeasoning);
 
     return NextResponse.json(newSeasoning, { status: 201 });
   } catch (error) {

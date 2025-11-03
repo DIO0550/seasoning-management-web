@@ -4,8 +4,10 @@
  */
 
 import { ConnectionManager } from "@/infrastructure/database/ConnectionManager";
-import type { IDatabaseConnectionProvider } from "@/libs/database/interfaces/core";
-import type { ConnectionConfig } from "@/libs/database/interfaces/core";
+import type {
+  ConnectionConfig,
+  IDatabaseConnectionProvider,
+} from "@/infrastructure/database/interfaces";
 import { databaseConfig, type DatabaseConfig } from "@/config/database";
 
 /**

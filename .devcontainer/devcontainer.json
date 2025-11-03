@@ -23,12 +23,25 @@
         "prisma.prisma",
         "apollographql.vscode-apollo",
         "bradlc.vscode-tailwindcss",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "openai.chatgpt"
       ]
     }
   },
   "remoteEnv": {
     "GITHUB_TOKEN": "${localEnv:GITHUB_PERSONAL_ACCESS_TOKEN}"
+  },
+  "mounts": [
+    "source=${localEnv:HOME}/.gitconfig,target=/home/node/.gitconfig,type=bind,readonly"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest",
+      "ppa": false
+    },
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    }
   },
   "forwardPorts": [3000],
   "remoteUser": "node"

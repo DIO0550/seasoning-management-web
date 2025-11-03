@@ -10,7 +10,7 @@ export type * from "./shared";
 export type {
   IDatabaseConnection,
   ITransaction,
-} from "@/libs/database/interfaces/core";
+} from "@/infrastructure/database/interfaces";
 export type {
   IConnectionPool,
   PoolStats,
