@@ -46,8 +46,12 @@
 
 ## テスト指針
 
-- テストは対象モジュールと同階層に `.test.ts` / `.test.tsx` を置き、Vitest + Testing Library でシナリオを記述します。
-- ドメイン / 機能フォルダでは、テスト関連ファイルを `__tests__/` ディレクトリにまとめ、フラットな `*.test.ts` 構成で管理します。
+- **テストファイルの配置**: 各モジュールごとにフォルダを作成し、その中にテスト対象ファイルと `__tests__/` サブディレクトリを配置します。
+  - 例: `src/features/seasoning/hooks/use-seasoning-submit/use-seasoning-submit.ts` のテストは `src/features/seasoning/hooks/use-seasoning-submit/__tests__/use-seasoning-submit.test.ts`
+  - hooks、services、usecases などの機能単位でフォルダを作成し、その中にファイルとテストを配置します。
+  - ファイル名は kebab-case を使用します（例: `use-seasoning-submit.ts`）。
+  - これにより、テスト対象とテストが近接し、モジュールごとの責務が明確になります。
+- テストは Vitest + Testing Library でシナリオを記述し、ファイル名は `*.test.ts` / `*.test.tsx` とします。
 - データベース関連は `src/infrastructure/database/**/__tests__` を参照し、コネクションはモック化して検証します。
 - 重要変更は `npm run test:coverage` で 80% 以上の維持を確認し、共通セットアップやモックは `vitest.setup.ts` に集約します。
 
