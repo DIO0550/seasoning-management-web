@@ -78,7 +78,7 @@ applyTo: "**"
   - hooks、services、usecases などの機能単位でフォルダを作成し、その中にファイルとテストを配置します。
   - ファイル名は kebab-case を使用します（例: `use-seasoning-submit.ts`）。
   - これにより、テスト対象とテストが近接し、モジュールごとの責務が明確になります。
-- テストは Vitest + Testing Library でシナリオを記述し、ファイル名は `*.test.ts` / `*.test.ts x` とします。
+- テストは Vitest + Testing Library でシナリオを記述し、ファイル名は `*.test.ts` / `*.test.tsx` とします。
 - データベース関連は `src/infrastructure/database/**/__tests__` を参照し、コネクションはモック化して検証します。
 - 重要変更は `npm run test:coverage` で 80% 以上の維持を確認し、共通セットアップやモックは `vitest.setup.ts` に集約します。
 
