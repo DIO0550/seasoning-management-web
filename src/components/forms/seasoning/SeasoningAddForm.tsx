@@ -4,10 +4,10 @@ import { TextInput } from "@/components/elements/inputs/TextInput";
 import { SelectInput } from "@/components/elements/inputs/SelectInput";
 import { FileInput } from "@/components/elements/inputs/FileInput";
 import { SubmitButton } from "@/components/elements/buttons/SubmitButton";
-import { useSeasoningNameInput } from "@/hooks/useSeasoningNameInput";
-import { useSeasoningTypeInput } from "@/hooks/useSeasoningTypeInput";
-import { useSeasoningImageInput } from "@/hooks/useSeasoningImageInput";
-import { useSeasoningSubmit, FormData } from "@/hooks/useSeasoningSubmit";
+import { useSeasoningNameInput } from "@/features/seasoning/hooks";
+import { useSeasoningTypeInput } from "@/features/seasoning/hooks";
+import { useSeasoningImageInput } from "@/features/seasoning/hooks";
+import { useSeasoningSubmit, FormData } from "@/features/seasoning/hooks";
 import { VALIDATION_CONSTANTS } from "@/constants/validation";
 
 /**

@@ -1,6 +1,6 @@
 import { renderHook, act } from "@testing-library/react";
 import { vi } from "vitest";
-import { useSeasoningTypeAdd } from "@/hooks/useSeasoningTypeAdd";
+import { useSeasoningTypeAdd } from "@/features/seasoning/hooks/use-seasoning-type-add/use-seasoning-type-add";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 import { TEST_ASYNC_DELAY } from "@/constants/ui";

@@ -3,8 +3,8 @@ import type { SubmitErrorState } from "@/types/submitErrorState";
 import type { ValidationErrorState } from "@/types/validationErrorState";
 import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
-import { UseSeasoningNameInputReturn } from "@/hooks/useSeasoningNameInput";
-import { UseSeasoningTypeInputReturn } from "@/hooks/useSeasoningTypeInput";
+import { UseSeasoningNameInputReturn } from "@/features/seasoning/hooks/use-seasoning-name-input/use-seasoning-name-input";
+import { UseSeasoningTypeInputReturn } from "@/features/seasoning/hooks/use-seasoning-type-input/use-seasoning-type-input";
 import { validateImage } from "@/utils/imageValidation";
 
 export interface FormData {

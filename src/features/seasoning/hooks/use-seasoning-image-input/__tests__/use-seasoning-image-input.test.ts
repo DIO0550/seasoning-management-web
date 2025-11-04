@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react";
-import { useSeasoningImageInput } from "@/hooks/useSeasoningImageInput";
+import { useSeasoningImageInput } from "@/features/seasoning/hooks/use-seasoning-image-input/use-seasoning-image-input";
 
 describe("useSeasoningImageInput", () => {
   test("初期値がnullでエラーがないこと", () => {

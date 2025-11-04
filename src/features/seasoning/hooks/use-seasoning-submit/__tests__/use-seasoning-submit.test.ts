@@ -1,7 +1,7 @@
 import { renderHook, act } from "@testing-library/react";
-import { useSeasoningSubmit } from "@/hooks/useSeasoningSubmit";
-import { UseSeasoningNameInputReturn } from "@/hooks/useSeasoningNameInput";
-import { UseSeasoningTypeInputReturn } from "@/hooks/useSeasoningTypeInput";
+import { useSeasoningSubmit } from "@/features/seasoning/hooks/use-seasoning-submit/use-seasoning-submit";
+import { UseSeasoningNameInputReturn } from "@/features/seasoning/hooks/use-seasoning-name-input/use-seasoning-name-input";
+import { UseSeasoningTypeInputReturn } from "@/features/seasoning/hooks/use-seasoning-type-input/use-seasoning-type-input";
 import { beforeEach, vi } from "vitest";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
