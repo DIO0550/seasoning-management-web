@@ -1,4 +1,4 @@
-import { getTemplateNameValidationMessage } from "@/features/template/utils/nameValidationMessage";
+import { getTemplateNameValidationMessage } from "../name-validation-message";
 
 describe("getTemplateNameValidationMessage", () => {
   test("有効な名前の場合は空文字を返す", () => {
