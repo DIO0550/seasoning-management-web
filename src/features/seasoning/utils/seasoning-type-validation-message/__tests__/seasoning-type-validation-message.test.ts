@@ -2,7 +2,7 @@ import { describe, test, expect } from "vitest";
 import {
   getSeasoningTypeValidationMessage,
   getSeasoningTypeSubmitMessage,
-} from "@/features/seasoning/utils/seasoningTypeValidationMessage";
+} from "../seasoning-type-validation-message";
 import {
   VALIDATION_ERROR_STATES,
   type ValidationErrorState,
