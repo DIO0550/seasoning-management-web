@@ -4,8 +4,8 @@
  */
 
 import { test, expect } from "vitest";
-import { SeasoningCollections } from "../SeasoningCollection";
-import { createMockItem } from "./SeasoningCollection.test-helpers";
+import { SeasoningCollections } from "../seasoning-collection";
+import { createMockItem } from "./seasoning-collection.test-helpers";
 
 test("SeasoningCollections.from は配列を取り込み count/isEmpty を提供する", () => {
   const items = [createMockItem(1, "醤油")];

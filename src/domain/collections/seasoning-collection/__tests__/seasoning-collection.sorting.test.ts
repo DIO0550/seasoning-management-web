@@ -3,8 +3,8 @@
  */
 
 import { test, expect } from "vitest";
-import { SeasoningCollections } from "../SeasoningCollection";
-import { createMockItem } from "./SeasoningCollection.test-helpers";
+import { SeasoningCollections } from "../seasoning-collection";
+import { createMockItem } from "./seasoning-collection.test-helpers";
 
 test("sortBy('expiryAsc') は期限昇順で並べ替える", () => {
   const items = [

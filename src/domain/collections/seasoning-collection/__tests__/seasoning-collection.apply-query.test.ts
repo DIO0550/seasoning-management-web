@@ -3,9 +3,9 @@
  */
 
 import { test, expect } from "vitest";
-import { SeasoningCollections } from "../SeasoningCollection";
+import { SeasoningCollections } from "../seasoning-collection";
 import type { SeasoningListQuery } from "@/types/api/seasoning/list/types";
-import { createMockItem } from "./SeasoningCollection.test-helpers";
+import { createMockItem } from "./seasoning-collection.test-helpers";
 
 test("applyQuery はクエリ条件を順に適用して結果を返す", () => {
   const items = [
