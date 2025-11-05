@@ -4,7 +4,7 @@
  */
 
 import { test, expect } from "vitest";
-import { SeasoningImage, SeasoningImageSchema } from "../SeasoningImage";
+import { SeasoningImage, SeasoningImageSchema } from "../seasoning-image";
 
 test("SeasoningImage: 有効なデータでエンティティを生成できる", () => {
   const validSeasoningImageData = {

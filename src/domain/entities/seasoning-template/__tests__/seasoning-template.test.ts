@@ -7,7 +7,7 @@ import { test, expect } from "vitest";
 import {
   SeasoningTemplate,
   SeasoningTemplateSchema,
-} from "../SeasoningTemplate";
+} from "../seasoning-template";
 
 test("SeasoningTemplate: 有効なデータでエンティティを生成できる", () => {
   const validSeasoningTemplateData = {
