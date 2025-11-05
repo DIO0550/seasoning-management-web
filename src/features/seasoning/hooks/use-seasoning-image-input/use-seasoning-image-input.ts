@@ -3,7 +3,7 @@ import {
   validateImage,
   type ImageValidationError,
 } from "@/utils/imageValidation";
-import { imageValidationErrorMessage } from "@/features/seasoning/utils/imageValidationMessage";
+import { imageValidationErrorMessage } from "@/features/seasoning/utils";
 import type { ValidationErrorState } from "@/types/validationErrorState";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 

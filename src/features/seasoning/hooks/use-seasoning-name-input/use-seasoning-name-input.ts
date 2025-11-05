@@ -3,7 +3,7 @@ import {
   validateSeasoningName,
   type NameValidationError,
 } from "@/utils/nameValidation";
-import { nameValidationErrorMessage } from "@/features/seasoning/utils/nameValidationMessage";
+import { nameValidationErrorMessage } from "@/features/seasoning/utils";
 import type { ValidationErrorState } from "@/types/validationErrorState";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 

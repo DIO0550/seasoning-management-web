@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, FocusEvent } from "react";
 import { validateType, type TypeValidationError } from "@/utils/typeValidation";
-import { typeValidationErrorMessage } from "@/features/seasoning/utils/typeValidationMessage";
+import { typeValidationErrorMessage } from "@/features/seasoning/utils";
 import type { ValidationErrorState } from "@/types/validationErrorState";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 

@@ -11,8 +11,8 @@ import {
 import {
   calculateDaysUntilExpiry,
   ExpiryStatusUtils,
-} from "@/features/seasoning/utils/expiry-status";
-import { SeasoningCollections } from "@/domain/collections/SeasoningCollection";
+} from "@/features/seasoning/utils";
+import { SeasoningCollections } from "@/domain/collections";
 import { SeasoningApiErrorCodes } from "@/constants/api/seasonings/error-codes";
 import type { SeasoningListItem } from "@/types/seasoning";
 import {
