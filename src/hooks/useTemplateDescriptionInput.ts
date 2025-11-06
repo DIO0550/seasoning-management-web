@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { validateTemplateDescription } from "@/utils/templateDescriptionValidation";
-import { getTemplateDescriptionValidationMessage } from "@/features/template/utils/descriptionValidationMessage";
+import { getTemplateDescriptionValidationMessage } from "@/features/template/utils";
 
 /**
  * テンプレート説明入力のカスタムフック

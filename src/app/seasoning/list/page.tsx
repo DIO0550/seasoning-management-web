@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Button } from "@/components/elements/buttons/button";
-import { useSeasoningNavigation } from "@/hooks/useSeasoningNavigation";
+import { useSeasoningNavigation } from "@/features/seasoning/hooks";
 
 /**
  * 調味料一覧ページコンポーネント

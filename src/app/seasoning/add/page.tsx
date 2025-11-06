@@ -2,8 +2,8 @@
 
 import React from "react";
 import { SeasoningAddForm } from "@/components/forms/seasoning/SeasoningAddForm";
-import { FormData } from "@/hooks/useSeasoningSubmit";
-import { useSeasoningNavigation } from "@/hooks/useSeasoningNavigation";
+import { FormData } from "@/features/seasoning/hooks";
+import { useSeasoningNavigation } from "@/features/seasoning/hooks";
 import { Button } from "@/components/elements/buttons/button";
 
 /**
