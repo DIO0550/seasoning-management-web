@@ -32,7 +32,6 @@ export const useTemplateSubmit = (
       await onSubmit(formData);
     } catch (err) {
       if (err instanceof Error) {
-        // エラーの種類を判定
         if (err.name === "NetworkError") {
           setError(SUBMIT_ERROR_STATES.NETWORK_ERROR);
         } else if (err.name === "ValidationError") {

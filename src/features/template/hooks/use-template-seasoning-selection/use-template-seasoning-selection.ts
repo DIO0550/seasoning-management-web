@@ -12,9 +12,8 @@ export const useTemplateSeasoningSelection = () => {
     setSelectedSeasoningIds((prev) => {
       if (prev.includes(seasoningId)) {
         return prev.filter((id) => id !== seasoningId);
-      } else {
-        return [...prev, seasoningId];
       }
+      return [...prev, seasoningId];
     });
   };
 

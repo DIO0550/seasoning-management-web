@@ -23,7 +23,9 @@ export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
   );
 
   // ValidationErrorStateから実際のバリデーションエラーを逆変換
-  const getValidationErrorFromState = (state: ValidationErrorState): TypeValidationError => {
+  const getValidationErrorFromState = (
+    state: ValidationErrorState
+  ): TypeValidationError => {
     switch (state) {
       case VALIDATION_ERROR_STATES.REQUIRED:
         return "REQUIRED";

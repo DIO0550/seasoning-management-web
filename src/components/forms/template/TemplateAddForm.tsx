@@ -4,10 +4,13 @@ import React from "react";
 import { TextInput } from "@/components/elements/inputs/TextInput";
 import { SubmitButton } from "@/components/elements/buttons/SubmitButton";
 import { ErrorMessage } from "@/components/elements/errors/ErrorMessage";
-import { useTemplateNameInput } from "@/hooks/useTemplateNameInput";
-import { useTemplateDescriptionInput } from "@/hooks/useTemplateDescriptionInput";
-import { useTemplateSeasoningSelection } from "@/hooks/useTemplateSeasoningSelection";
-import { useTemplateSubmit, TemplateFormData } from "@/hooks/useTemplateSubmit";
+import {
+  useTemplateNameInput,
+  useTemplateDescriptionInput,
+  useTemplateSeasoningSelection,
+  useTemplateSubmit,
+  TemplateFormData,
+} from "@/features/template/hooks";
 
 /**
  * テンプレート追加フォームのProps
