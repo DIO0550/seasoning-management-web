@@ -2,7 +2,7 @@
 
 import React from "react";
 import { TemplateAddForm } from "@/components/forms/template/TemplateAddForm";
-import { TemplateFormData } from "@/hooks/useTemplateSubmit";
+import { TemplateFormData } from "@/features/template/hooks";
 
 /**
  * テンプレート追加ページコンポーネント
