@@ -26,7 +26,9 @@ export const useSeasoningImageInput = (): UseSeasoningImageInputReturn => {
   );
 
   // ValidationErrorStateから実際のバリデーションエラーを逆変換
-  const getValidationErrorFromState = (state: ValidationErrorState): ImageValidationError => {
+  const getValidationErrorFromState = (
+    state: ValidationErrorState
+  ): ImageValidationError => {
     switch (state) {
       case VALIDATION_ERROR_STATES.INVALID_FILE_TYPE:
         return "INVALID_TYPE";

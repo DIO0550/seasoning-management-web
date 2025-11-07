@@ -70,7 +70,9 @@ export const useSeasoningNameInput = (): UseSeasoningNameInputReturn => {
   };
 
   // ValidationErrorStateから実際のバリデーションエラーを逆変換
-  const getValidationErrorFromState = (state: ValidationErrorState): NameValidationError => {
+  const getValidationErrorFromState = (
+    state: ValidationErrorState
+  ): NameValidationError => {
     switch (state) {
       case VALIDATION_ERROR_STATES.REQUIRED:
         return "REQUIRED";
