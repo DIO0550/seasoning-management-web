@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo, ChangeEvent, FocusEvent } from "react";
 import {
   validateSeasoningTypeName,
   type SeasoningTypeNameValidationError,
-} from "@/utils/seasoningTypeNameValidation";
+} from "@/utils/seasoning-type-name-validation/seasoning-type-name-validation";
 import type { SeasoningTypeFormData } from "@/types/seasoningType";
 import type { ValidationErrorState } from "@/types/validationErrorState";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";

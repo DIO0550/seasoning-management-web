@@ -1,4 +1,4 @@
-import { validateSeasoningName } from "@/utils/nameValidation";
+import { validateSeasoningName } from "@/utils/name-validation/name-validation";
 import { SEASONING_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
 
 describe("validateSeasoningName", () => {

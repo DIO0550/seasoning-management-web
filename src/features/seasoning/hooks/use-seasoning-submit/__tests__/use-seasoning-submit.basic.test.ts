@@ -28,7 +28,7 @@ const createMockSeasoningTypeInput = (
 });
 
 // モック作成
-vi.mock("@/utils/imageValidation", () => ({
+vi.mock("@/utils/image-validation/image-validation", () => ({
   validateImage: vi.fn(() => "NONE"),
 }));
 

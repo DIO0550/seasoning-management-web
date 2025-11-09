@@ -1,4 +1,4 @@
-import type { ImageValidationError } from "@/utils/imageValidation";
+import type { ImageValidationError } from "@/utils/image-validation/image-validation";
 import {
   VALIDATION_CONSTANTS,
   VALIDATION_ERROR_MESSAGES,

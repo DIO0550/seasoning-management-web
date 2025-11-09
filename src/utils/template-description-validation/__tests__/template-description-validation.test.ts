@@ -1,4 +1,4 @@
-import { validateTemplateDescription } from "@/utils/templateDescriptionValidation";
+import { validateTemplateDescription } from "@/utils/template-description-validation/template-description-validation";
 import { TEMPLATE_DESCRIPTION_MAX_LENGTH } from "@/constants/validation/descriptionValidation";
 
 describe("validateTemplateDescription", () => {

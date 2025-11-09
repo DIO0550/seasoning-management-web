@@ -4,8 +4,8 @@ import type {
 } from "@/infrastructure/database/interfaces";
 import type { SeasoningListItem } from "@/types/seasoning";
 import { SeasoningService } from "@/features/seasoning/services/SeasoningService";
-import { sortSeasoningsByExpiry } from "@/utils/seasoningSort";
-import { calculateExpiryStatus } from "@/utils/expiryCalculation";
+import { sortSeasoningsByExpiry } from "@/utils/seasoning-sort/seasoning-sort";
+import { calculateExpiryStatus } from "@/utils/expiry-calculation/expiry-calculation";
 
 interface Dependencies {
   seasoningRepository: ISeasoningRepository;

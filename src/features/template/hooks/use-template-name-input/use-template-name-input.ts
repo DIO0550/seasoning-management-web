@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { validateTemplateName } from "@/utils/templateNameValidation";
+import { validateTemplateName } from "@/utils/template-name-validation/template-name-validation";
 import { getTemplateNameValidationMessage } from "@/features/template/utils";
 
 /**

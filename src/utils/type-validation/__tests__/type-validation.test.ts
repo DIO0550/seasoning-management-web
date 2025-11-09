@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { validateType } from "@/utils/typeValidation";
+import { validateType } from "@/utils/type-validation/type-validation";
 
 describe("validateType", () => {
   test("空文字の場合にREQUIREDエラーを返す", () => {

@@ -2,7 +2,7 @@ import { useState } from "react";
 import {
   validateImage,
   type ImageValidationError,
-} from "@/utils/imageValidation";
+} from "@/utils/image-validation/image-validation";
 import { imageValidationErrorMessage } from "@/features/seasoning/utils";
 import type { ValidationErrorState } from "@/types/validationErrorState";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";

@@ -3,7 +3,7 @@ import {
   isValidImageType,
   isValidImageSize,
   validateImage,
-} from "@/utils/imageValidation";
+} from "@/utils/image-validation/image-validation";
 import {
   IMAGE_MAX_SIZE_MB,
   BYTES_PER_KB,

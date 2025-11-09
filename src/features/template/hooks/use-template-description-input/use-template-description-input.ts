@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { validateTemplateDescription } from "@/utils/templateDescriptionValidation";
+import { validateTemplateDescription } from "@/utils/template-description-validation/template-description-validation";
 import { getTemplateDescriptionValidationMessage } from "@/features/template/utils";
 
 /**
