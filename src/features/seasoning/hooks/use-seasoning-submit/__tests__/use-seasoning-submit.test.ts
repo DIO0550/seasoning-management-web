@@ -30,7 +30,7 @@ const createMockSeasoningTypeInput = (
 });
 
 // モック作成
-vi.mock("@/utils/imageValidation", () => ({
+vi.mock("@/utils/image-validation/image-validation", () => ({
   validateImage: vi.fn(),
 }));
 
@@ -157,7 +157,7 @@ describe("useSeasoningSubmit", () => {
 
   describe("リファクタリング後の単一責任テスト", () => {
     test("バリデーション処理が独立して動作すること", async () => {
-      const { validateImage } = await import("@/utils/imageValidation");
+      const { validateImage } = await import("@/utils/image-validation/image-validation");
 
       const mockValidateImage = vi.mocked(validateImage);
 
@@ -183,7 +183,7 @@ describe("useSeasoningSubmit", () => {
     });
 
     test("フォーム状態リセット機能が独立して動作すること", async () => {
-      const { validateImage } = await import("@/utils/imageValidation");
+      const { validateImage } = await import("@/utils/image-validation/image-validation");
 
       const mockValidateImage = vi.mocked(validateImage);
 
@@ -228,7 +228,7 @@ describe("useSeasoningSubmit", () => {
     });
 
     test("エラーメッセージが定数から取得されること", async () => {
-      const { validateImage } = await import("@/utils/imageValidation");
+      const { validateImage } = await import("@/utils/image-validation/image-validation");
 
       const mockValidateImage = vi.mocked(validateImage);
 
@@ -261,7 +261,7 @@ describe("useSeasoningSubmit", () => {
     });
 
     test("バリデーション関数が適切な引数で呼び出されること", async () => {
-      const { validateImage } = await import("@/utils/imageValidation");
+      const { validateImage } = await import("@/utils/image-validation/image-validation");
 
       const mockValidateImage = vi.mocked(validateImage);
 
@@ -292,7 +292,7 @@ describe("useSeasoningSubmit", () => {
       const mockOnSubmit = vi.fn().mockResolvedValue(undefined);
       const mockOnReset = vi.fn();
 
-      const { validateImage } = await import("@/utils/imageValidation");
+      const { validateImage } = await import("@/utils/image-validation/image-validation");
 
       const mockValidateImage = vi.mocked(validateImage);
 
@@ -329,7 +329,7 @@ describe("useSeasoningSubmit", () => {
         .fn()
         .mockRejectedValue(new Error("ネットワークエラー"));
 
-      const { validateImage } = await import("@/utils/imageValidation");
+      const { validateImage } = await import("@/utils/image-validation/image-validation");
 
       const mockValidateImage = vi.mocked(validateImage);
 

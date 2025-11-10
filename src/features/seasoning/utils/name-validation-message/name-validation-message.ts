@@ -1,4 +1,4 @@
-import type { NameValidationError } from "@/utils/nameValidation";
+import type { NameValidationError } from "@/utils/name-validation/name-validation";
 import {
   VALIDATION_CONSTANTS,
   VALIDATION_ERROR_MESSAGES,

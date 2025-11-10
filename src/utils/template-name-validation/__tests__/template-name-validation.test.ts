@@ -1,4 +1,4 @@
-import { validateTemplateName } from "@/utils/templateNameValidation";
+import { validateTemplateName } from "@/utils/template-name-validation/template-name-validation";
 import { TEMPLATE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
 
 describe("validateTemplateName", () => {

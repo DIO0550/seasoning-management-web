@@ -2,7 +2,7 @@ import { useState, ChangeEvent, FocusEvent } from "react";
 import {
   validateSeasoningName,
   type NameValidationError,
-} from "@/utils/nameValidation";
+} from "@/utils/name-validation/name-validation";
 import { nameValidationErrorMessage } from "@/features/seasoning/utils";
 import type { ValidationErrorState } from "@/types/validationErrorState";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";

@@ -5,7 +5,7 @@ import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 import { UseSeasoningNameInputReturn } from "@/features/seasoning/hooks/use-seasoning-name-input/use-seasoning-name-input";
 import { UseSeasoningTypeInputReturn } from "@/features/seasoning/hooks/use-seasoning-type-input/use-seasoning-type-input";
-import { validateImage } from "@/utils/imageValidation";
+import { validateImage } from "@/utils/image-validation/image-validation";
 
 export interface FormData {
   name: string;
