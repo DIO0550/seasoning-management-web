@@ -1,71 +1,56 @@
-import { describe, test, expect } from "vitest";
+import { expect, test } from "vitest";
+
 import {
-  isValidImageType,
+  BYTES_PER_KB,
+  IMAGE_MAX_SIZE_MB,
+} from "@/constants/validation/imageValidation";
+import {
   isValidImageSize,
+  isValidImageType,
   validateImage,
 } from "@/utils/image-validation/image-validation";
-import {
-  IMAGE_MAX_SIZE_MB,
-  BYTES_PER_KB,
-} from "@/constants/validation/imageValidation";
 
-describe("isValidImageType", () => {
-  test("JPEG形式のファイルは有効である", () => {
-    const jpegFile = new File(["dummy"], "test.jpg", { type: "image/jpeg" });
-    expect(isValidImageType(jpegFile)).toBe(true);
-  });
+const createFile = (sizeBytes: number, type: string) =>
+  new File(["x".repeat(sizeBytes)], "file", { type });
 
-  test("PNG形式のファイルは有効である", () => {
-    const pngFile = new File(["dummy"], "test.png", { type: "image/png" });
-    expect(isValidImageType(pngFile)).toBe(true);
-  });
-
-  test("無効なファイル形式は無効である", () => {
-    const textFile = new File(["dummy"], "test.txt", { type: "text/plain" });
-    expect(isValidImageType(textFile)).toBe(false);
-  });
+test("isValidImageType - JPEG/PNG のみ許可", () => {
+  expect(isValidImageType(createFile(BYTES_PER_KB, "image/jpeg"))).toBe(true);
+  expect(isValidImageType(createFile(BYTES_PER_KB, "image/png"))).toBe(true);
+  expect(isValidImageType(createFile(BYTES_PER_KB, "text/plain"))).toBe(false);
 });
 
-describe("isValidImageSize", () => {
-  test(`${IMAGE_MAX_SIZE_MB}MB以下のファイルは有効である`, () => {
-    const smallFile = new File(["x".repeat(BYTES_PER_KB)], "small.jpg", {
-      type: "image/jpeg",
-    });
-    expect(isValidImageSize(smallFile)).toBe(true);
-  });
-
-  test(`${IMAGE_MAX_SIZE_MB}MBを超えるファイルは無効である`, () => {
-    // 6MB相当のダミーデータ
-    const largeFile = new File(
-      ["x".repeat((IMAGE_MAX_SIZE_MB + 1) * BYTES_PER_KB * BYTES_PER_KB)],
-      "large.jpg",
-      {
-        type: "image/jpeg",
-      }
-    );
-    expect(isValidImageSize(largeFile)).toBe(false);
-  });
+test(`${IMAGE_MAX_SIZE_MB}MB を境界に isValidImageSize が判定する`, () => {
+  const limitBytes = IMAGE_MAX_SIZE_MB * BYTES_PER_KB * BYTES_PER_KB;
+  expect(isValidImageSize(createFile(limitBytes, "image/jpeg"))).toBe(true);
+  expect(isValidImageSize(createFile(limitBytes + 1, "image/jpeg"))).toBe(false);
 });
 
-describe("validateImage", () => {
-  test("nullファイルは'NONE'を返す", () => {
-    expect(validateImage(null)).toBe("NONE");
-  });
+const validateCases: Array<{
+  name: string;
+  file: File | null;
+  expected: ReturnType<typeof validateImage>;
+}> = [
+  { name: "null ファイルは NONE", file: null, expected: "NONE" },
+  {
+    name: "有効な JPEG は NONE",
+    file: createFile(BYTES_PER_KB, "image/jpeg"),
+    expected: "NONE",
+  },
+  {
+    name: "無効な拡張子は INVALID_TYPE",
+    file: createFile(BYTES_PER_KB, "text/plain"),
+    expected: "INVALID_TYPE",
+  },
+  {
+    name: "サイズ超過は SIZE_EXCEEDED",
+    file: createFile(
+      (IMAGE_MAX_SIZE_MB + 1) * BYTES_PER_KB * BYTES_PER_KB,
+      "image/jpeg"
+    ),
+    expected: "SIZE_EXCEEDED",
+  },
+];
 
-  test("有効なファイルは'NONE'を返す", () => {
-    const validFile = new File(["dummy"], "test.jpg", { type: "image/jpeg" });
-    expect(validateImage(validFile)).toBe("NONE");
-  });
-
-  test("無効なファイル形式はINVALID_TYPEを返す", () => {
-    const invalidFile = new File(["dummy"], "test.txt", { type: "text/plain" });
-    expect(validateImage(invalidFile)).toBe("INVALID_TYPE");
-  });
-
-  test("サイズ超過ファイルはSIZE_EXCEEDEDを返す", () => {
-    const largeFile = new File(["x".repeat(6 * 1024 * 1024)], "large.jpg", {
-      type: "image/jpeg",
-    });
-    expect(validateImage(largeFile)).toBe("SIZE_EXCEEDED");
-  });
+test.each(validateCases)("validateImage - %s", ({ file, expected }) => {
+  expect(validateImage(file)).toBe(expected);
 });

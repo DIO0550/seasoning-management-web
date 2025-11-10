@@ -1,26 +1,33 @@
-import { validateTemplateDescription } from "@/utils/template-description-validation/template-description-validation";
+import { expect, test } from "vitest";
+
 import { TEMPLATE_DESCRIPTION_MAX_LENGTH } from "@/constants/validation/descriptionValidation";
+import { validateTemplateDescription } from "@/utils/template-description-validation/template-description-validation";
 
-describe("validateTemplateDescription", () => {
-  test("空文字の場合はtrueを返す（任意項目のため）", () => {
-    expect(validateTemplateDescription("")).toBe(true);
-  });
+const chars = (count: number): string => "あ".repeat(count);
 
-  test(`${TEMPLATE_DESCRIPTION_MAX_LENGTH}文字以内の場合はtrueを返す`, () => {
-    const description = "あ".repeat(TEMPLATE_DESCRIPTION_MAX_LENGTH);
-    expect(validateTemplateDescription(description)).toBe(true);
-  });
+const cases: Array<{ name: string; input: string; expected: boolean }> = [
+  {
+    name: "空文字は true（任意項目）",
+    input: "",
+    expected: true,
+  },
+  {
+    name: `${TEMPLATE_DESCRIPTION_MAX_LENGTH}文字以内は true`,
+    input: chars(TEMPLATE_DESCRIPTION_MAX_LENGTH),
+    expected: true,
+  },
+  {
+    name: `${TEMPLATE_DESCRIPTION_MAX_LENGTH + 1}文字以上は false`,
+    input: chars(TEMPLATE_DESCRIPTION_MAX_LENGTH + 1),
+    expected: false,
+  },
+  {
+    name: "有効な説明文は true",
+    input: "朝食に使う調味料のテンプレートです。",
+    expected: true,
+  },
+];
 
-  test(`${
-    TEMPLATE_DESCRIPTION_MAX_LENGTH + 1
-  }文字以上の場合はfalseを返す`, () => {
-    const description = "あ".repeat(TEMPLATE_DESCRIPTION_MAX_LENGTH + 1);
-    expect(validateTemplateDescription(description)).toBe(false);
-  });
-
-  test("有効な説明文の場合はtrueを返す", () => {
-    expect(
-      validateTemplateDescription("朝食に使う調味料のテンプレートです。")
-    ).toBe(true);
-  });
+test.each(cases)("validateTemplateDescription - %s", ({ input, expected }) => {
+  expect(validateTemplateDescription(input)).toBe(expected);
 });
