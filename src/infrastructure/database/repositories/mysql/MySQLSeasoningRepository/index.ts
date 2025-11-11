@@ -111,19 +111,62 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
    * すべての調味料を取得
    */
   async findAll(
-    _options?: SeasoningSearchOptions
+    options?: SeasoningSearchOptions
   ): Promise<PaginatedResult<Seasoning>> {
-    const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning ORDER BY created_at DESC`;
-    const result = await this.connection.query<SeasoningRow>(sql);
+    const params: unknown[] = [];
+    const whereClauses: string[] = [];
+
+    // フィルタリング条件の構築
+    if (options?.typeId) {
+      whereClauses.push("type_id = ?");
+      params.push(options.typeId);
+    }
+
+    if (options?.search) {
+      const sanitized = escapeLikePattern(options.search);
+      whereClauses.push("name LIKE ?");
+      params.push(`%${sanitized}%`);
+    }
+
+    // WHERE句の組み立て
+    const whereClause =
+      whereClauses.length > 0 ? `WHERE ${whereClauses.join(" AND ")}` : "";
+
+    // ソート条件（将来的に拡張）
+    const orderByClause = "ORDER BY created_at DESC";
+
+    // 総件数を取得
+    const countSql = `SELECT COUNT(*) AS cnt FROM seasoning ${whereClause}`;
+    const countResult = await this.connection.query<{ cnt: number }>(
+      countSql,
+      params
+    );
+    const total = Number(countResult.rows[0]?.cnt ?? 0);
+
+    // ページネーション設定
+    const page = options?.pagination?.page ?? 1;
+    const limit = options?.pagination?.limit ?? total;
+    const offset = (page - 1) * limit;
+
+    // データ取得
+    const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning ${whereClause} ${orderByClause} LIMIT ? OFFSET ?`;
+    const result = await this.connection.query<SeasoningRow>(sql, [
+      ...params,
+      limit,
+      offset,
+    ]);
 
     const seasonings = result.rows.map((row) => this.rowToEntity(row));
 
+    // ページネーション結果
+    const totalPages = Math.ceil(total / limit);
+
     return {
       items: seasonings,
-      total: seasonings.length,
-      page: 1,
-      limit: seasonings.length,
-      totalPages: 1,
+      total,
+      page,
+      limit,
+      totalPages,
     };
   }
 

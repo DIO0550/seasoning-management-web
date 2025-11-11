@@ -10,7 +10,7 @@ import type {
   SeasoningCreateInput,
   SeasoningUpdateInput,
 } from "../ISeasoningRepository";
-import type { Seasoning } from "../../../entities/Seasoning";
+import { Seasoning } from "../../../entities/Seasoning";
 import type {
   PaginatedResult,
   UpdateResult,
@@ -27,7 +27,7 @@ class MockSeasoningRepository implements ISeasoningRepository {
   }
 
   async create(_input: SeasoningCreateInput): Promise<Seasoning> {
-    return {
+    return new Seasoning({
       id: 1,
       name: "醤油",
       typeId: 1,
@@ -37,7 +37,7 @@ class MockSeasoningRepository implements ISeasoningRepository {
       purchasedAt: null,
       createdAt: new Date("2024-01-01"),
       updatedAt: new Date("2024-01-01"),
-    };
+    });
   }
 
   async findById(_id: number): Promise<Seasoning | null> {
