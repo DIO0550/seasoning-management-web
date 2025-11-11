@@ -8,25 +8,21 @@ import {
   type SeasoningListResponse,
   type ErrorResponse as ApiErrorResponse,
 } from "@/types/api/seasoning/list/types";
-import {
-  calculateDaysUntilExpiry,
-  ExpiryStatusUtils,
-} from "@/features/seasoning/utils";
-import { SeasoningCollections } from "@/domain/collections";
 import { SeasoningApiErrorCodes } from "@/constants/api/seasonings/error-codes";
-import type { SeasoningListItem } from "@/types/seasoning";
-import {
-  seasoningStore,
-  type SeasoningRecord,
-} from "@/app/api/seasonings/store";
+import { ConnectionManager } from "@/infrastructure/database/ConnectionManager";
+import { RepositoryFactory } from "@/infrastructure/di/RepositoryFactory";
+import { ListSeasoningsUseCase } from "@/features/seasonings/usecases/list-seasonings";
+import { errorMapper } from "@/utils/api/error-mapper";
+import type { SeasoningRecord } from "@/app/api/seasonings/store";
+import { seasoningStore } from "@/app/api/seasonings/store";
 
 /**
  * GET /api/seasonings - 調味料一覧を取得
- * OpenAPI仕様に準拠
+ * OpenAPI仕様に準拠 - UseCaseパターンで実装
  */
 export async function GET(request: NextRequest) {
   try {
-    // クエリパラメータの取得とバリデーション
+    // 1. クエリパラメータの取得とバリデーション
     const { searchParams } = new URL(request.url);
     const queryParams = Object.fromEntries(searchParams);
 
@@ -45,80 +41,29 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(errorResponse, { status: 400 });
     }
 
-    const query = validationResult.data;
-    const { page, pageSize } = query;
+    // 2. DIコンテナからリポジトリとUseCaseを取得
+    const connectionManager = ConnectionManager.getInstance();
+    const repositoryFactory = new RepositoryFactory(connectionManager);
+    const seasoningRepository =
+      await repositoryFactory.createSeasoningRepository();
+    const useCase = new ListSeasoningsUseCase(seasoningRepository);
 
-    // TODO: リポジトリからデータ取得（現在はモックデータ）
-    // モックデータを SeasoningListItem 形式に変換
-    const seasoningItems: SeasoningListItem[] = seasoningStore
-      .list()
-      .map((s) => {
-        const expiryDate = null; // モックデータには期限情報がない
-        const daysUntilExpiry = calculateDaysUntilExpiry(expiryDate);
-        const expiryStatus = ExpiryStatusUtils.fromDays(daysUntilExpiry);
+    // 3. UseCaseを実行（Input DTOを渡す）
+    const output = await useCase.execute(validationResult.data);
 
-        return {
-        // TODO: リポジトリ実装時に削除（モックデータ専用のID解析ロジック）
-        id: Number.parseInt(s.id.split("_")[1] || "1"),
-        name: s.name,
-        typeId: s.seasoningTypeId,
-        bestBeforeAt: undefined,
-        expiresAt: undefined,
-        purchasedAt: undefined,
-        daysUntilExpiry: daysUntilExpiry ?? undefined,
-        expiryStatus,
-      };
-    });
-
-    const baseCollection = SeasoningCollections.from(seasoningItems);
-    const collection = SeasoningCollections.applyQuery(baseCollection, query);
-
-    // サマリー計算（フィルタリング前の全データから）
-    const summary = SeasoningCollections.calculateSummary(baseCollection);
-
-    // ページネーション
-    const paginationResult = SeasoningCollections.paginate(
-      collection,
-      page,
-      pageSize
-    );
-
-    // ドメイン型からAPI型への変換
-    const apiItems = paginationResult.items.map((item) => ({
-      id: item.id,
-      name: item.name,
-      typeId: item.typeId,
-      imageId: null, // モックデータには画像情報がない
-      bestBeforeAt: item.bestBeforeAt?.toISOString() ?? null,
-      expiresAt: item.expiresAt?.toISOString() ?? null,
-      purchasedAt: item.purchasedAt?.toISOString() ?? null,
-      daysUntilExpiry: item.daysUntilExpiry ?? null,
-      expiryStatus: item.expiryStatus,
-    }));
-
+    // 4. Output DTOをレスポンス型に変換して返却
     const response: SeasoningListResponse = {
-      data: apiItems,
-      meta: {
-        page: paginationResult.page,
-        pageSize: paginationResult.pageSize,
-        totalItems: paginationResult.totalItems,
-        totalPages: paginationResult.totalPages,
-        hasNext: paginationResult.hasNext,
-        hasPrevious: paginationResult.hasPrevious,
-      },
-      summary,
+      data: output.data,
+      meta: output.meta,
+      summary: output.summary,
     };
 
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
+    // 5. Domain例外をHTTPステータスにマッピング
     console.error("調味料一覧取得エラー:", error);
-
-    const errorResponse: ApiErrorResponse = {
-      code: SeasoningApiErrorCodes.internal,
-      message: "システムエラーが発生しました",
-    };
-
-    return NextResponse.json(errorResponse, { status: 500 });
+    const { status, body } = errorMapper.toHttpResponse(error);
+    return NextResponse.json(body, { status });
   }
 }
 
