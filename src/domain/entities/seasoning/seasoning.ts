@@ -21,6 +21,11 @@ export const SeasoningSchema = z.object({
 });
 
 /**
+ * 期限ステータスの型定義
+ */
+export type ExpiryStatus = "fresh" | "expiring_soon" | "expired" | "unknown";
+
+/**
  * 調味料エンティティの型定義
  */
 export interface SeasoningData {
@@ -65,5 +70,64 @@ export class Seasoning {
     this.purchasedAt = data.purchasedAt;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
+  }
+
+  /**
+   * 期限までの日数を計算する
+   * @returns 期限までの日数。期限がない場合はnull
+   */
+  calculateDaysUntilExpiry(): number | null {
+    if (!this.expiresAt) {
+      return null;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const expiryDate = new Date(this.expiresAt);
+    expiryDate.setHours(0, 0, 0, 0);
+
+    const diffTime = expiryDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+  }
+
+  /**
+   * 期限のステータスを取得する
+   * @returns 期限ステータス
+   */
+  getExpiryStatus(): ExpiryStatus {
+    const days = this.calculateDaysUntilExpiry();
+
+    if (days === null) {
+      return "unknown";
+    }
+
+    if (days < 0) {
+      return "expired";
+    }
+
+    if (days <= 7) {
+      return "expiring_soon";
+    }
+
+    return "fresh";
+  }
+
+  /**
+   * 期限切れかどうかを判定する
+   * @returns 期限切れの場合true
+   */
+  isExpired(): boolean {
+    return this.getExpiryStatus() === "expired";
+  }
+
+  /**
+   * 期限が近いかどうかを判定する
+   * @returns 期限が7日以内の場合true
+   */
+  isExpiringSoon(): boolean {
+    return this.getExpiryStatus() === "expiring_soon";
   }
 }
