@@ -25,6 +25,7 @@ beforeEach(() => {
     findByTypeId: vi.fn(),
     findExpiringSoon: vi.fn(),
     count: vi.fn(),
+    getStatistics: vi.fn(),
   };
 
   useCase = new ListSeasoningsUseCase(mockRepository);
@@ -65,6 +66,12 @@ test("ListSeasoningsUseCase.execute: 全調味料を取得してDTOに変換す�
     totalPages: 1,
   });
 
+  vi.mocked(mockRepository.getStatistics).mockResolvedValue({
+    total: 2,
+    expiringSoon: 0,
+    expired: 0,
+  });
+
   const input: ListSeasoningsInput = {
     page: 1,
     pageSize: 20,
@@ -90,6 +97,12 @@ test("ListSeasoningsUseCase.execute: typeIdでフィルタリングする", asyn
     totalPages: 0,
   });
 
+  vi.mocked(mockRepository.getStatistics).mockResolvedValue({
+    total: 0,
+    expiringSoon: 0,
+    expired: 0,
+  });
+
   const input: ListSeasoningsInput = {
     page: 1,
     pageSize: 20,
@@ -112,6 +125,12 @@ test("ListSeasoningsUseCase.execute: searchでフィルタリングする", asyn
     page: 1,
     limit: 20,
     totalPages: 0,
+  });
+
+  vi.mocked(mockRepository.getStatistics).mockResolvedValue({
+    total: 0,
+    expiringSoon: 0,
+    expired: 0,
   });
 
   const input: ListSeasoningsInput = {
@@ -183,6 +202,12 @@ test("ListSeasoningsUseCase.execute: サマリーを正しく計算する", asyn
     totalPages: 1,
   });
 
+  vi.mocked(mockRepository.getStatistics).mockResolvedValue({
+    total: 3,
+    expiringSoon: 1,
+    expired: 1,
+  });
+
   const input: ListSeasoningsInput = {
     page: 1,
     pageSize: 20,
@@ -218,6 +243,12 @@ test("ListSeasoningsUseCase.execute: ページネーションを正しく処理�
     page: 1,
     limit: 2,
     totalPages: 3,
+  });
+
+  vi.mocked(mockRepository.getStatistics).mockResolvedValue({
+    total: 5,
+    expiringSoon: 0,
+    expired: 0,
   });
 
   const input: ListSeasoningsInput = {

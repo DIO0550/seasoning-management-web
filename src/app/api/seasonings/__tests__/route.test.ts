@@ -31,6 +31,11 @@ const mockRepository: ISeasoningRepository = {
     limit: 10,
     totalPages: 0,
   })),
+  getStatistics: vi.fn(async () => ({
+    total: 0,
+    expiringSoon: 0,
+    expired: 0,
+  })),
   findById: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),

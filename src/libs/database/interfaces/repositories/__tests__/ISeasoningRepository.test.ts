@@ -96,6 +96,21 @@ class MockSeasoningRepository implements ISeasoningRepository {
   async count(): Promise<number> {
     return 0;
   }
+
+  async getStatistics(_options?: {
+    readonly search?: string;
+    readonly typeId?: number;
+  }): Promise<{
+    total: number;
+    expiringSoon: number;
+    expired: number;
+  }> {
+    return {
+      total: 0,
+      expiringSoon: 0,
+      expired: 0,
+    };
+  }
 }
 
 describe("ISeasoningRepository Interface", () => {

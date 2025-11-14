@@ -61,7 +61,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     // 5. Domain例外をHTTPステータスにマッピング
-    console.error("調味料一覧取得エラー:", error);
+    if (process.env.NODE_ENV === "development") {
+      console.error("調味料一覧取得エラー:", error);
+    } else {
+      // 本番環境では詳細なエラー情報を出力しない
+      console.error(
+        "調味料一覧取得エラー:",
+        error instanceof Error ? error.message : String(error)
+      );
+    }
     const { status, body } = errorMapper.toHttpResponse(error);
     return NextResponse.json(body, { status });
   }

@@ -34,10 +34,15 @@ export class ListSeasoningsUseCase {
     });
 
     // 2. サマリー計算（全データから）
+    const statistics = await this.seasoningRepository.getStatistics({
+      search: input.search,
+      typeId: input.typeId,
+    });
+
     const summary: SeasoningSummary = {
-      totalCount: result.total,
-      expiringCount: result.items.filter((s) => s.isExpiringSoon()).length,
-      expiredCount: result.items.filter((s) => s.isExpired()).length,
+      totalCount: statistics.total,
+      expiringCount: statistics.expiringSoon,
+      expiredCount: statistics.expired,
     };
 
     // 3. Domain Entity → Output DTOに変換
