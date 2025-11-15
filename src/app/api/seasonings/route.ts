@@ -8,7 +8,7 @@ import {
   type SeasoningListResponse,
   type ErrorResponse as ApiErrorResponse,
 } from "@/types/api/seasoning/list/types";
-import { SeasoningApiErrorCodes } from "@/constants/api/seasonings/error-codes";
+import { SeasoningListErrorCode } from "@/types/api/seasoning/list/errorCode";
 import { ConnectionManager } from "@/infrastructure/database/ConnectionManager";
 import { RepositoryFactory } from "@/infrastructure/di/RepositoryFactory";
 import { ListSeasoningsUseCase } from "@/features/seasonings/usecases/list-seasonings";
@@ -29,8 +29,12 @@ export async function GET(request: NextRequest) {
     const validationResult = SeasoningListQuerySchema.safeParse(queryParams);
 
     if (!validationResult.success) {
+      const errorCode = SeasoningListErrorCode.fromValidationError(
+        validationResult.error
+      );
+
       const errorResponse: ApiErrorResponse = {
-        code: SeasoningApiErrorCodes.validation,
+        code: errorCode,
         message: "入力内容を確認してください",
         details: validationResult.error.errors.map((err) => ({
           field: err.path.join("."),
@@ -61,15 +65,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     // 5. Domain例外をHTTPステータスにマッピング
-    if (process.env.NODE_ENV === "development") {
-      console.error("調味料一覧取得エラー:", error);
-    } else {
-      // 本番環境では詳細なエラー情報を出力しない
-      console.error(
-        "調味料一覧取得エラー:",
-        error instanceof Error ? error.message : String(error)
-      );
-    }
+    console.error("調味料一覧取得エラー:", error);
     const { status, body } = errorMapper.toHttpResponse(error);
     return NextResponse.json(body, { status });
   }
