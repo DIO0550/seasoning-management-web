@@ -111,19 +111,62 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
    * すべての調味料を取得
    */
   async findAll(
-    _options?: SeasoningSearchOptions
+    options?: SeasoningSearchOptions
   ): Promise<PaginatedResult<Seasoning>> {
-    const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning ORDER BY created_at DESC`;
-    const result = await this.connection.query<SeasoningRow>(sql);
+    const params: unknown[] = [];
+    const whereClauses: string[] = [];
+
+    // フィルタリング条件の構築
+    if (options?.typeId) {
+      whereClauses.push("type_id = ?");
+      params.push(options.typeId);
+    }
+
+    if (options?.search) {
+      const sanitized = escapeLikePattern(options.search);
+      whereClauses.push("name LIKE ? ESCAPE '\\\\'");
+      params.push(`%${sanitized}%`);
+    }
+
+    // WHERE句の組み立て
+    const whereClause =
+      whereClauses.length > 0 ? `WHERE ${whereClauses.join(" AND ")}` : "";
+
+    // ソート条件（将来的に拡張）
+    const orderByClause = "ORDER BY created_at DESC";
+
+    // 総件数を取得
+    const countSql = `SELECT COUNT(*) AS cnt FROM seasoning ${whereClause}`;
+    const countResult = await this.connection.query<{ cnt: number }>(
+      countSql,
+      params
+    );
+    const total = Number(countResult.rows[0]?.cnt ?? 0);
+
+    // ページネーション設定
+    const page = options?.pagination?.page ?? 1;
+    const limit = options?.pagination?.limit ?? 20;
+    const offset = (page - 1) * limit;
+
+    // データ取得
+    const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning ${whereClause} ${orderByClause} LIMIT ? OFFSET ?`;
+    const result = await this.connection.query<SeasoningRow>(sql, [
+      ...params,
+      limit,
+      offset,
+    ]);
 
     const seasonings = result.rows.map((row) => this.rowToEntity(row));
 
+    // ページネーション結果
+    const totalPages = limit > 0 ? Math.ceil(total / limit) : 0;
+
     return {
       items: seasonings,
-      total: seasonings.length,
-      page: 1,
-      limit: seasonings.length,
-      totalPages: 1,
+      total,
+      page,
+      limit,
+      totalPages,
     };
   }
 
@@ -193,6 +236,71 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
     const result = await this.connection.query<{ cnt: number }>(sql);
     const row = result.rows[0];
     return row ? Number(row.cnt) : 0;
+  }
+
+  /**
+   * 検索条件に一致する調味料の統計情報を取得する
+   */
+  async getStatistics(options?: {
+    readonly search?: string;
+    readonly typeId?: number;
+  }): Promise<{
+    total: number;
+    expiringSoon: number;
+    expired: number;
+  }> {
+    const params: unknown[] = [];
+    const whereClauses: string[] = [];
+
+    // フィルタリング条件の構築
+    if (options?.typeId) {
+      whereClauses.push("type_id = ?");
+      params.push(options.typeId);
+    }
+
+    if (options?.search) {
+      const sanitized = escapeLikePattern(options.search);
+      whereClauses.push("name LIKE ? ESCAPE '\\\\'");
+      params.push(`%${sanitized}%`);
+    }
+
+    // WHERE句の組み立て
+    const whereClause =
+      whereClauses.length > 0 ? `WHERE ${whereClauses.join(" AND ")}` : "";
+
+    // 統計情報を一度のクエリで取得
+    // 消費期限を優先し、なければ賞味期限を使用
+    // 期限間近: 1-7日以内（当日は期限切れに含める）
+    // 期限切れ: 当日以前
+    const sql = `
+      SELECT 
+        COUNT(*) AS total,
+        SUM(CASE 
+          WHEN best_before_at IS NOT NULL AND DATEDIFF(best_before_at, CURDATE()) BETWEEN 1 AND 7 THEN 1
+          WHEN best_before_at IS NULL AND expires_at IS NOT NULL AND DATEDIFF(expires_at, CURDATE()) BETWEEN 1 AND 7 THEN 1
+          ELSE 0 
+        END) AS expiring_soon,
+        SUM(CASE 
+          WHEN best_before_at IS NOT NULL AND best_before_at <= CURDATE() THEN 1
+          WHEN best_before_at IS NULL AND expires_at IS NOT NULL AND expires_at <= CURDATE() THEN 1
+          ELSE 0 
+        END) AS expired
+      FROM seasoning ${whereClause}
+    `;
+
+    const result = await this.connection.query<{
+      total: number;
+      expiring_soon: number;
+      expired: number;
+    }>(sql, params);
+
+    const row = result.rows[0];
+
+    return {
+      total: row ? Number(row.total) : 0,
+      expiringSoon: row ? Number(row.expiring_soon) : 0,
+      expired: row ? Number(row.expired) : 0,
+    };
   }
 
   /**

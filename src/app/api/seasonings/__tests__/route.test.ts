@@ -1,8 +1,50 @@
-import { test, expect, beforeEach } from "vitest";
+import { test, expect, beforeEach, vi } from "vitest";
 import { NextRequest } from "next/server";
 import { GET, POST } from "@/app/api/seasonings/route";
 // Note: 将来的には createSeasoningStore() を使用してテストごとに独立したストアを作成することを推奨
 import { seasoningStore } from "@/app/api/seasonings/store";
+import type { ISeasoningRepository } from "@/libs/database/interfaces/repositories/ISeasoningRepository";
+import type { IDatabaseConnection } from "@/libs/database/interfaces/core/IDatabaseConnection";
+
+// ConnectionManager と RepositoryFactory をモック化
+vi.mock("@/infrastructure/database/ConnectionManager", () => ({
+  ConnectionManager: {
+    getInstance: vi.fn(() => ({
+      getConnection: vi.fn(),
+    })),
+  },
+}));
+
+vi.mock("@/infrastructure/di/RepositoryFactory", () => ({
+  RepositoryFactory: vi.fn().mockImplementation(() => ({
+    createSeasoningRepository: vi.fn(async () => mockRepository),
+  })),
+}));
+
+// モックリポジトリの作成
+const mockRepository: ISeasoningRepository = {
+  connection: {} as IDatabaseConnection,
+  findAll: vi.fn(async () => ({
+    items: [],
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 0,
+  })),
+  getStatistics: vi.fn(async () => ({
+    total: 0,
+    expiringSoon: 0,
+    expired: 0,
+  })),
+  findById: vi.fn(),
+  create: vi.fn(),
+  update: vi.fn(),
+  delete: vi.fn(),
+  findByName: vi.fn(),
+  findByTypeId: vi.fn(),
+  findExpiringSoon: vi.fn(),
+  count: vi.fn(),
+};
 
 // テスト用のモックリクエスト作成関数
 const createRequest = (

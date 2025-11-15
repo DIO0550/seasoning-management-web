@@ -135,4 +135,19 @@ export interface ISeasoningRepository {
    * @throws {RepositoryError} データベース操作でエラーが発生した場合
    */
   count(): Promise<number>;
+
+  /**
+   * 検索条件に一致する調味料の統計情報を取得する
+   * @param options 検索オプション
+   * @returns 統計情報（総数、期限間近の数、期限切れの数）
+   * @throws {RepositoryError} データベース操作でエラーが発生した場合
+   */
+  getStatistics(options?: {
+    readonly search?: string;
+    readonly typeId?: number;
+  }): Promise<{
+    total: number;
+    expiringSoon: number;
+    expired: number;
+  }>;
 }

@@ -80,3 +80,210 @@ test("SeasoningSchema: name が文字列でない場合はバリデーション�
     SeasoningSchema.parse(invalidData);
   }).toThrow();
 });
+
+test("Seasoning: calculateDaysUntilExpiry() - 期限までの日数を計算できる", () => {
+  const today = new Date();
+  const futureDate = new Date(today);
+  futureDate.setDate(today.getDate() + 10);
+
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: futureDate,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  const days = seasoning.calculateDaysUntilExpiry();
+  expect(days).toBeGreaterThanOrEqual(9);
+  expect(days).toBeLessThanOrEqual(10);
+});
+
+test("Seasoning: calculateDaysUntilExpiry() - 期限がない場合はnullを返す", () => {
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: null,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  expect(seasoning.calculateDaysUntilExpiry()).toBeNull();
+});
+
+test("Seasoning: calculateDaysUntilExpiry() - 過去の日付の場合は負の値を返す", () => {
+  const pastDate = new Date();
+  pastDate.setDate(pastDate.getDate() - 5);
+
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: pastDate,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  const days = seasoning.calculateDaysUntilExpiry();
+  expect(days).toBeLessThan(0);
+});
+
+test("Seasoning: getExpiryStatus() - 期限が7日以上先の場合は'fresh'", () => {
+  const futureDate = new Date();
+  futureDate.setDate(futureDate.getDate() + 14);
+
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: futureDate,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  expect(seasoning.getExpiryStatus()).toBe("fresh");
+});
+
+test("Seasoning: getExpiryStatus() - 期限が7日以内の場合は'expiring_soon'", () => {
+  const futureDate = new Date();
+  futureDate.setDate(futureDate.getDate() + 3);
+
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: futureDate,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  expect(seasoning.getExpiryStatus()).toBe("expiring_soon");
+});
+
+test("Seasoning: getExpiryStatus() - 期限切れの場合は'expired'", () => {
+  const pastDate = new Date();
+  pastDate.setDate(pastDate.getDate() - 1);
+
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: pastDate,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  expect(seasoning.getExpiryStatus()).toBe("expired");
+});
+
+test("Seasoning: getExpiryStatus() - 期限がない場合は'unknown'", () => {
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: null,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  expect(seasoning.getExpiryStatus()).toBe("unknown");
+});
+
+test("Seasoning: isExpired() - 期限切れの場合はtrue", () => {
+  const pastDate = new Date();
+  pastDate.setDate(pastDate.getDate() - 1);
+
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: pastDate,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  expect(seasoning.isExpired()).toBe(true);
+});
+
+test("Seasoning: isExpired() - 期限切れでない場合はfalse", () => {
+  const futureDate = new Date();
+  futureDate.setDate(futureDate.getDate() + 10);
+
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: futureDate,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  expect(seasoning.isExpired()).toBe(false);
+});
+
+test("Seasoning: isExpiringSoon() - 期限が7日以内の場合はtrue", () => {
+  const futureDate = new Date();
+  futureDate.setDate(futureDate.getDate() + 3);
+
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: futureDate,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  expect(seasoning.isExpiringSoon()).toBe(true);
+});
+
+test("Seasoning: isExpiringSoon() - 期限が7日以上先の場合はfalse", () => {
+  const futureDate = new Date();
+  futureDate.setDate(futureDate.getDate() + 14);
+
+  const seasoning = new Seasoning({
+    id: 1,
+    name: "醤油",
+    typeId: 1,
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: futureDate,
+    purchasedAt: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  expect(seasoning.isExpiringSoon()).toBe(false);
+});
