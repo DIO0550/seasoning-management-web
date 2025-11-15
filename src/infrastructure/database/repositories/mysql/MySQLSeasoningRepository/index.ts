@@ -269,17 +269,20 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
       whereClauses.length > 0 ? `WHERE ${whereClauses.join(" AND ")}` : "";
 
     // 統計情報を一度のクエリで取得
+    // 消費期限を優先し、なければ賞味期限を使用
+    // 期限間近: 1-7日以内（当日は期限切れに含める）
+    // 期限切れ: 当日以前
     const sql = `
       SELECT 
         COUNT(*) AS total,
         SUM(CASE 
-          WHEN best_before_at IS NOT NULL AND DATEDIFF(best_before_at, CURDATE()) BETWEEN 0 AND 7 THEN 1
-          WHEN expires_at IS NOT NULL AND DATEDIFF(expires_at, CURDATE()) BETWEEN 0 AND 7 THEN 1
+          WHEN best_before_at IS NOT NULL AND DATEDIFF(best_before_at, CURDATE()) BETWEEN 1 AND 7 THEN 1
+          WHEN best_before_at IS NULL AND expires_at IS NOT NULL AND DATEDIFF(expires_at, CURDATE()) BETWEEN 1 AND 7 THEN 1
           ELSE 0 
         END) AS expiring_soon,
         SUM(CASE 
-          WHEN best_before_at IS NOT NULL AND best_before_at < CURDATE() THEN 1
-          WHEN expires_at IS NOT NULL AND expires_at < CURDATE() THEN 1
+          WHEN best_before_at IS NOT NULL AND best_before_at <= CURDATE() THEN 1
+          WHEN best_before_at IS NULL AND expires_at IS NOT NULL AND expires_at <= CURDATE() THEN 1
           ELSE 0 
         END) AS expired
       FROM seasoning ${whereClause}
