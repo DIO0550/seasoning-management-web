@@ -74,20 +74,24 @@ export class Seasoning {
 
   /**
    * 期限までの日数を計算する
+   * 消費期限を優先、なければ賞味期限を使用
    * @returns 期限までの日数。期限がない場合はnull
    */
   calculateDaysUntilExpiry(): number | null {
-    if (!this.expiresAt) {
+    // 消費期限を優先、なければ賞味期限を使用
+    const expiryDate = this.bestBeforeAt ?? this.expiresAt;
+
+    if (!expiryDate) {
       return null;
     }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    const expiryDate = new Date(this.expiresAt);
-    expiryDate.setHours(0, 0, 0, 0);
+    const expiry = new Date(expiryDate);
+    expiry.setHours(0, 0, 0, 0);
 
-    const diffTime = expiryDate.getTime() - today.getTime();
+    const diffTime = expiry.getTime() - today.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
     return diffDays;
@@ -104,10 +108,12 @@ export class Seasoning {
       return "unknown";
     }
 
-    if (days < 0) {
+    // 当日以前は期限切れ
+    if (days <= 0) {
       return "expired";
     }
 
+    // 1-7日は期限間近
     if (days <= 7) {
       return "expiring_soon";
     }
@@ -117,6 +123,7 @@ export class Seasoning {
 
   /**
    * 期限切れかどうかを判定する
+   * 当日以前を期限切れとして扱う
    * @returns 期限切れの場合true
    */
   isExpired(): boolean {
@@ -125,7 +132,7 @@ export class Seasoning {
 
   /**
    * 期限が近いかどうかを判定する
-   * @returns 期限が7日以内の場合true
+   * @returns 期限が1-7日以内の場合true
    */
   isExpiringSoon(): boolean {
     return this.getExpiryStatus() === "expiring_soon";
