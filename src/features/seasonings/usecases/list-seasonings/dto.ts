@@ -20,11 +20,11 @@ export interface ListSeasoningsInput {
   pageSize: number;
   /** 調味料種類IDでフィルタリング */
   typeId?: number;
-  /** 指定日数以内に期限切れとなるアイテム */
+  /** 指定日数以内に期限切れとなるアイテム (将来の実装予定) */
   expiresWithinDays?: number;
   /** 調味料名の部分一致検索 */
   search?: string;
-  /** ソートキー */
+  /** ソートキー (将来の実装予定) */
   sort?: SortOrder;
 }
 
