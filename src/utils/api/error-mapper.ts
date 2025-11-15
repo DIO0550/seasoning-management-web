@@ -72,7 +72,7 @@ export class ErrorMapper {
     // DuplicateError
     if (error instanceof DuplicateError) {
       return {
-        status: 400,
+        status: 409,
         body: {
           code: "DUPLICATE_ERROR",
           message: error.message,

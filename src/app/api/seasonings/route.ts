@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { seasoningAddRequestSchema } from "@/types/api/seasoning/add/schemas";
 import { SeasoningAddErrorCode } from "@/types/api/seasoning/add/errorCode";
-import type { SeasoningAddErrorCode as SeasoningAddErrorCodeType } from "@/types/api/seasoning/add/errorCode";
-import type { ErrorResponse } from "@/types/api/common/types";
 import {
   SeasoningListQuerySchema,
   type SeasoningListResponse,
@@ -12,9 +10,9 @@ import { SeasoningListErrorCode } from "@/types/api/seasoning/list/errorCode";
 import { ConnectionManager } from "@/infrastructure/database/ConnectionManager";
 import { RepositoryFactory } from "@/infrastructure/di/RepositoryFactory";
 import { ListSeasoningsUseCase } from "@/features/seasonings/usecases/list-seasonings";
+import { CreateSeasoningUseCase } from "@/features/seasonings/usecases/create-seasoning";
 import { errorMapper } from "@/utils/api/error-mapper";
-import type { SeasoningRecord } from "@/app/api/seasonings/store";
-import { seasoningStore } from "@/app/api/seasonings/store";
+import { DuplicateError, NotFoundError } from "@/domain/errors";
 
 /**
  * GET /api/seasonings - 調味料一覧を取得
@@ -86,62 +84,95 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-
-    // zodスキーマでバリデーション
     const validationResult = seasoningAddRequestSchema.safeParse(body);
 
     if (!validationResult.success) {
-      // バリデーションエラーの種類に応じて適切なエラーコードを決定
       const errorCode = SeasoningAddErrorCode.fromValidationError(
         validationResult.error
       );
 
-      const errorResponse: ErrorResponse<SeasoningAddErrorCodeType> = {
-        result_code: errorCode,
-      };
-
-      return NextResponse.json(errorResponse, { status: 400 });
+      return NextResponse.json(
+        {
+          code: errorCode,
+          message: "入力内容を確認してください",
+          details: validationResult.error.errors.map((err) => ({
+            field: err.path.join("."),
+            message: err.message,
+          })),
+        },
+        { status: 400 }
+      );
     }
 
-    const { name, seasoningTypeId, image } = validationResult.data;
+    const connectionManager = ConnectionManager.getInstance();
+    const repositoryFactory = new RepositoryFactory(connectionManager);
+    const [
+      seasoningRepository,
+      seasoningTypeRepository,
+      seasoningImageRepository,
+    ] = await Promise.all([
+      repositoryFactory.createSeasoningRepository(),
+      repositoryFactory.createSeasoningTypeRepository(),
+      repositoryFactory.createSeasoningImageRepository(),
+    ]);
 
-    // 重複チェック（名前が同じものがないかチェック）
-    const existingSeasoning = seasoningStore.findByName(name);
-    if (existingSeasoning) {
-      const errorResponse: ErrorResponse<SeasoningAddErrorCodeType> = {
-        result_code: "DUPLICATE_NAME",
-      };
+    const useCase = new CreateSeasoningUseCase(
+      seasoningRepository,
+      seasoningTypeRepository,
+      seasoningImageRepository
+    );
 
-      return NextResponse.json(errorResponse, { status: 400 });
-    }
+    const result = await useCase.execute(validationResult.data);
 
-    // 新しい調味料を作成
-    const newSeasoning: SeasoningRecord = {
-      id: `seasoning_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      name: name,
-      seasoningTypeId: seasoningTypeId,
-      image: image || undefined,
-      createdAt: new Date().toISOString(),
-    };
-
-    // モックデータに追加
-    seasoningStore.add(newSeasoning);
-
-    return NextResponse.json(newSeasoning, { status: 201 });
+    return NextResponse.json({ data: result }, { status: 201 });
   } catch (error) {
-    console.error("調味料追加エラー:", error);
-
-    // JSON解析エラーなどの場合
-    if (error instanceof SyntaxError) {
-      const errorResponse: ErrorResponse<SeasoningAddErrorCodeType> = {
-        result_code: SeasoningAddErrorCode.INTERNAL_ERROR,
-      };
-      return NextResponse.json(errorResponse, { status: 400 });
-    }
-
-    const errorResponse: ErrorResponse<SeasoningAddErrorCodeType> = {
-      result_code: SeasoningAddErrorCode.INTERNAL_ERROR,
-    };
-    return NextResponse.json(errorResponse, { status: 500 });
+    return handleCreateSeasoningError(error);
   }
 }
+
+const handleCreateSeasoningError = (error: unknown) => {
+  if (error instanceof DuplicateError) {
+    return NextResponse.json(
+      {
+        code: SeasoningAddErrorCode.DUPLICATE_NAME,
+        message: error.message,
+      },
+      { status: 409 }
+    );
+  }
+
+  if (error instanceof NotFoundError) {
+    if (error.resource === "SeasoningType") {
+      return NextResponse.json(
+        {
+          code: SeasoningAddErrorCode.SEASONING_TYPE_NOT_FOUND,
+          message: error.message,
+        },
+        { status: 404 }
+      );
+    }
+
+    if (error.resource === "SeasoningImage") {
+      return NextResponse.json(
+        {
+          code: SeasoningAddErrorCode.SEASONING_IMAGE_NOT_FOUND,
+          message: error.message,
+        },
+        { status: 404 }
+      );
+    }
+  }
+
+  if (error instanceof SyntaxError) {
+    return NextResponse.json(
+      {
+        code: SeasoningAddErrorCode.INTERNAL_ERROR,
+        message: "リクエストボディの解析に失敗しました",
+      },
+      { status: 400 }
+    );
+  }
+
+  const { status, body } = errorMapper.toHttpResponse(error);
+  return NextResponse.json(body, { status });
+};

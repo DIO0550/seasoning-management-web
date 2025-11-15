@@ -8,9 +8,9 @@ describe("Seasoning Add API Schemas", () => {
   describe("seasoningAddRequestSchema", () => {
     test("有効な調味料追加リクエストを受け入れる", () => {
       const validRequest = {
-        name: "soysauce",
-        seasoningTypeId: 1,
-        image: null,
+        name: "醤油",
+        typeId: 1,
+        imageId: null,
       };
 
       expect(() => seasoningAddRequestSchema.parse(validRequest)).not.toThrow();
@@ -19,8 +19,11 @@ describe("Seasoning Add API Schemas", () => {
     test("画像ありの調味料追加リクエストを受け入れる", () => {
       const validRequest = {
         name: "soysauce",
-        seasoningTypeId: 1,
-        image: "base64encodedimage",
+        typeId: 1,
+        imageId: 12,
+        bestBeforeAt: "2025-12-01",
+        expiresAt: "2025-12-20",
+        purchasedAt: "2025-11-01",
       };
 
       expect(() => seasoningAddRequestSchema.parse(validRequest)).not.toThrow();
@@ -29,8 +32,8 @@ describe("Seasoning Add API Schemas", () => {
     test("nameが空文字の場合にバリデーションエラーになる", () => {
       const invalidRequest = {
         name: "",
-        seasoningTypeId: 1,
-        image: null,
+        typeId: 1,
+        imageId: null,
       };
 
       expect(() => seasoningAddRequestSchema.parse(invalidRequest)).toThrow();
@@ -38,9 +41,9 @@ describe("Seasoning Add API Schemas", () => {
 
     test("nameが50文字を超える場合にバリデーションエラーになる", () => {
       const invalidRequest = {
-        name: "a".repeat(51),
-        seasoningTypeId: 1,
-        image: null,
+        name: "a".repeat(101),
+        typeId: 1,
+        imageId: null,
       };
 
       expect(() => seasoningAddRequestSchema.parse(invalidRequest)).toThrow();
@@ -49,8 +52,18 @@ describe("Seasoning Add API Schemas", () => {
     test("seasoningTypeIdが正の整数でない場合にバリデーションエラーになる", () => {
       const invalidRequest = {
         name: "soysauce",
-        seasoningTypeId: 0,
-        image: null,
+        typeId: 0,
+        imageId: null,
+      };
+
+      expect(() => seasoningAddRequestSchema.parse(invalidRequest)).toThrow();
+    });
+
+    test("bestBeforeAtが日付形式でない場合にバリデーションエラーになる", () => {
+      const invalidRequest = {
+        name: "soysauce",
+        typeId: 1,
+        bestBeforeAt: "2025/12/01",
       };
 
       expect(() => seasoningAddRequestSchema.parse(invalidRequest)).toThrow();
@@ -60,13 +73,15 @@ describe("Seasoning Add API Schemas", () => {
   describe("seasoningAddResponseSchema", () => {
     test("有効な調味料追加レスポンスを受け入れる", () => {
       const validResponse = {
-        result_code: "OK",
         data: {
           id: 1,
           name: "醤油",
-          seasoningTypeId: 1,
-          seasoningTypeName: "液体調味料",
-          imageUrl: null,
+          typeId: 1,
+          typeName: "液体調味料",
+          imageId: null,
+          bestBeforeAt: null,
+          expiresAt: null,
+          purchasedAt: null,
           createdAt: "2024-01-01T00:00:00Z",
           updatedAt: "2024-01-01T00:00:00Z",
         },
@@ -79,13 +94,15 @@ describe("Seasoning Add API Schemas", () => {
 
     test("画像URLありのレスポンスを受け入れる", () => {
       const validResponse = {
-        result_code: "OK",
         data: {
           id: 1,
           name: "醤油",
-          seasoningTypeId: 1,
-          seasoningTypeName: "液体調味料",
-          imageUrl: "/images/seasoning/1.jpg",
+          typeId: 1,
+          typeName: "液体調味料",
+          imageId: 10,
+          bestBeforeAt: "2025-12-01",
+          expiresAt: "2025-12-20",
+          purchasedAt: "2025-11-01",
           createdAt: "2024-01-01T00:00:00Z",
           updatedAt: "2024-01-01T00:00:00Z",
         },
@@ -98,13 +115,15 @@ describe("Seasoning Add API Schemas", () => {
 
     test("successがfalseの場合にバリデーションエラーになる", () => {
       const invalidResponse = {
-        result_code: "ERROR",
         data: {
-          id: 1,
+          id: "invalid",
           name: "醤油",
-          seasoningTypeId: 1,
-          seasoningTypeName: "液体調味料",
-          imageUrl: null,
+          typeId: 1,
+          typeName: "液体調味料",
+          imageId: null,
+          bestBeforeAt: null,
+          expiresAt: null,
+          purchasedAt: null,
           createdAt: "2024-01-01T00:00:00Z",
           updatedAt: "2024-01-01T00:00:00Z",
         },

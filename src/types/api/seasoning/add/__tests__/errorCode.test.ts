@@ -25,11 +25,11 @@ describe("SeasoningAddErrorCode", () => {
       const zodError = new ZodError([
         {
           code: "too_big",
-          maximum: 20,
+          maximum: 100,
           type: "string",
           inclusive: true,
           exact: false,
-          message: "調味料名は20文字以内で入力してください",
+          message: "調味料名は100文字以内で入力してください",
           path: ["name"],
         },
       ]);
@@ -39,28 +39,14 @@ describe("SeasoningAddErrorCode", () => {
       expect(result).toBe("VALIDATION_ERROR_NAME_TOO_LONG");
     });
 
-    it("nameフィールドのcustomエラーの場合、VALIDATION_ERROR_NAME_INVALID_FORMATを返す", () => {
-      const zodError = new ZodError([
-        {
-          code: "custom",
-          message: "調味料名は半角英数字で入力してください",
-          path: ["name"],
-        },
-      ]);
-
-      const result = SeasoningAddErrorCode.fromValidationError(zodError);
-
-      expect(result).toBe("VALIDATION_ERROR_NAME_INVALID_FORMAT");
-    });
-
-    it("seasoningTypeIdフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_TYPE_REQUIREDを返す", () => {
+    it("typeIdフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_TYPE_REQUIREDを返す", () => {
       const zodError = new ZodError([
         {
           code: "invalid_type",
           expected: "number",
           received: "undefined",
           message: "調味料の種類を選択してください",
-          path: ["seasoningTypeId"],
+          path: ["typeId"],
         },
       ]);
 
@@ -69,7 +55,7 @@ describe("SeasoningAddErrorCode", () => {
       expect(result).toBe("VALIDATION_ERROR_TYPE_REQUIRED");
     });
 
-    it("seasoningTypeIdフィールドのtoo_smallエラーの場合、VALIDATION_ERROR_TYPE_REQUIREDを返す", () => {
+    it("typeIdフィールドのtoo_smallエラーの場合、VALIDATION_ERROR_TYPE_REQUIREDを返す", () => {
       const zodError = new ZodError([
         {
           code: "too_small",
@@ -78,7 +64,7 @@ describe("SeasoningAddErrorCode", () => {
           inclusive: true,
           exact: false,
           message: "調味料の種類を選択してください",
-          path: ["seasoningTypeId"],
+          path: ["typeId"],
         },
       ]);
 
@@ -87,38 +73,53 @@ describe("SeasoningAddErrorCode", () => {
       expect(result).toBe("VALIDATION_ERROR_TYPE_REQUIRED");
     });
 
-    it("imageフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_IMAGE_INVALID_TYPEを返す", () => {
+    it("imageIdフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_IMAGE_ID_INVALIDを返す", () => {
       const zodError = new ZodError([
         {
           code: "invalid_type",
           expected: "string",
           received: "number",
           message: "画像の形式が無効です",
-          path: ["image"],
+          path: ["imageId"],
         },
       ]);
 
       const result = SeasoningAddErrorCode.fromValidationError(zodError);
 
-      expect(result).toBe("VALIDATION_ERROR_IMAGE_INVALID_TYPE");
+      expect(result).toBe("VALIDATION_ERROR_IMAGE_ID_INVALID");
     });
 
-    it("imageフィールドのtoo_bigエラーの場合、VALIDATION_ERROR_IMAGE_TOO_LARGEを返す", () => {
+    it("imageIdフィールドのtoo_smallエラーの場合、VALIDATION_ERROR_IMAGE_ID_INVALIDを返す", () => {
       const zodError = new ZodError([
         {
-          code: "too_big",
-          maximum: 1000000,
-          type: "string",
+          code: "too_small",
+          minimum: 1,
+          type: "number",
           inclusive: true,
           exact: false,
-          message: "画像サイズが大きすぎます",
-          path: ["image"],
+          message: "画像IDは1以上で指定してください",
+          path: ["imageId"],
         },
       ]);
 
       const result = SeasoningAddErrorCode.fromValidationError(zodError);
 
-      expect(result).toBe("VALIDATION_ERROR_IMAGE_TOO_LARGE");
+      expect(result).toBe("VALIDATION_ERROR_IMAGE_ID_INVALID");
+    });
+
+    it("bestBeforeAtフィールドのregexエラーの場合、VALIDATION_ERROR_DATE_INVALIDを返す", () => {
+      const zodError = new ZodError([
+        {
+          code: "invalid_string",
+          validation: "regex",
+          message: "日付はYYYY-MM-DD形式で入力してください",
+          path: ["bestBeforeAt"],
+        },
+      ]);
+
+      const result = SeasoningAddErrorCode.fromValidationError(zodError);
+
+      expect(result).toBe("VALIDATION_ERROR_DATE_INVALID");
     });
 
     it("issuesが空の場合、DEFAULTエラーコードを返す", () => {
@@ -132,10 +133,10 @@ describe("SeasoningAddErrorCode", () => {
     it("未知のフィールドの場合、DEFAULTエラーコードを返す", () => {
       const zodError = new ZodError([
         {
-          code: "invalid_type",
-          expected: "string",
-          received: "number",
-          message: "不明なフィールドエラー",
+          code: "invalid_literal" as const,
+          expected: "test",
+          received: "unknown",
+          message: "未知のエラー",
           path: ["unknownField"],
         },
       ]);
@@ -143,22 +144,6 @@ describe("SeasoningAddErrorCode", () => {
       const result = SeasoningAddErrorCode.fromValidationError(zodError);
 
       expect(result).toBe(SeasoningAddErrorCode.DEFAULT);
-    });
-
-    it("未知のエラーコードの場合、該当フィールドのデフォルトエラーを返す", () => {
-      const zodError = new ZodError([
-        {
-          code: "invalid_literal" as const,
-          expected: "test",
-          received: "unknown",
-          message: "未知のエラー",
-          path: ["name"],
-        },
-      ]);
-
-      const result = SeasoningAddErrorCode.fromValidationError(zodError);
-
-      expect(result).toBe("VALIDATION_ERROR_NAME_REQUIRED");
     });
   });
 

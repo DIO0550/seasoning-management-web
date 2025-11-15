@@ -10,7 +10,7 @@ describe("Seasoning List API Schemas", () => {
       const validQuery = {
         page: 1,
         limit: 20,
-        seasoningTypeId: null,
+        typeId: null,
         search: null,
       };
 
@@ -21,7 +21,7 @@ describe("Seasoning List API Schemas", () => {
       const validQuery = {
         page: 2,
         limit: 10,
-        seasoningTypeId: 1,
+        typeId: 1,
         search: "醤油",
       };
 
@@ -32,7 +32,7 @@ describe("Seasoning List API Schemas", () => {
       const invalidQuery = {
         page: 0,
         limit: 20,
-        seasoningTypeId: null,
+        typeId: null,
         search: null,
       };
 
@@ -43,7 +43,7 @@ describe("Seasoning List API Schemas", () => {
       const invalidQuery = {
         page: 1,
         limit: 0,
-        seasoningTypeId: null,
+        typeId: null,
         search: null,
       };
 
@@ -54,7 +54,7 @@ describe("Seasoning List API Schemas", () => {
       const invalidQuery = {
         page: 1,
         limit: 101,
-        seasoningTypeId: null,
+        typeId: null,
         search: null,
       };
 
@@ -71,7 +71,7 @@ describe("Seasoning List API Schemas", () => {
             {
               id: 1,
               name: "醤油",
-              seasoningTypeId: 1,
+              typeId: 1,
               seasoningTypeName: "液体調味料",
               imageUrl: null,
               createdAt: "2024-01-01T00:00:00Z",

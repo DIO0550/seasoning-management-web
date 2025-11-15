@@ -1,12 +1,26 @@
-import { test, expect, beforeEach, vi } from "vitest";
+import { beforeEach, expect, test, vi } from "vitest";
 import { NextRequest } from "next/server";
+import type { RequestInit as NextRequestInit } from "next/dist/server/web/spec-extension/request";
 import { GET, POST } from "@/app/api/seasonings/route";
-// Note: 将来的には createSeasoningStore() を使用してテストごとに独立したストアを作成することを推奨
-import { seasoningStore } from "@/app/api/seasonings/store";
-import type { ISeasoningRepository } from "@/libs/database/interfaces/repositories/ISeasoningRepository";
+import {
+  DuplicateError,
+  NotFoundError,
+} from "@/domain/errors";
+import type {
+  ISeasoningRepository,
+  ISeasoningTypeRepository,
+  ISeasoningImageRepository,
+} from "@/infrastructure/database/interfaces";
 import type { IDatabaseConnection } from "@/libs/database/interfaces/core/IDatabaseConnection";
 
-// ConnectionManager と RepositoryFactory をモック化
+const createUseCaseExecuteMock = vi.fn();
+
+vi.mock("@/features/seasonings/usecases/create-seasoning", () => ({
+  CreateSeasoningUseCase: vi.fn().mockImplementation(() => ({
+    execute: createUseCaseExecuteMock,
+  })),
+}));
+
 vi.mock("@/infrastructure/database/ConnectionManager", () => ({
   ConnectionManager: {
     getInstance: vi.fn(() => ({
@@ -15,27 +29,13 @@ vi.mock("@/infrastructure/database/ConnectionManager", () => ({
   },
 }));
 
-vi.mock("@/infrastructure/di/RepositoryFactory", () => ({
-  RepositoryFactory: vi.fn().mockImplementation(() => ({
-    createSeasoningRepository: vi.fn(async () => mockRepository),
-  })),
-}));
+const findAllMock = vi.fn();
+const getStatisticsMock = vi.fn();
 
-// モックリポジトリの作成
-const mockRepository: ISeasoningRepository = {
+const mockSeasoningRepository: ISeasoningRepository = {
   connection: {} as IDatabaseConnection,
-  findAll: vi.fn(async () => ({
-    items: [],
-    total: 0,
-    page: 1,
-    limit: 10,
-    totalPages: 0,
-  })),
-  getStatistics: vi.fn(async () => ({
-    total: 0,
-    expiringSoon: 0,
-    expired: 0,
-  })),
+  findAll: findAllMock,
+  getStatistics: getStatisticsMock,
   findById: vi.fn(),
   create: vi.fn(),
   update: vi.fn(),
@@ -46,216 +46,225 @@ const mockRepository: ISeasoningRepository = {
   count: vi.fn(),
 };
 
-// テスト用のモックリクエスト作成関数
-const createRequest = (
-  body?: Record<string, unknown>,
-  method: string = "POST"
-): NextRequest => {
-  const url = "http://localhost:3000/api/seasonings";
+const mockSeasoningTypeRepository =
+  {} as unknown as ISeasoningTypeRepository;
+const mockSeasoningImageRepository =
+  {} as unknown as ISeasoningImageRepository;
+
+vi.mock("@/infrastructure/di/RepositoryFactory", () => ({
+  RepositoryFactory: vi.fn().mockImplementation(() => ({
+    createSeasoningRepository: vi.fn(async () => mockSeasoningRepository),
+    createSeasoningTypeRepository: vi.fn(
+      async () => mockSeasoningTypeRepository
+    ),
+    createSeasoningImageRepository: vi.fn(
+      async () => mockSeasoningImageRepository
+    ),
+  })),
+}));
+
+const createRequest = ({
+  method = "GET",
+  body,
+  searchParams,
+}: {
+  method?: string;
+  body?: Record<string, unknown>;
+  searchParams?: Record<string, string>;
+} = {}): NextRequest => {
+  const url = new URL("http://localhost:3000/api/seasonings");
+
+  if (searchParams) {
+    Object.entries(searchParams).forEach(([key, value]) => {
+      url.searchParams.set(key, value);
+    });
+  }
+
+  const init: NextRequestInit = {
+    method,
+  };
 
   if (body) {
-    return new NextRequest(url, {
-      method,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    });
+    init.headers = {
+      "Content-Type": "application/json",
+    };
+    init.body = JSON.stringify(body);
   }
 
-  return new NextRequest(url, { method });
+  return new NextRequest(url, init);
 };
 
-// テスト前にデータリセット
 beforeEach(() => {
-  seasoningStore.clear();
-});
+  vi.clearAllMocks();
+  createUseCaseExecuteMock.mockReset();
 
-// GET /api/seasonings のテスト
-test.concurrent(
-  "GET /api/seasonings - 調味料一覧を正常に取得できる",
-  async () => {
-    const request = createRequest(undefined, "GET");
-    const response = await GET(request);
-    const data = await response.json();
-
-    expect(response.status).toBe(200);
-    expect(data).toHaveProperty("data");
-    expect(data).toHaveProperty("meta");
-    expect(data).toHaveProperty("summary");
-    expect(Array.isArray(data.data)).toBe(true);
-  }
-);
-
-test.concurrent(
-  "GET /api/seasonings - 空の配列が返される（初期状態）",
-  async () => {
-    const request = createRequest(undefined, "GET");
-    const response = await GET(request);
-    const data = await response.json();
-
-    expect(response.status).toBe(200);
-    expect(data.data).toEqual([]);
-    expect(data.meta.totalItems).toBe(0);
-    expect(data.summary.totalCount).toBe(0);
-  }
-);
-
-// POST /api/seasonings の正常系テスト
-test.each([
-  {
-    name: "salt",
-    seasoningTypeId: 1,
-    image: null,
-    description: "基本的な調味料データ",
-  },
-  {
-    name: "sugar123",
-    seasoningTypeId: 2,
-    image: null,
-    description: "半角英数字混合",
-  },
-  {
-    name: "a".repeat(20),
-    seasoningTypeId: 3,
-    image: null,
-    description: "名前20文字（境界値）",
-  },
-  {
-    name: "oil",
-    seasoningTypeId: 999,
-    image: "data:image/jpeg;base64,validBase64String",
-    description: "画像データありの場合",
-  },
-])(
-  "POST /api/seasonings - $description で調味料を正常に作成できる",
-  async ({ name, seasoningTypeId, image }) => {
-    const request = createRequest({ name, seasoningTypeId, image });
-    const response = await POST(request);
-    const data = await response.json();
-
-    expect(response.status).toBe(201);
-    expect(data).toMatchObject({
-      name,
-      seasoningTypeId,
-      id: expect.any(String),
-      createdAt: expect.any(String),
-    });
-
-    if (image) {
-      expect(data.image).toBe(image);
-    }
-  }
-);
-
-// POST /api/seasonings - 名前フィールドのバリデーション
-test("POST /api/seasonings - 名前が空の場合、VALIDATION_ERROR_NAME_REQUIREDが返される", async () => {
-  const request = createRequest({
-    name: "",
-    seasoningTypeId: 1,
-    image: null,
+  findAllMock.mockReset();
+  findAllMock.mockResolvedValue({
+    items: [],
+    total: 0,
+    page: 1,
+    limit: 10,
+    totalPages: 0,
   });
 
-  const response = await POST(request);
-  const data = await response.json();
-
-  expect(response.status).toBe(400);
-  expect(data).toEqual({
-    result_code: "VALIDATION_ERROR_NAME_REQUIRED",
+  getStatisticsMock.mockReset();
+  getStatisticsMock.mockResolvedValue({
+    total: 0,
+    expiringSoon: 0,
+    expired: 0,
   });
 });
 
-test("POST /api/seasonings - 名前が長すぎる場合、VALIDATION_ERROR_NAME_TOO_LONGが返される", async () => {
-  const request = createRequest({
-    name: "a".repeat(21), // 21文字
-    seasoningTypeId: 1,
-    image: null,
-  });
+// GET /api/seasonings
 
-  const response = await POST(request);
+test.concurrent("GET /api/seasonings は一覧を取得できる", async () => {
+  const request = createRequest({ method: "GET" });
+  const response = await GET(request);
   const data = await response.json();
 
-  expect(response.status).toBe(400);
-  expect(data).toEqual({
-    result_code: "VALIDATION_ERROR_NAME_TOO_LONG",
-  });
+  expect(response.status).toBe(200);
+  expect(Array.isArray(data.data)).toBe(true);
+  expect(data.meta).toHaveProperty("totalItems", 0);
+  expect(data.summary).toHaveProperty("totalCount", 0);
 });
 
-test("POST /api/seasonings - 名前の形式が無効な場合、VALIDATION_ERROR_NAME_INVALID_FORMATが返される", async () => {
-  const request = createRequest({
-    name: "調味料", // 日本語
-    seasoningTypeId: 1,
-    image: null,
-  });
-
-  const response = await POST(request);
+test.concurrent("GET /api/seasonings は meta/summary を含む空レスポンスを返す", async () => {
+  const request = createRequest({ method: "GET" });
+  const response = await GET(request);
   const data = await response.json();
 
-  expect(response.status).toBe(400);
-  expect(data).toEqual({
-    result_code: "VALIDATION_ERROR_NAME_INVALID_FORMAT",
-  });
+  expect(data.data).toEqual([]);
+  expect(data.meta.totalItems).toBe(0);
+  expect(data.summary.expiringCount).toBe(0);
 });
 
-// POST /api/seasonings - 調味料種類IDのバリデーション
-test("POST /api/seasonings - 調味料種類IDが無効な場合、VALIDATION_ERROR_TYPE_REQUIREDが返される", async () => {
-  const request = createRequest({
-    name: "salt",
-    seasoningTypeId: 0, // 無効な値
-    image: null,
-  });
+// POST /api/seasonings
 
-  const response = await POST(request);
-  const data = await response.json();
+test("POST /api/seasonings - 正常に作成できる", async () => {
+  const detail = {
+    id: 10,
+    name: "醤油",
+    typeId: 2,
+    typeName: "液体調味料",
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: null,
+    purchasedAt: null,
+    createdAt: "2025-11-15T00:00:00.000Z",
+    updatedAt: "2025-11-15T00:00:00.000Z",
+  };
 
-  expect(response.status).toBe(400);
-  expect(data).toEqual({
-    result_code: "VALIDATION_ERROR_TYPE_REQUIRED",
-  });
-});
+  createUseCaseExecuteMock.mockResolvedValue(detail);
 
-// POST /api/seasonings - 重複チェック
-test("POST /api/seasonings - 重複する名前の場合、DUPLICATE_NAMEが返される", async () => {
-  // 最初の調味料を作成
-  const request1 = createRequest({
-    name: "salt",
-    seasoningTypeId: 1,
-    image: null,
-  });
-  await POST(request1);
-
-  // 同じ名前で再作成を試行
-  const request2 = createRequest({
-    name: "salt",
-    seasoningTypeId: 2,
-    image: null,
-  });
-
-  const response = await POST(request2);
-  const data = await response.json();
-
-  expect(response.status).toBe(400);
-  expect(data).toEqual({
-    result_code: "DUPLICATE_NAME",
-  });
-});
-
-// POST /api/seasonings - 正常ケース
-test("POST /api/seasonings - 正常なデータの場合、調味料が作成される", async () => {
-  const request = createRequest({
-    name: "salt",
-    seasoningTypeId: 1,
-    image: null,
-  });
-
-  const response = await POST(request);
-  const data = await response.json();
+  const response = await POST(
+    createRequest({
+      method: "POST",
+      body: {
+        name: "醤油",
+        typeId: 2,
+      },
+    })
+  );
 
   expect(response.status).toBe(201);
-  expect(data).toMatchObject({
-    name: "salt",
-    seasoningTypeId: 1,
-    id: expect.any(String),
-    createdAt: expect.any(String),
+  await expect(response.json()).resolves.toEqual({ data: detail });
+  expect(createUseCaseExecuteMock).toHaveBeenCalledWith({
+    name: "醤油",
+    typeId: 2,
   });
+});
+
+test("POST /api/seasonings - バリデーションエラー時は400と詳細を返す", async () => {
+  const response = await POST(
+    createRequest({
+      method: "POST",
+      body: {
+        name: "",
+        typeId: 1,
+      },
+    })
+  );
+
+  expect(response.status).toBe(400);
+  const payload = await response.json();
+  expect(payload.code).toBe("VALIDATION_ERROR_NAME_REQUIRED");
+  expect(payload.details?.[0]?.field).toBe("name");
+});
+
+test("POST /api/seasonings - 日付形式が不正な場合はVALIDATION_ERROR_DATE_INVALID", async () => {
+  const response = await POST(
+    createRequest({
+      method: "POST",
+      body: {
+        name: "醤油",
+        typeId: 1,
+        bestBeforeAt: "2025/12/01",
+      },
+    })
+  );
+
+  expect(response.status).toBe(400);
+  const payload = await response.json();
+  expect(payload.code).toBe("VALIDATION_ERROR_DATE_INVALID");
+});
+
+test("POST /api/seasonings - DuplicateError は409とDUPLICATE_NAMEを返す", async () => {
+  createUseCaseExecuteMock.mockRejectedValue(
+    new DuplicateError("name", "醤油")
+  );
+
+  const response = await POST(
+    createRequest({
+      method: "POST",
+      body: {
+        name: "醤油",
+        typeId: 1,
+      },
+    })
+  );
+
+  expect(response.status).toBe(409);
+  const payload = await response.json();
+  expect(payload.code).toBe("DUPLICATE_NAME");
+});
+
+test("POST /api/seasonings - SeasoningTypeが存在しない場合は404", async () => {
+  createUseCaseExecuteMock.mockRejectedValue(
+    new NotFoundError("SeasoningType", 999)
+  );
+
+  const response = await POST(
+    createRequest({
+      method: "POST",
+      body: {
+        name: "醤油",
+        typeId: 999,
+      },
+    })
+  );
+
+  expect(response.status).toBe(404);
+  const payload = await response.json();
+  expect(payload.code).toBe("SEASONING_TYPE_NOT_FOUND");
+});
+
+test("POST /api/seasonings - SeasoningImageが存在しない場合は404", async () => {
+  createUseCaseExecuteMock.mockRejectedValue(
+    new NotFoundError("SeasoningImage", 55)
+  );
+
+  const response = await POST(
+    createRequest({
+      method: "POST",
+      body: {
+        name: "醤油",
+        typeId: 1,
+        imageId: 55,
+      },
+    })
+  );
+
+  expect(response.status).toBe(404);
+  const payload = await response.json();
+  expect(payload.code).toBe("SEASONING_IMAGE_NOT_FOUND");
 });

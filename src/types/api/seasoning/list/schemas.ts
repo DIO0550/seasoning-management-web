@@ -14,7 +14,7 @@ export const seasoningListQuerySchema = z.object({
     .int()
     .min(1, "リミットは1以上である必要があります")
     .max(100, "リミットは100以下である必要があります"),
-  seasoningTypeId: z.number().int().positive().nullable(),
+  typeId: z.number().int().positive().nullable(),
   search: z.string().nullable(),
 });
 
@@ -24,7 +24,7 @@ export const seasoningListQuerySchema = z.object({
 const seasoningItemSchema = z.object({
   id: z.number().int().positive(),
   name: z.string(),
-  seasoningTypeId: z.number().int().positive(),
+  typeId: z.number().int().positive(),
   seasoningTypeName: z.string(),
   imageUrl: z.string().nullable(),
   createdAt: z.string().datetime(),
