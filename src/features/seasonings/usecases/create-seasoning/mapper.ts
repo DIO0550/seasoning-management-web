@@ -6,14 +6,14 @@ const formatDate = (value: Date | null): string | null => {
     return null;
   }
 
-  return value.toISOString().slice(0, 10);
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };
 
 export class CreateSeasoningMapper {
-  static toDetailDto(
-    entity: Seasoning,
-    typeName: string
-  ): SeasoningDetailDto {
+  static toDetailDto(entity: Seasoning, typeName: string): SeasoningDetailDto {
     return {
       id: entity.id,
       name: entity.name,
