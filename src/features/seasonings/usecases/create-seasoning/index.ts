@@ -23,12 +23,10 @@ export class CreateSeasoningUseCase {
   ) {}
 
   async execute(input: CreateSeasoningInput): Promise<SeasoningDetailDto> {
-    const name = input.name.trim();
-
     // 重複チェック（名前が同じものがないかチェック）
-    const duplicates = await this.seasoningRepository.findByName(name);
+    const duplicates = await this.seasoningRepository.findByName(input.name);
     if (duplicates.length > 0) {
-      throw new DuplicateError("name", name);
+      throw new DuplicateError("name", input.name);
     }
 
     // 調味料種類の存在確認
@@ -50,7 +48,7 @@ export class CreateSeasoningUseCase {
     }
 
     const created = await this.seasoningRepository.create({
-      name,
+      name: input.name,
       typeId: input.typeId,
       imageId,
       bestBeforeAt: toDate(input.bestBeforeAt),
