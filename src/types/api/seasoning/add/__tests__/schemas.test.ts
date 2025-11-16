@@ -39,9 +39,9 @@ describe("Seasoning Add API Schemas", () => {
       expect(() => seasoningAddRequestSchema.parse(invalidRequest)).toThrow();
     });
 
-    test("nameが50文字を超える場合にバリデーションエラーになる", () => {
+    test("nameが256文字を超える場合にバリデーションエラーになる", () => {
       const invalidRequest = {
-        name: "a".repeat(101),
+        name: "a".repeat(257),
         typeId: 1,
         imageId: null,
       };
