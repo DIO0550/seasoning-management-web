@@ -68,6 +68,26 @@ describe("Seasoning Add API Schemas", () => {
 
       expect(() => seasoningAddRequestSchema.parse(invalidRequest)).toThrow();
     });
+
+    test("bestBeforeAtが無効な日付（存在しない日付）の場合にバリデーションエラーになる", () => {
+      const invalidRequest = {
+        name: "soysauce",
+        typeId: 1,
+        bestBeforeAt: "2025-02-30", // 2月30日は存在しない
+      };
+
+      expect(() => seasoningAddRequestSchema.parse(invalidRequest)).toThrow();
+    });
+
+    test("bestBeforeAtが無効な日付（13月）の場合にバリデーションエラーになる", () => {
+      const invalidRequest = {
+        name: "soysauce",
+        typeId: 1,
+        bestBeforeAt: "2025-13-01", // 13月は存在しない
+      };
+
+      expect(() => seasoningAddRequestSchema.parse(invalidRequest)).toThrow();
+    });
   });
 
   describe("seasoningAddResponseSchema", () => {
