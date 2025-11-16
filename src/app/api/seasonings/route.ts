@@ -161,6 +161,10 @@ const handleCreateSeasoningError = (error: unknown) => {
         { status: 404 }
       );
     }
+
+    // 想定外の resource の場合は errorMapper に委譲する（将来の拡張や予期せぬ値に備える）
+    const { status, body } = errorMapper.toHttpResponse(error);
+    return NextResponse.json(body, { status });
   }
 
   if (error instanceof SyntaxError) {
