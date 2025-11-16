@@ -25,11 +25,13 @@ export class CreateSeasoningUseCase {
   async execute(input: CreateSeasoningInput): Promise<SeasoningDetailDto> {
     const name = input.name.trim();
 
+    // 重複チェック（名前が同じものがないかチェック）
     const duplicates = await this.seasoningRepository.findByName(name);
-    if (duplicates.some((seasoning) => seasoning.name === name)) {
+    if (duplicates.length > 0) {
       throw new DuplicateError("name", name);
     }
 
+    // 調味料種類の存在確認
     const seasoningType = await this.seasoningTypeRepository.findById(
       input.typeId
     );
@@ -38,21 +40,19 @@ export class CreateSeasoningUseCase {
       throw new NotFoundError("SeasoningType", input.typeId);
     }
 
-    if (typeof input.imageId === "number") {
-      const image = await this.seasoningImageRepository.findById(
-        input.imageId
-      );
-
+    // 画像IDの存在確認（指定された場合のみ）
+    const imageId = typeof input.imageId === "number" ? input.imageId : null;
+    if (imageId !== null) {
+      const image = await this.seasoningImageRepository.findById(imageId);
       if (!image) {
-        throw new NotFoundError("SeasoningImage", input.imageId);
+        throw new NotFoundError("SeasoningImage", imageId);
       }
     }
 
     const created = await this.seasoningRepository.create({
       name,
       typeId: input.typeId,
-      imageId:
-        typeof input.imageId === "number" ? input.imageId : null,
+      imageId,
       bestBeforeAt: toDate(input.bestBeforeAt),
       expiresAt: toDate(input.expiresAt),
       purchasedAt: toDate(input.purchasedAt),
