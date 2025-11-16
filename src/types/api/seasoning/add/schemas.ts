@@ -6,14 +6,15 @@ const dateStringSchema = z
   .refine(
     (val) => {
       // 文字列が有効な日付であることを検証（例: 2025-02-30 は無効）
+      // タイムゾーンに依存しないローカル日付として検証
       const [year, month, day] = val.split("-").map(Number);
-      const date = new Date(val);
+      const date = new Date(year, month - 1, day);
       // Date が入力と一致することを確認（JavaScript の Date の癖を回避）
       return (
         !isNaN(date.getTime()) &&
-        date.getUTCFullYear() === year &&
-        date.getUTCMonth() + 1 === month &&
-        date.getUTCDate() === day
+        date.getFullYear() === year &&
+        date.getMonth() + 1 === month &&
+        date.getDate() === day
       );
     },
     { message: "有効な日付を入力してください" }
@@ -25,8 +26,9 @@ const dateStringSchema = z
 export const seasoningAddRequestSchema = z.object({
   name: z
     .string()
+    .trim()
     .min(1, "調味料名は必須です")
-    .max(100, "調味料名は100文字以内です"),
+    .max(256, "調味料名は256文字以内です"),
   typeId: z
     .number({ message: "調味料の種類を選択してください" })
     .int()
