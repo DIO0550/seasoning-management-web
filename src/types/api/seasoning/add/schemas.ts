@@ -2,13 +2,31 @@ import { z } from "zod";
 
 const dateStringSchema = z
   .string()
-  .regex(/^\d{4}-\d{2}-\d{2}$/u, "日付はYYYY-MM-DD形式で入力してください");
+  .regex(/^\d{4}-\d{2}-\d{2}$/u, "日付はYYYY-MM-DD形式で入力してください")
+  .refine(
+    (val) => {
+      // 文字列が有効な日付であることを検証（例: 2025-02-30 は無効）
+      const [year, month, day] = val.split("-").map(Number);
+      const date = new Date(val);
+      // Date が入力と一致することを確認（JavaScript の Date の癖を回避）
+      return (
+        !isNaN(date.getTime()) &&
+        date.getUTCFullYear() === year &&
+        date.getUTCMonth() + 1 === month &&
+        date.getUTCDate() === day
+      );
+    },
+    { message: "有効な日付を入力してください" }
+  );
 
 /**
  * 調味料追加リクエストのスキーマ
  */
 export const seasoningAddRequestSchema = z.object({
-  name: z.string().min(1, "調味料名は必須です").max(100, "調味料名は100文字以内です"),
+  name: z
+    .string()
+    .min(1, "調味料名は必須です")
+    .max(100, "調味料名は100文字以内です"),
   typeId: z
     .number({ message: "調味料の種類を選択してください" })
     .int()
