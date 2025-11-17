@@ -180,4 +180,23 @@ describe("CreateSeasoningUseCase", () => {
 
     await expect(useCase.execute(input)).rejects.toBeInstanceOf(NotFoundError);
   });
+
+  test("無効な日付文字列を渡した場合はエラーになる", async () => {
+    vi.mocked(mockSeasoningRepository.findByName).mockResolvedValue([]);
+    vi.mocked(mockSeasoningTypeRepository.findById).mockResolvedValue(
+      createSeasoningTypeEntity()
+    );
+    vi.mocked(mockSeasoningImageRepository.findById).mockResolvedValue(
+      createSeasoningImageEntity()
+    );
+
+    const input: CreateSeasoningInput = {
+      name: "醤油",
+      typeId: 1,
+      bestBeforeAt: "2025-02-30",
+    };
+
+    await expect(useCase.execute(input)).rejects.toThrow("Invalid date format");
+    expect(mockSeasoningRepository.create).not.toHaveBeenCalled();
+  });
 });
