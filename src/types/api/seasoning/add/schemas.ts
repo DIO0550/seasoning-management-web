@@ -6,19 +6,21 @@ const dateStringSchema = z
   .refine(
     (val) => {
       // 文字列が有効な日付であることを検証（例: 2025-02-30 は無効）
-      // タイムゾーンに依存しないローカル日付として検証
       const [year, month, day] = val.split("-").map(Number);
-      const date = new Date(year, month - 1, day);
-      // Date が入力と一致することを確認（JavaScript の Date の癖を回避）
+      const date = new Date(Date.UTC(year, month - 1, day));
+      // Date が入力と一致することを確認（タイムゾーンの影響を排除）
       return (
-        !isNaN(date.getTime()) &&
-        date.getFullYear() === year &&
-        date.getMonth() + 1 === month &&
-        date.getDate() === day
+        !Number.isNaN(date.getTime()) &&
+        date.getUTCFullYear() === year &&
+        date.getUTCMonth() + 1 === month &&
+        date.getUTCDate() === day
       );
     },
     { message: "有効な日付を入力してください" }
   );
+
+const nullableDateStringSchema = dateStringSchema.nullable();
+const optionalNullableDateStringSchema = nullableDateStringSchema.optional();
 
 /**
  * 調味料追加リクエストのスキーマ
@@ -39,9 +41,9 @@ export const seasoningAddRequestSchema = z.object({
     .min(1, "画像IDは1以上で指定してください")
     .nullable()
     .optional(),
-  bestBeforeAt: dateStringSchema.nullable().optional(),
-  expiresAt: dateStringSchema.nullable().optional(),
-  purchasedAt: dateStringSchema.nullable().optional(),
+  bestBeforeAt: optionalNullableDateStringSchema,
+  expiresAt: optionalNullableDateStringSchema,
+  purchasedAt: optionalNullableDateStringSchema,
 });
 
 /**
@@ -53,9 +55,9 @@ const seasoningDataSchema = z.object({
   typeId: z.number().int().positive(),
   typeName: z.string(),
   imageId: z.number().int().positive().nullable(),
-  bestBeforeAt: dateStringSchema.nullable(),
-  expiresAt: dateStringSchema.nullable(),
-  purchasedAt: dateStringSchema.nullable(),
+  bestBeforeAt: nullableDateStringSchema,
+  expiresAt: nullableDateStringSchema,
+  purchasedAt: nullableDateStringSchema,
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
 });
