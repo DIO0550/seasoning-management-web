@@ -12,7 +12,25 @@ const toDate = (value?: string | null): Date | null => {
     return null;
   }
 
-  return new Date(value);
+  const parts = value.split("-").map(Number);
+  if (parts.length !== 3) {
+    throw new Error(`Invalid date format: ${value}`);
+  }
+
+  const [year, month, day] = parts;
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  const isInvalid =
+    Number.isNaN(date.getTime()) ||
+    date.getUTCFullYear() !== year ||
+    date.getUTCMonth() + 1 !== month ||
+    date.getUTCDate() !== day;
+
+  if (isInvalid) {
+    throw new Error(`Invalid date format: ${value}`);
+  }
+
+  return date;
 };
 
 export class CreateSeasoningUseCase {
