@@ -123,9 +123,9 @@ describe("CreateSeasoningUseCase", () => {
       name: "醤油",
       typeId: 1,
       imageId: 10,
-      bestBeforeAt: new Date("2025-12-01"),
-      expiresAt: new Date("2025-12-20"),
-      purchasedAt: new Date("2025-11-01"),
+      bestBeforeAt: new Date(Date.UTC(2025, 11, 1)),
+      expiresAt: new Date(Date.UTC(2025, 11, 20)),
+      purchasedAt: new Date(Date.UTC(2025, 10, 1)),
     });
 
     expect(result).toMatchObject({
