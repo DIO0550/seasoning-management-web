@@ -1,16 +1,6 @@
 import type { Seasoning } from "@/domain/entities/seasoning/seasoning";
 import type { SeasoningDetailDto } from "./dto";
-
-const formatDate = (value: Date | null): string | null => {
-  if (!value) {
-    return null;
-  }
-
-  const year = value.getUTCFullYear();
-  const month = String(value.getUTCMonth() + 1).padStart(2, "0");
-  const day = String(value.getUTCDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-};
+import { utcDateToString } from "@/utils/date-conversion";
 
 export class CreateSeasoningMapper {
   static toDetailDto(entity: Seasoning, typeName: string): SeasoningDetailDto {
@@ -20,9 +10,9 @@ export class CreateSeasoningMapper {
       typeId: entity.typeId,
       typeName,
       imageId: entity.imageId,
-      bestBeforeAt: formatDate(entity.bestBeforeAt),
-      expiresAt: formatDate(entity.expiresAt),
-      purchasedAt: formatDate(entity.purchasedAt),
+      bestBeforeAt: utcDateToString(entity.bestBeforeAt),
+      expiresAt: utcDateToString(entity.expiresAt),
+      purchasedAt: utcDateToString(entity.purchasedAt),
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };
