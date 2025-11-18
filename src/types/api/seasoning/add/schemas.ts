@@ -1,23 +1,12 @@
 import { z } from "zod";
+import { isValidDateString } from "@/utils/date-conversion";
 
 const dateStringSchema = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/u, "日付はYYYY-MM-DD形式で入力してください")
-  .refine(
-    (val) => {
-      // 文字列が有効な日付であることを検証（例: 2025-02-30 は無効）
-      const [year, month, day] = val.split("-").map(Number);
-      const date = new Date(Date.UTC(year, month - 1, day));
-      // Date が入力と一致することを確認（タイムゾーンの影響を排除）
-      return (
-        !Number.isNaN(date.getTime()) &&
-        date.getUTCFullYear() === year &&
-        date.getUTCMonth() + 1 === month &&
-        date.getUTCDate() === day
-      );
-    },
-    { message: "有効な日付を入力してください" }
-  );
+  .refine((val) => isValidDateString(val), {
+    message: "有効な日付を入力してください",
+  });
 
 const nullableDateStringSchema = dateStringSchema.nullable();
 const optionalNullableDateStringSchema = nullableDateStringSchema.optional();
