@@ -17,9 +17,9 @@ describe("stringToUtcDate", () => {
   });
 
   test("無効な日付形式の場合はエラーを投げる", () => {
-    expect(() => stringToUtcDate("2025-13-01")).toThrow("Invalid date format");
-    expect(() => stringToUtcDate("2025-02-30")).toThrow("Invalid date format");
-    expect(() => stringToUtcDate("invalid")).toThrow("Invalid date format");
+    expect(() => stringToUtcDate("2025-13-01")).toThrow("無効な日付形式です");
+    expect(() => stringToUtcDate("2025-02-30")).toThrow("無効な日付形式です");
+    expect(() => stringToUtcDate("invalid")).toThrow("無効な日付形式です");
   });
 });
 
