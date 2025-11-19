@@ -196,7 +196,7 @@ describe("CreateSeasoningUseCase", () => {
       bestBeforeAt: "2025-02-30",
     };
 
-    await expect(useCase.execute(input)).rejects.toThrow("Invalid date format");
+    await expect(useCase.execute(input)).rejects.toThrow("無効な日付形式です");
     expect(mockSeasoningRepository.create).not.toHaveBeenCalled();
   });
 });
