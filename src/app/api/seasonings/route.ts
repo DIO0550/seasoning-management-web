@@ -126,6 +126,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ data: result }, { status: 201 });
   } catch (error) {
+    // エラー内容をログ出力（本番環境のデバッグ・モニタリング用）
+    console.error("[POST /api/seasonings] Error:", error);
     return handleCreateSeasoningError(error);
   }
 }

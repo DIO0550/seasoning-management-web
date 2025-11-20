@@ -28,6 +28,7 @@ export const seasoningAddRequestSchema = z.object({
     .number()
     .int()
     .min(1, "画像IDは1以上で指定してください")
+    // imageId: undefined（省略）、null、または1以上の整数
     .nullable()
     .optional(),
   bestBeforeAt: optionalNullableDateStringSchema,

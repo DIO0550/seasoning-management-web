@@ -11,7 +11,7 @@ const validateAndParseDateString = (
   }
 
   const parts = value.split("-").map(Number);
-  if (parts.length !== 3) {
+  if (parts.length !== 3 || parts.some(Number.isNaN)) {
     return [false, 0, 0, 0];
   }
 
