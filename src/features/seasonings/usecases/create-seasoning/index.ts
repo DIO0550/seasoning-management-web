@@ -16,7 +16,7 @@ export class CreateSeasoningUseCase {
   ) {}
 
   async execute(input: CreateSeasoningInput): Promise<SeasoningDetailDto> {
-    // 重複チェック（名前が同じものがないかチェック）
+    // 同名の調味料が既に存在する場合はエラーを投げる
     const duplicates = await this.seasoningRepository.findByName(input.name);
     if (duplicates.length > 0) {
       throw new DuplicateError("name", input.name);
