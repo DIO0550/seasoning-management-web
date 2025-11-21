@@ -164,12 +164,13 @@ const handleCreateSeasoningError = (error: unknown) => {
       );
     }
 
-    // 想定外の resource の場合は errorMapper に委譲する(将来の拡張や予期せぬ値に備える)
-    const { status: notFoundStatus, body: notFoundBody } =
-      errorMapper.toHttpResponse(error);
-    return NextResponse.json(notFoundBody, { status: notFoundStatus });
+    // 想定外の resource の場合も NotFoundError であれば常に 404 を返す
+    const { body: notFoundBody } = errorMapper.toHttpResponse(error);
+    return NextResponse.json(notFoundBody, { status: 404 });
   }
 
+  // JSON解析エラー（クライアント側のリクエスト不備）
+  // TODO: 将来的にはINVALID_REQUEST_BODYなどの専用エラーコードを定義することを検討
   if (error instanceof SyntaxError) {
     return NextResponse.json(
       {

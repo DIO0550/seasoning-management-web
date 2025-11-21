@@ -31,7 +31,7 @@ const validateAndParseDateString = (
  * YYYY-MM-DD形式の日付文字列をUTC Dateオブジェクトに変換する
  * @param value - YYYY-MM-DD形式の日付文字列
  * @returns UTC Dateオブジェクト、またはnull
- * @throws {Error} 無効な日付形式の場合
+ * @throws 無効な日付形式の場合にErrorをスローします
  */
 export const stringToUtcDate = (value?: string | null): Date | null => {
   if (!value) {
