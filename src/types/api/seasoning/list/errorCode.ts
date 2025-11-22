@@ -1,7 +1,7 @@
 import { ZodError, ZodIssue, ZodIssueCode } from "zod";
 
 // フィールド名の型定義
-type FieldName = "page" | "limit" | "seasoningTypeId" | "search";
+type FieldName = "page" | "limit" | "typeId" | "search";
 
 /**
  * 調味料一覧APIのエラーコード
@@ -12,7 +12,7 @@ export type SeasoningListErrorCode =
   | "VALIDATION_ERROR_LIMIT_INVALID"
   | "VALIDATION_ERROR_LIMIT_TOO_SMALL"
   | "VALIDATION_ERROR_LIMIT_TOO_LARGE"
-  | "VALIDATION_ERROR_SEASONING_TYPE_ID_INVALID"
+  | "VALIDATION_ERROR_TYPE_ID_INVALID"
   | "VALIDATION_ERROR_SEARCH_INVALID"
   | "SEASONING_TYPE_NOT_FOUND"
   | "INTERNAL_ERROR";
@@ -47,8 +47,7 @@ export const SeasoningListErrorCode = {
   LIMIT_INVALID: "VALIDATION_ERROR_LIMIT_INVALID" as const,
   LIMIT_TOO_SMALL: "VALIDATION_ERROR_LIMIT_TOO_SMALL" as const,
   LIMIT_TOO_LARGE: "VALIDATION_ERROR_LIMIT_TOO_LARGE" as const,
-  SEASONING_TYPE_ID_INVALID:
-    "VALIDATION_ERROR_SEASONING_TYPE_ID_INVALID" as const,
+  TYPE_ID_INVALID: "VALIDATION_ERROR_TYPE_ID_INVALID" as const,
   SEARCH_INVALID: "VALIDATION_ERROR_SEARCH_INVALID" as const,
   SEASONING_TYPE_NOT_FOUND: "SEASONING_TYPE_NOT_FOUND" as const,
   INTERNAL_ERROR: "INTERNAL_ERROR" as const,
@@ -91,14 +90,14 @@ const limitFieldErrorCode = (
 /**
  * seasoningTypeIdフィールドのZodエラーコードに対応する調味料一覧APIエラーコード
  */
-const seasoningTypeIdFieldErrorCode = (
+const typeIdFieldErrorCode = (
   zodErrorCode: ZodIssueCode
 ): SeasoningListErrorCode => {
   switch (zodErrorCode) {
     case "invalid_type":
-      return SeasoningListErrorCode.SEASONING_TYPE_ID_INVALID;
+      return SeasoningListErrorCode.TYPE_ID_INVALID;
     default:
-      return SeasoningListErrorCode.SEASONING_TYPE_ID_INVALID;
+      return SeasoningListErrorCode.TYPE_ID_INVALID;
   }
 };
 
@@ -139,8 +138,8 @@ const issueToErrorCode = (issue: ZodIssue): SeasoningListErrorCode => {
     return limitFieldErrorCode(issue.code);
   }
 
-  if (isFieldName(issue.path, "seasoningTypeId")) {
-    return seasoningTypeIdFieldErrorCode(issue.code);
+  if (isFieldName(issue.path, "typeId")) {
+    return typeIdFieldErrorCode(issue.code);
   }
 
   if (isFieldName(issue.path, "search")) {

@@ -53,3 +53,6 @@ storybook-static
 
 # temporary scripts
 fix_imports.sh
+
+# work notes and commands
+.codex-commands.md

@@ -89,20 +89,20 @@ describe("SeasoningListErrorCode", () => {
       expect(result).toBe("VALIDATION_ERROR_LIMIT_TOO_LARGE");
     });
 
-    it("seasoningTypeIdフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_SEASONING_TYPE_ID_INVALIDを返す", () => {
+    it("typeIdフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_TYPE_ID_INVALIDを返す", () => {
       const zodError = new ZodError([
         {
           code: "invalid_type",
           expected: "number",
           received: "string",
           message: "調味料タイプIDは数値である必要があります",
-          path: ["seasoningTypeId"],
+          path: ["typeId"],
         },
       ]);
 
       const result = SeasoningListErrorCode.fromValidationError(zodError);
 
-      expect(result).toBe("VALIDATION_ERROR_SEASONING_TYPE_ID_INVALID");
+      expect(result).toBe("VALIDATION_ERROR_TYPE_ID_INVALID");
     });
 
     it("searchフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_SEARCH_INVALIDを返す", () => {
@@ -163,8 +163,8 @@ describe("SeasoningListErrorCode", () => {
       expect(SeasoningListErrorCode.LIMIT_TOO_LARGE).toBe(
         "VALIDATION_ERROR_LIMIT_TOO_LARGE"
       );
-      expect(SeasoningListErrorCode.SEASONING_TYPE_ID_INVALID).toBe(
-        "VALIDATION_ERROR_SEASONING_TYPE_ID_INVALID"
+      expect(SeasoningListErrorCode.TYPE_ID_INVALID).toBe(
+        "VALIDATION_ERROR_TYPE_ID_INVALID"
       );
       expect(SeasoningListErrorCode.SEARCH_INVALID).toBe(
         "VALIDATION_ERROR_SEARCH_INVALID"

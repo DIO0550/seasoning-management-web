@@ -42,11 +42,11 @@ test("ErrorMapper.toHttpResponse: ValidationErrorを400レスポンスに変換�
   });
 });
 
-test("ErrorMapper.toHttpResponse: DuplicateErrorを400レスポンスに変換する", () => {
+test("ErrorMapper.toHttpResponse: DuplicateErrorを409レスポンスに変換する", () => {
   const error = new DuplicateError("name", "醤油");
   const response = errorMapper.toHttpResponse(error);
 
-  expect(response.status).toBe(400);
+  expect(response.status).toBe(409);
   expect(response.body).toEqual({
     code: "DUPLICATE_ERROR",
     message: "Duplicate value for name: 醤油",
