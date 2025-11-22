@@ -169,8 +169,23 @@ const handleCreateSeasoningError = (error: unknown) => {
     return NextResponse.json(notFoundBody, { status: 404 });
   }
 
+  // 日付変換エラーを明示的にハンドリング
+  if (
+    error instanceof Error &&
+    (error.message.includes("Invalid date") ||
+      error.message.includes("無効な日付形式です"))
+  ) {
+    return NextResponse.json(
+      {
+        code: SeasoningAddErrorCode.DATE_INVALID,
+        message: error.message,
+      },
+      { status: 400 }
+    );
+  }
+
   // JSON解析エラー（クライアント側のリクエスト不備）
-  // TODO: 将来的にはINVALID_REQUEST_BODYなどの専用エラーコードを定義することを検討
+  // TODO: 次回のエラーコード整理フェーズでINVALID_REQUEST_BODYなどの専用エラーコードを定義・統一する
   if (error instanceof SyntaxError) {
     return NextResponse.json(
       {
