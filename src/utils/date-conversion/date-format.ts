@@ -52,9 +52,9 @@ export const DateFormat = {
     // その他の文字はエスケープする
     const regexPattern = format
       .replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // 特殊文字をエスケープ
-      .replace("yyyy", "(\\d{4})")
-      .replace("MM", "(\\d{2})")
-      .replace("dd", "(\\d{2})");
+      .replaceAll("yyyy", "(\\d{4})")
+      .replaceAll("MM", "(\\d{2})")
+      .replaceAll("dd", "(\\d{2})");
 
     const regex = new RegExp(`^${regexPattern}$`);
     const match = value.match(regex);
@@ -67,6 +67,11 @@ export const DateFormat = {
     const yearIndex = format.indexOf("yyyy");
     const monthIndex = format.indexOf("MM");
     const dayIndex = format.indexOf("dd");
+
+    // 必須トークンが含まれているか確認
+    if (yearIndex === -1 || monthIndex === -1 || dayIndex === -1) {
+      return null;
+    }
 
     // 出現順序に基づいてソートし、正規表現のグループインデックスをマッピング
     const indices = [
@@ -126,9 +131,9 @@ export const DateFormat = {
     const day = date.getUTCDate();
 
     return format
-      .replace("yyyy", String(year))
-      .replace("MM", String(month).padStart(2, "0"))
-      .replace("dd", String(day).padStart(2, "0"));
+      .replaceAll("yyyy", String(year))
+      .replaceAll("MM", String(month).padStart(2, "0"))
+      .replaceAll("dd", String(day).padStart(2, "0"));
   },
 
   /**

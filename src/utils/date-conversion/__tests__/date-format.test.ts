@@ -61,6 +61,20 @@ test("DateFormat.parse: 入力がnullまたはundefinedの場合はnullを返す
   expect(DateFormat.parse(DateFormat.Standard, undefined)).toBeNull();
 });
 
+test("DateFormat.parse: 繰り返しトークンを含むフォーマットを正しくパースできること", () => {
+  const format = DateFormat.of("yyyy-MM-dd (yyyy/MM/dd)");
+  const result = DateFormat.parse(format, "2023-11-23 (2023/11/23)");
+  expect(result).not.toBeNull();
+  expect(result?.getUTCFullYear()).toBe(2023);
+  expect(result?.getUTCMonth()).toBe(10);
+  expect(result?.getUTCDate()).toBe(23);
+});
+
+test("DateFormat.parse: 必須トークンが欠けているフォーマットの場合はnullを返すこと", () => {
+  const format = DateFormat.of("yyyy-MM");
+  expect(DateFormat.parse(format, "2023-11")).toBeNull();
+});
+
 test("DateFormat.format: Dateオブジェクトを標準フォーマット(yyyy-MM-dd)に変換できること", () => {
   const date = new Date(Date.UTC(2023, 10, 23)); // 2023-11-23 UTC
   expect(DateFormat.format(DateFormat.Standard, date)).toBe("2023-11-23");
@@ -78,6 +92,12 @@ test("DateFormat.format: Dateオブジェクトを日本語フォーマット(yy
 
 test("DateFormat.format: 入力がnullの場合はnullを返すこと", () => {
   expect(DateFormat.format(DateFormat.Standard, null)).toBeNull();
+});
+
+test("DateFormat.format: 繰り返しトークンを含むフォーマットに正しく変換できること", () => {
+  const date = new Date(Date.UTC(2023, 10, 23));
+  const format = DateFormat.of("yyyy-MM-dd (yyyy/MM/dd)");
+  expect(DateFormat.format(format, date)).toBe("2023-11-23 (2023/11/23)");
 });
 
 test("DateFormat.isValid: 有効な日付文字列とフォーマットの場合はtrueを返すこと", () => {
