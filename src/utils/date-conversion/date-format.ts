@@ -3,10 +3,6 @@
  */
 export type DateFormat = string;
 
-/**
- * DateFormatのコンパニオンオブジェクト
- * 標準的なフォーマット定義とヘルパー関数を提供する
- */
 const Constants = {
   /** 標準形式: yyyy-MM-dd */
   Standard: "yyyy-MM-dd",
