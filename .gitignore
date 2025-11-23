@@ -1,5 +1,7 @@
 # Ignore docs folder (keep local, remove from git tracking)
 /docs/
+specs/
+.specify/
 
 # Node / Next standard ignores (partial, keep minimal)
 node_modules/
