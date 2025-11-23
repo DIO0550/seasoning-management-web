@@ -29,7 +29,13 @@ export const DateFormat = {
 
   /**
    * 指定されたフォーマットに従って文字列をパースし、Dateオブジェクトを返す
-   * @param format フォーマット文字列
+   *
+   * サポートされているフォーマットトークン:
+   * - yyyy: 年 (4桁)
+   * - MM: 月 (2桁, 01-12)
+   * - dd: 日 (2桁, 01-31)
+   *
+   * @param format フォーマット文字列 (例: "yyyy-MM-dd", "yyyy/MM/dd")
    * @param value パース対象の文字列
    * @returns Dateオブジェクト、または無効な場合はnull
    */
