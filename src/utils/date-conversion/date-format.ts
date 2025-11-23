@@ -110,8 +110,19 @@ export const DateFormat = {
    * @param date フォーマット対象のDateオブジェクト
    * @returns フォーマットされた文字列、またはdateがnullの場合はnull
    */
-  format: (_format: DateFormat, _date: Date | null): string | null => {
-    throw new Error("Not implemented");
+  format: (format: DateFormat, date: Date | null): string | null => {
+    if (!date) {
+      return null;
+    }
+
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1;
+    const day = date.getUTCDate();
+
+    return format
+      .replace("yyyy", String(year))
+      .replace("MM", String(month).padStart(2, "0"))
+      .replace("dd", String(day).padStart(2, "0"));
   },
 
   /**
