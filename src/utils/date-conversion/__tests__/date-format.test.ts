@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { DateFormat } from "@/utils/date-conversion/date-format";
+import { DateFormat } from "@/utils/date-conversion";
 
 test("DateFormat: 標準フォーマット定義: Standardフォーマットが正しい形式であること", () => {
   expect(DateFormat.Standard).toBe("yyyy-MM-dd");
