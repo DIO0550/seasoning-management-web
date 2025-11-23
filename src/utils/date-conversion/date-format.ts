@@ -131,7 +131,7 @@ export const DateFormat = {
    * @param value 検証対象の文字列
    * @returns 有効な場合はtrue
    */
-  isValid: (_format: DateFormat, _value: string): boolean => {
-    throw new Error("Not implemented");
+  isValid: (format: DateFormat, value: string): boolean => {
+    return DateFormat.parse(format, value) !== null;
   },
 } as const;
