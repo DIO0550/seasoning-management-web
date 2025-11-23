@@ -26,4 +26,37 @@ export const DateFormat = {
    * @returns DateFormat
    */
   of: (pattern: string): DateFormat => pattern,
+
+  /**
+   * 指定されたフォーマットに従って文字列をパースし、Dateオブジェクトを返す
+   * @param format フォーマット文字列
+   * @param value パース対象の文字列
+   * @returns Dateオブジェクト、または無効な場合はnull
+   */
+  parse: (
+    _format: DateFormat,
+    _value: string | null | undefined
+  ): Date | null => {
+    throw new Error("Not implemented");
+  },
+
+  /**
+   * Dateオブジェクトを指定されたフォーマットの文字列に変換する
+   * @param format フォーマット文字列
+   * @param date フォーマット対象のDateオブジェクト
+   * @returns フォーマットされた文字列、またはdateがnullの場合はnull
+   */
+  format: (_format: DateFormat, _date: Date | null): string | null => {
+    throw new Error("Not implemented");
+  },
+
+  /**
+   * 文字列が指定されたフォーマットに適合し、かつ有効な日付であるかを検証する
+   * @param format フォーマット文字列
+   * @param value 検証対象の文字列
+   * @returns 有効な場合はtrue
+   */
+  isValid: (_format: DateFormat, _value: string): boolean => {
+    throw new Error("Not implemented");
+  },
 } as const;
