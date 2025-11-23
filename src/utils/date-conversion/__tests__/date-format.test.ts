@@ -114,3 +114,19 @@ test("DateFormat.isValid: 無効な日付文字列の場合はfalseを返すこ�
 test("DateFormat.isValid: フォーマットと一致しない場合はfalseを返すこと", () => {
   expect(DateFormat.isValid(DateFormat.Standard, "2023/11/23")).toBe(false);
 });
+
+test("DateFormat.parse: 繰り返しトークンの値が不一致の場合はnullを返すこと", () => {
+  const format = DateFormat.of("yyyy-MM-dd (yyyy/MM/dd)");
+  expect(DateFormat.parse(format, "2023-11-23 (2024/11/23)")).toBeNull();
+  expect(DateFormat.parse(format, "2023-11-23 (2023/12/23)")).toBeNull();
+  expect(DateFormat.parse(format, "2023-11-23 (2023/11/24)")).toBeNull();
+});
+
+test("DateFormat.parse: 年が1000未満の場合はnullを返すこと", () => {
+  expect(DateFormat.parse(DateFormat.Standard, "0999-01-01")).toBeNull();
+  expect(DateFormat.parse(DateFormat.Standard, "0001-01-01")).toBeNull();
+});
+
+test("DateFormat.parse: 存在しない日付(うるう年以外)の場合はnullを返すこと", () => {
+  expect(DateFormat.parse(DateFormat.Standard, "2023-02-29")).toBeNull();
+});

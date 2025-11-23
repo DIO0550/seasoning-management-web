@@ -35,6 +35,11 @@ export const DateFormat = {
    * - MM: 月 (2桁, 01-12)
    * - dd: 日 (2桁, 01-31)
    *
+   * 注意事項:
+   * - 時刻フォーマット (HH:mm:ss) は現在サポートされていません。
+   * - 年は 1000 ~ 9999 の範囲のみサポートしています。
+   * - フォーマット内に同じトークンが複数回出現する場合、すべての値が一致する必要があります。
+   *
    * @param format フォーマット文字列 (例: "yyyy-MM-dd", "yyyy/MM/dd")
    * @param value パース対象の文字列
    * @returns Dateオブジェクト、または無効な場合はnull
@@ -47,56 +52,81 @@ export const DateFormat = {
       return null;
     }
 
-    // フォーマット文字列を正規表現に変換
-    // yyyy -> (\d{4}), MM -> (\d{2}), dd -> (\d{2})
-    // その他の文字はエスケープする
-    const regexPattern = format
-      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // 特殊文字をエスケープ
-      .replaceAll("yyyy", "(\\d{4})")
-      .replaceAll("MM", "(\\d{2})")
-      .replaceAll("dd", "(\\d{2})");
+    // フォーマット文字列をトークンで分割して正規表現を構築
+    const tokenRegex = /yyyy|MM|dd/g;
+    const parts = format.split(tokenRegex);
+    const matches = format.match(tokenRegex);
 
-    const regex = new RegExp(`^${regexPattern}$`);
+    if (!matches) {
+      return null;
+    }
+
+    let regexString = "^";
+    const groupTypes: string[] = [];
+
+    for (let i = 0; i < parts.length; i++) {
+      // 特殊文字をエスケープして追加
+      regexString += parts[i].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+      if (i < matches.length) {
+        const token = matches[i];
+        if (token === "yyyy") {
+          regexString += "(\\d{4})";
+          groupTypes.push("year");
+        } else if (token === "MM") {
+          regexString += "(\\d{2})";
+          groupTypes.push("month");
+        } else if (token === "dd") {
+          regexString += "(\\d{2})";
+          groupTypes.push("day");
+        }
+      }
+    }
+    regexString += "$";
+
+    const regex = new RegExp(regexString);
     const match = value.match(regex);
 
     if (!match) {
       return null;
     }
 
-    // フォーマット内の各パーツの出現順序を特定
-    const yearIndex = format.indexOf("yyyy");
-    const monthIndex = format.indexOf("MM");
-    const dayIndex = format.indexOf("dd");
-
     // 必須トークンが含まれているか確認
-    if (yearIndex === -1 || monthIndex === -1 || dayIndex === -1) {
+    if (
+      !groupTypes.includes("year") ||
+      !groupTypes.includes("month") ||
+      !groupTypes.includes("day")
+    ) {
       return null;
     }
 
-    // 出現順序に基づいてソートし、正規表現のグループインデックスをマッピング
-    const indices = [
-      { type: "year", index: yearIndex },
-      { type: "month", index: monthIndex },
-      { type: "day", index: dayIndex },
-    ]
-      .filter((item) => item.index !== -1)
-      .sort((a, b) => a.index - b.index);
+    let year: number | null = null;
+    let month: number | null = null;
+    let day: number | null = null;
 
-    let year = 0;
-    let month = 0;
-    let day = 0;
-
-    // マッチした結果から値を取得
-    // match[0]は全体のマッチ、match[1]以降がキャプチャグループ
-    indices.forEach((item, i) => {
+    // マッチした結果から値を取得し、整合性をチェック
+    for (let i = 0; i < groupTypes.length; i++) {
       const val = parseInt(match[i + 1], 10);
-      if (item.type === "year") year = val;
-      if (item.type === "month") month = val;
-      if (item.type === "day") day = val;
-    });
+      const type = groupTypes[i];
 
-    // 日付の妥当性チェック
-    if (month < 1 || month > 12 || day < 1 || day > 31) {
+      if (type === "year") {
+        if (year !== null && year !== val) return null;
+        year = val;
+      } else if (type === "month") {
+        if (month !== null && month !== val) return null;
+        month = val;
+      } else if (type === "day") {
+        if (day !== null && day !== val) return null;
+        day = val;
+      }
+    }
+
+    if (year === null || month === null || day === null) {
+      return null;
+    }
+
+    // 年の範囲チェック
+    if (year < 1000 || year > 9999) {
       return null;
     }
 
@@ -117,7 +147,17 @@ export const DateFormat = {
 
   /**
    * Dateオブジェクトを指定されたフォーマットの文字列に変換する
-   * @param format フォーマット文字列
+   *
+   * サポートされているフォーマットトークン:
+   * - yyyy: 年 (4桁)
+   * - MM: 月 (2桁, 01-12)
+   * - dd: 日 (2桁, 01-31)
+   *
+   * 注意:
+   * - 単一のDateオブジェクトを指定されたフォーマットに変換します。
+   * - フォーマット内に同じトークンが複数回出現する場合、すべて同じ値に置換されます。
+   *
+   * @param format フォーマット文字列 (例: "yyyy-MM-dd", "yyyy/MM/dd")
    * @param date フォーマット対象のDateオブジェクト
    * @returns フォーマットされた文字列、またはdateがnullの場合はnull
    */
