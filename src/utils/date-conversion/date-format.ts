@@ -34,10 +34,74 @@ export const DateFormat = {
    * @returns Dateオブジェクト、または無効な場合はnull
    */
   parse: (
-    _format: DateFormat,
-    _value: string | null | undefined
+    format: DateFormat,
+    value: string | null | undefined
   ): Date | null => {
-    throw new Error("Not implemented");
+    if (!value) {
+      return null;
+    }
+
+    // フォーマット文字列を正規表現に変換
+    // yyyy -> (\d{4}), MM -> (\d{2}), dd -> (\d{2})
+    // その他の文字はエスケープする
+    const regexPattern = format
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&") // 特殊文字をエスケープ
+      .replace("yyyy", "(\\d{4})")
+      .replace("MM", "(\\d{2})")
+      .replace("dd", "(\\d{2})");
+
+    const regex = new RegExp(`^${regexPattern}$`);
+    const match = value.match(regex);
+
+    if (!match) {
+      return null;
+    }
+
+    // フォーマット内の各パーツの出現順序を特定
+    const yearIndex = format.indexOf("yyyy");
+    const monthIndex = format.indexOf("MM");
+    const dayIndex = format.indexOf("dd");
+
+    // 出現順序に基づいてソートし、正規表現のグループインデックスをマッピング
+    const indices = [
+      { type: "year", index: yearIndex },
+      { type: "month", index: monthIndex },
+      { type: "day", index: dayIndex },
+    ]
+      .filter((item) => item.index !== -1)
+      .sort((a, b) => a.index - b.index);
+
+    let year = 0;
+    let month = 0;
+    let day = 0;
+
+    // マッチした結果から値を取得
+    // match[0]は全体のマッチ、match[1]以降がキャプチャグループ
+    indices.forEach((item, i) => {
+      const val = parseInt(match[i + 1], 10);
+      if (item.type === "year") year = val;
+      if (item.type === "month") month = val;
+      if (item.type === "day") day = val;
+    });
+
+    // 日付の妥当性チェック
+    if (month < 1 || month > 12 || day < 1 || day > 31) {
+      return null;
+    }
+
+    // Dateオブジェクトを作成 (UTCとして扱う)
+    const date = new Date(Date.UTC(year, month - 1, day));
+
+    // 日付の整合性チェック (例: 2月30日 -> 3月2日になっていないか)
+    if (
+      date.getUTCFullYear() !== year ||
+      date.getUTCMonth() !== month - 1 ||
+      date.getUTCDate() !== day
+    ) {
+      return null;
+    }
+
+    return date;
   },
 
   /**
