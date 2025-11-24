@@ -171,7 +171,7 @@ export const DateFormat = {
     const day = date.getUTCDate();
 
     return format
-      .replaceAll("yyyy", String(year))
+      .replaceAll("yyyy", String(year).padStart(4, "0"))
       .replaceAll("MM", String(month).padStart(2, "0"))
       .replaceAll("dd", String(day).padStart(2, "0"));
   },
