@@ -3,6 +3,13 @@
  */
 export type DateFormat = string;
 
+/**
+ * 正規表現の特殊文字をエスケープするヘルパー関数
+ */
+const escapeRegExp = (str: string) => {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 const Constants = {
   /** 標準形式: yyyy-MM-dd */
   Standard: "yyyy-MM-dd",
@@ -67,7 +74,7 @@ export const DateFormat = {
 
     for (let i = 0; i < parts.length; i++) {
       // 特殊文字をエスケープして追加
-      regexString += parts[i].replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      regexString += escapeRegExp(parts[i]);
 
       if (i < matches.length) {
         const token = matches[i];
