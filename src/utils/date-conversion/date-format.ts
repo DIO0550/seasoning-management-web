@@ -60,10 +60,9 @@ export const DateFormat = {
     }
 
     // フォーマット文字列をトークンで分割して正規表現を構築
-    const tokenRegexForSplit = /yyyy|MM|dd/g;
-    const tokenRegexForMatch = /yyyy|MM|dd/g;
-    const parts = format.split(tokenRegexForSplit);
-    const matches = format.match(tokenRegexForMatch);
+    const tokenRegex = /yyyy|MM|dd/g;
+    const parts = format.split(tokenRegex);
+    const matches = format.match(tokenRegex);
 
     if (!matches) {
       return null;
