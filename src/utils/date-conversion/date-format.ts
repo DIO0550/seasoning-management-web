@@ -160,10 +160,11 @@ export const DateFormat = {
    * 注意:
    * - 単一のDateオブジェクトを指定されたフォーマットに変換します。
    * - フォーマット内に同じトークンが複数回出現する場合、すべて同じ値に置換されます。
+   * - 年は 1000 ~ 9999 の範囲のみサポートしています。範囲外の場合はnullを返します。
    *
    * @param format フォーマット文字列 (例: "yyyy-MM-dd", "yyyy/MM/dd")
    * @param date フォーマット対象のDateオブジェクト
-   * @returns フォーマットされた文字列、またはdateがnullの場合はnull
+   * @returns フォーマットされた文字列、またはdateがnullまたは年が範囲外の場合はnull
    */
   format: (format: DateFormat, date: Date | null): string | null => {
     if (!date) {
@@ -173,6 +174,11 @@ export const DateFormat = {
     const year = date.getUTCFullYear();
     const month = date.getUTCMonth() + 1;
     const day = date.getUTCDate();
+
+    // 年の範囲チェック（parseメソッドと一貫性を保つ）
+    if (year < 1000 || year > 9999) {
+      return null;
+    }
 
     return format
       .replaceAll("yyyy", String(year).padStart(4, "0"))

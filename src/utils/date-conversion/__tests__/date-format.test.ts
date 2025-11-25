@@ -100,9 +100,14 @@ test("DateFormat.format: 繰り返しトークンを含むフォーマットに�
   expect(DateFormat.format(format, date)).toBe("2023-11-23 (2023/11/23)");
 });
 
-test("DateFormat.format: 年が1000未満の場合は4桁ゼロパディングされること", () => {
-  const date = new Date(Date.UTC(123, 0, 1)); // 0123-01-01
-  expect(DateFormat.format(DateFormat.Standard, date)).toBe("0123-01-01");
+test("DateFormat.format: 年が1000未満の場合はnullを返すこと", () => {
+  const date = new Date(Date.UTC(123, 0, 1)); // 年が範囲外
+  expect(DateFormat.format(DateFormat.Standard, date)).toBeNull();
+});
+
+test("DateFormat.format: 年が10000以上の場合はnullを返すこと", () => {
+  const date = new Date(Date.UTC(10000, 0, 1)); // 年が範囲外
+  expect(DateFormat.format(DateFormat.Standard, date)).toBeNull();
 });
 
 test("DateFormat.isValid: 有効な日付文字列とフォーマットの場合はtrueを返すこと", () => {
