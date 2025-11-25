@@ -108,26 +108,22 @@ export const DateFormat = {
       return null;
     }
 
-    let year: number | null = null;
-    let month: number | null = null;
-    let day: number | null = null;
+    const values: Record<"year" | "month" | "day", number | null> = {
+      year: null,
+      month: null,
+      day: null,
+    };
 
     // マッチした結果から値を取得し、整合性をチェック
     for (let i = 0; i < groupTypes.length; i++) {
       const val = parseInt(match[i + 1], 10);
-      const type = groupTypes[i];
+      const type = groupTypes[i] as "year" | "month" | "day";
 
-      if (type === "year") {
-        if (year !== null && year !== val) return null;
-        year = val;
-      } else if (type === "month") {
-        if (month !== null && month !== val) return null;
-        month = val;
-      } else if (type === "day") {
-        if (day !== null && day !== val) return null;
-        day = val;
-      }
+      if (values[type] !== null && values[type] !== val) return null;
+      values[type] = val;
     }
+
+    const { year, month, day } = values;
 
     if (year === null || month === null || day === null) {
       return null;
