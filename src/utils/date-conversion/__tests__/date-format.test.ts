@@ -137,6 +137,18 @@ test("DateFormat.parse: 年が1000未満の場合はnullを返すこと", () => 
   expect(DateFormat.parse(DateFormat.Standard, "0001-01-01")).toBeNull();
 });
 
+test("DateFormat.parse: 年が1000の場合は正しくパースできること", () => {
+  const result = DateFormat.parse(DateFormat.Standard, "1000-01-01");
+  expect(result).not.toBeNull();
+  expect(result?.getUTCFullYear()).toBe(1000);
+});
+
+test("DateFormat.parse: 年が9999の場合は正しくパースできること", () => {
+  const result = DateFormat.parse(DateFormat.Standard, "9999-12-31");
+  expect(result).not.toBeNull();
+  expect(result?.getUTCFullYear()).toBe(9999);
+});
+
 test("DateFormat.parse: 存在しない日付(うるう年以外)の場合はnullを返すこと", () => {
   expect(DateFormat.parse(DateFormat.Standard, "2023-02-29")).toBeNull();
 });
