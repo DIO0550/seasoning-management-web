@@ -152,3 +152,27 @@ test("DateFormat.parse: 年が9999の場合は正しくパースできること"
 test("DateFormat.parse: 存在しない日付(うるう年以外)の場合はnullを返すこと", () => {
   expect(DateFormat.parse(DateFormat.Standard, "2023-02-29")).toBeNull();
 });
+
+test("DateFormat.parse: 月が00の場合はnullを返すこと", () => {
+  expect(DateFormat.parse(DateFormat.Standard, "2023-00-15")).toBeNull();
+});
+
+test("DateFormat.parse: 月が13以上の場合はnullを返すこと", () => {
+  expect(DateFormat.parse(DateFormat.Standard, "2023-13-01")).toBeNull();
+});
+
+test("DateFormat.parse: 日が00の場合はnullを返すこと", () => {
+  expect(DateFormat.parse(DateFormat.Standard, "2023-01-00")).toBeNull();
+});
+
+test("DateFormat.parse: 日が32以上の場合はnullを返すこと", () => {
+  expect(DateFormat.parse(DateFormat.Standard, "2023-01-32")).toBeNull();
+});
+
+test("DateFormat.parse: うるう年の2月29日は正しくパースできること", () => {
+  const result = DateFormat.parse(DateFormat.Standard, "2024-02-29");
+  expect(result).not.toBeNull();
+  expect(result?.getUTCFullYear()).toBe(2024);
+  expect(result?.getUTCMonth()).toBe(1);
+  expect(result?.getUTCDate()).toBe(29);
+});
