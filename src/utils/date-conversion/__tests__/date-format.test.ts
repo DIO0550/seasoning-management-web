@@ -107,6 +107,7 @@ test("DateFormat.format: 年が1000未満の場合はnullを返すこと", () =>
 
 test("DateFormat.format: 年が10000以上の場合はnullを返すこと", () => {
   const date = new Date(Date.UTC(10000, 0, 1)); // 年が範囲外
+  expect(date.getUTCFullYear()).toBe(10000); // 実際の年を確認
   expect(DateFormat.format(DateFormat.Standard, date)).toBeNull();
 });
 
