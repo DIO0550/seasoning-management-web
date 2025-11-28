@@ -69,7 +69,8 @@ export const DateFormat = {
     }
 
     let regexString = "^";
-    const groupTypes: string[] = [];
+    type TokenType = "year" | "month" | "day";
+    const groupTypes: TokenType[] = [];
 
     for (let i = 0; i < parts.length; i++) {
       // 特殊文字をエスケープして追加
@@ -107,7 +108,7 @@ export const DateFormat = {
       return null;
     }
 
-    const values: Record<"year" | "month" | "day", number | null> = {
+    const values: Record<TokenType, number | null> = {
       year: null,
       month: null,
       day: null,
@@ -116,7 +117,7 @@ export const DateFormat = {
     // マッチした結果から値を取得し、整合性をチェック
     for (let i = 0; i < groupTypes.length; i++) {
       const val = parseInt(match[i + 1], 10);
-      const type = groupTypes[i] as "year" | "month" | "day";
+      const type = groupTypes[i];
 
       if (values[type] !== null && values[type] !== val) return null;
       values[type] = val;
