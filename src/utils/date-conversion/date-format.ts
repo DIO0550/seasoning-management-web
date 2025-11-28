@@ -3,6 +3,13 @@
  */
 export type DateFormat = string;
 
+/**
+ * 正規表現の特殊文字をエスケープするヘルパー関数
+ */
+const escapeRegExp = (str: string) => {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+};
+
 const Constants = {
   /** 標準形式: yyyy-MM-dd */
   Standard: "yyyy-MM-dd",
@@ -29,25 +36,161 @@ export const DateFormat = {
 
   /**
    * 指定されたフォーマットに従って文字列をパースし、Dateオブジェクトを返す
-   * @param format フォーマット文字列
+   *
+   * サポートされているフォーマットトークン:
+   * - yyyy: 年 (4桁)
+   * - MM: 月 (2桁, 01-12)
+   * - dd: 日 (2桁, 01-31)
+   *
+   * 注意事項:
+   * - 時刻フォーマット (HH:mm:ss) は現在サポートされていません。
+   * - 年は 1000 ~ 9999 の範囲のみサポートしています。
+   * - フォーマット内に同じトークンが複数回出現する場合、すべての値が一致する必要があります。
+   *
+   * @param format フォーマット文字列 (例: "yyyy-MM-dd", "yyyy/MM/dd")
    * @param value パース対象の文字列
    * @returns Dateオブジェクト、または無効な場合はnull
    */
   parse: (
-    _format: DateFormat,
-    _value: string | null | undefined
+    format: DateFormat,
+    value: string | null | undefined
   ): Date | null => {
-    throw new Error("Not implemented");
+    if (!value) {
+      return null;
+    }
+
+    // フォーマット文字列をトークンで分割して正規表現を構築
+    const tokenRegex = /yyyy|MM|dd/g;
+    const parts = format.split(tokenRegex);
+    const matches = format.match(tokenRegex);
+
+    if (!matches) {
+      return null;
+    }
+
+    let regexString = "^";
+    const groupTypes: string[] = [];
+
+    for (let i = 0; i < parts.length; i++) {
+      // 特殊文字をエスケープして追加
+      regexString += escapeRegExp(parts[i]);
+
+      if (i < matches.length) {
+        const token = matches[i];
+        if (token === "yyyy") {
+          regexString += "(\\d{4})";
+          groupTypes.push("year");
+        } else if (token === "MM") {
+          regexString += "(\\d{2})";
+          groupTypes.push("month");
+        } else if (token === "dd") {
+          regexString += "(\\d{2})";
+          groupTypes.push("day");
+        }
+      }
+    }
+    regexString += "$";
+
+    const regex = new RegExp(regexString);
+    const match = value.match(regex);
+
+    if (!match) {
+      return null;
+    }
+
+    // 必須トークンが含まれているか確認
+    if (
+      !groupTypes.includes("year") ||
+      !groupTypes.includes("month") ||
+      !groupTypes.includes("day")
+    ) {
+      return null;
+    }
+
+    const values: Record<"year" | "month" | "day", number | null> = {
+      year: null,
+      month: null,
+      day: null,
+    };
+
+    // マッチした結果から値を取得し、整合性をチェック
+    for (let i = 0; i < groupTypes.length; i++) {
+      const val = parseInt(match[i + 1], 10);
+      const type = groupTypes[i] as "year" | "month" | "day";
+
+      if (values[type] !== null && values[type] !== val) return null;
+      values[type] = val;
+    }
+
+    const { year, month, day } = values;
+
+    if (year === null || month === null || day === null) {
+      return null;
+    }
+
+    // 年の範囲チェック
+    if (year < 1000 || year > 9999) {
+      return null;
+    }
+
+    // Dateオブジェクトを作成 (UTCとして扱う)
+    const date = new Date(Date.UTC(year, month - 1, day));
+
+    // 日付の整合性チェック (例: 2月30日 -> 3月2日になっていないか)
+    if (
+      date.getUTCFullYear() !== year ||
+      date.getUTCMonth() !== month - 1 ||
+      date.getUTCDate() !== day
+    ) {
+      return null;
+    }
+
+    return date;
   },
 
   /**
    * Dateオブジェクトを指定されたフォーマットの文字列に変換する
-   * @param format フォーマット文字列
+   *
+   * サポートされているフォーマットトークン:
+   * - yyyy: 年 (4桁)
+   * - MM: 月 (2桁, 01-12)
+   * - dd: 日 (2桁, 01-31)
+   *
+   * 注意:
+   * - 単一のDateオブジェクトを指定されたフォーマットに変換します。
+   * - フォーマット内に同じトークンが複数回出現する場合、すべて同じ値に置換されます。
+   * - 年は 1000 ~ 9999 の範囲のみサポートしています。範囲外の場合はnullを返します。
+   *
+   * @param format フォーマット文字列 (例: "yyyy-MM-dd", "yyyy/MM/dd")
    * @param date フォーマット対象のDateオブジェクト
-   * @returns フォーマットされた文字列、またはdateがnullの場合はnull
+   * @returns フォーマットされた文字列、またはdateがnullまたは年が範囲外の場合はnull
    */
-  format: (_format: DateFormat, _date: Date | null): string | null => {
-    throw new Error("Not implemented");
+  format: (format: DateFormat, date: Date | null): string | null => {
+    if (!date) {
+      return null;
+    }
+
+    const year = date.getUTCFullYear();
+    const month = date.getUTCMonth() + 1;
+    const day = date.getUTCDate();
+
+    // 年の範囲チェック（parseメソッドと一貫性を保つ）
+    if (year < 1000 || year > 9999) {
+      return null;
+    }
+
+    return format.replace(/yyyy|MM|dd/g, (token) => {
+      switch (token) {
+        case "yyyy":
+          return String(year);
+        case "MM":
+          return String(month).padStart(2, "0");
+        case "dd":
+          return String(day).padStart(2, "0");
+        default:
+          return token;
+      }
+    });
   },
 
   /**
@@ -56,7 +199,7 @@ export const DateFormat = {
    * @param value 検証対象の文字列
    * @returns 有効な場合はtrue
    */
-  isValid: (_format: DateFormat, _value: string): boolean => {
-    throw new Error("Not implemented");
+  isValid: (format: DateFormat, value: string): boolean => {
+    return DateFormat.parse(format, value) !== null;
   },
 } as const;

@@ -9,7 +9,6 @@
 - **CLI**: `npx` は使用せず、必ず `npm run <script> -- [args]` 形式で実行してください。
 - **セキュリティ**: 機密情報は `.env.local` に限定し、ログ等に残さないでください。
 - **Linter**: `eslint-disable` や `any` 型の使用は禁止。コード修正で解決してください。
-- **コミット**: Conventional Commits 形式（`type: subject`）+ 絵文字を使用。
 
 ## プロジェクト構成 & 技術スタック
 
