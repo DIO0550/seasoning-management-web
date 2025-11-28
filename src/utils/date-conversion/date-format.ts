@@ -179,10 +179,18 @@ export const DateFormat = {
       return null;
     }
 
-    return format
-      .replaceAll("yyyy", String(year).padStart(4, "0"))
-      .replaceAll("MM", String(month).padStart(2, "0"))
-      .replaceAll("dd", String(day).padStart(2, "0"));
+    return format.replace(/yyyy|MM|dd/g, (token) => {
+      switch (token) {
+        case "yyyy":
+          return String(year);
+        case "MM":
+          return String(month).padStart(2, "0");
+        case "dd":
+          return String(day).padStart(2, "0");
+        default:
+          return token;
+      }
+    });
   },
 
   /**
