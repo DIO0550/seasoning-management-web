@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { successResponseSchema } from "@/types/api/common/schemas";
+import { successResponseSchema } from "@/types/api/common/response";
 
 /**
  * テンプレート更新リクエストのスキーマ
@@ -37,7 +37,7 @@ const templateSeasoningSchema = z.object({
 /**
  * テンプレートデータのスキーマ
  */
-const templateDataSchema = z.object({
+export const templateUpdateDataSchema = z.object({
   id: z.number().int().positive(),
   name: z.string(),
   description: z.string().nullable(),
@@ -49,5 +49,6 @@ const templateDataSchema = z.object({
 /**
  * テンプレート更新レスポンスのスキーマ
  */
-export const templateUpdateResponseSchema =
-  successResponseSchema(templateDataSchema);
+export const templateUpdateResponseSchema = successResponseSchema(
+  templateUpdateDataSchema
+);
