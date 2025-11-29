@@ -58,7 +58,6 @@ describe("Seasoning Delete API Schemas", () => {
   describe("seasoningDeleteResponseSchema", () => {
     test("有効な調味料削除レスポンスを受け入れる", () => {
       const validResponse = {
-        result_code: "OK",
         data: {
           id: 1,
           deletedAt: "2024-01-01T00:00:00Z",
@@ -70,24 +69,8 @@ describe("Seasoning Delete API Schemas", () => {
       ).not.toThrow();
     });
 
-    test("result_codeが'OK'でない場合にバリデーションエラーになる", () => {
-      const invalidResponse = {
-        result_code: "ERROR",
-        data: {
-          id: 1,
-          deletedAt: "2024-01-01T00:00:00Z",
-        },
-      };
-
-      expect(() =>
-        seasoningDeleteResponseSchema.parse(invalidResponse)
-      ).toThrow();
-    });
-
     test("dataが未指定の場合にバリデーションエラーになる", () => {
-      const invalidResponse = {
-        result_code: "OK",
-      };
+      const invalidResponse = {};
 
       expect(() =>
         seasoningDeleteResponseSchema.parse(invalidResponse)
@@ -96,7 +79,6 @@ describe("Seasoning Delete API Schemas", () => {
 
     test("data.idが正の整数でない場合にバリデーションエラーになる", () => {
       const invalidResponse = {
-        result_code: "OK",
         data: {
           id: 0,
           deletedAt: "2024-01-01T00:00:00Z",
@@ -110,7 +92,6 @@ describe("Seasoning Delete API Schemas", () => {
 
     test("data.deletedAtが不正な日時形式の場合にバリデーションエラーになる", () => {
       const invalidResponse = {
-        result_code: "OK",
         data: {
           id: 1,
           deletedAt: "invalid-datetime",

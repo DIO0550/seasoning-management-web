@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { successResponseSchema } from "@/types/api/common/schemas";
+import { successResponseSchema } from "@/types/api/common/response";
 
 /**
  * 調味料削除リクエストのスキーマ
