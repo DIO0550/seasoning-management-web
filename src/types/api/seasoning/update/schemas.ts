@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { successResponseSchema } from "@/types/api/common/schemas";
+import { successResponseSchema } from "@/types/api/common/response";
 
 /**
  * 調味料更新リクエストのスキーマ
@@ -29,7 +29,7 @@ export const seasoningUpdateRequestSchema = z.object({
 /**
  * 調味料データのスキーマ
  */
-const seasoningDataSchema = z.object({
+export const seasoningUpdateDataSchema = z.object({
   id: z.number().int().positive(),
   name: z.string(),
   seasoningTypeId: z.number().int().positive(),
@@ -45,5 +45,6 @@ const seasoningDataSchema = z.object({
 /**
  * 調味料更新レスポンスのスキーマ
  */
-export const seasoningUpdateResponseSchema =
-  successResponseSchema(seasoningDataSchema);
+export const seasoningUpdateResponseSchema = successResponseSchema(
+  seasoningUpdateDataSchema
+);

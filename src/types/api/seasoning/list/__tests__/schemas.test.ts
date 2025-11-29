@@ -1,133 +1,56 @@
-import { describe, test, expect } from "vitest";
+import { test, expect } from "vitest";
 import {
-  seasoningListResponseSchema,
-  seasoningListQuerySchema,
-} from "@/types/api/seasoning/list/schemas";
+  SeasoningListQuerySchema,
+  SeasoningListResponseSchema,
+} from "@/types/api/seasoning/list/types";
 
-describe("Seasoning List API Schemas", () => {
-  describe("seasoningListQuerySchema", () => {
-    test("有効なクエリパラメータを受け入れる", () => {
-      const validQuery = {
-        page: 1,
-        limit: 20,
-        typeId: null,
-        search: null,
-      };
+test("SeasoningListQuerySchema: 基本的なクエリを受け入れる", () => {
+  const payload = {
+    page: 1,
+    pageSize: 20,
+    typeId: 2,
+    search: "醤油",
+    sort: "expiryAsc",
+  };
 
-      expect(() => seasoningListQuerySchema.parse(validQuery)).not.toThrow();
-    });
+  expect(() => SeasoningListQuerySchema.parse(payload)).not.toThrow();
+});
 
-    test("検索条件ありのクエリパラメータを受け入れる", () => {
-      const validQuery = {
-        page: 2,
-        limit: 10,
-        typeId: 1,
-        search: "醤油",
-      };
+test("SeasoningListQuerySchema: page は1未満で失敗する", () => {
+  expect(() =>
+    SeasoningListQuerySchema.parse({ page: 0, pageSize: 10 })
+  ).toThrow();
+});
 
-      expect(() => seasoningListQuerySchema.parse(validQuery)).not.toThrow();
-    });
+test("SeasoningListResponseSchema: メタ情報付き一覧を受け入れる", () => {
+  const payload = {
+    data: [
+      {
+        id: 1,
+        name: "醤油",
+        typeId: 2,
+        imageId: null,
+        bestBeforeAt: "2024-01-01",
+        expiresAt: null,
+        purchasedAt: "2023-12-01",
+        daysUntilExpiry: 10,
+        expiryStatus: "expiring_soon",
+      },
+    ],
+    meta: {
+      page: 1,
+      pageSize: 20,
+      totalItems: 1,
+      totalPages: 1,
+      hasNext: false,
+      hasPrevious: false,
+    },
+    summary: {
+      totalCount: 1,
+      expiringCount: 1,
+      expiredCount: 0,
+    },
+  };
 
-    test("pageが0以下の場合にバリデーションエラーになる", () => {
-      const invalidQuery = {
-        page: 0,
-        limit: 20,
-        typeId: null,
-        search: null,
-      };
-
-      expect(() => seasoningListQuerySchema.parse(invalidQuery)).toThrow();
-    });
-
-    test("limitが0以下の場合にバリデーションエラーになる", () => {
-      const invalidQuery = {
-        page: 1,
-        limit: 0,
-        typeId: null,
-        search: null,
-      };
-
-      expect(() => seasoningListQuerySchema.parse(invalidQuery)).toThrow();
-    });
-
-    test("limitが100を超える場合にバリデーションエラーになる", () => {
-      const invalidQuery = {
-        page: 1,
-        limit: 101,
-        typeId: null,
-        search: null,
-      };
-
-      expect(() => seasoningListQuerySchema.parse(invalidQuery)).toThrow();
-    });
-  });
-
-  describe("seasoningListResponseSchema", () => {
-    test("有効な調味料一覧レスポンスを受け入れる", () => {
-      const validResponse = {
-        result_code: "OK",
-        data: {
-          items: [
-            {
-              id: 1,
-              name: "醤油",
-              typeId: 1,
-              seasoningTypeName: "液体調味料",
-              imageUrl: null,
-              createdAt: "2024-01-01T00:00:00Z",
-              updatedAt: "2024-01-01T00:00:00Z",
-            },
-          ],
-          pagination: {
-            page: 1,
-            limit: 20,
-            total: 1,
-            totalPages: 1,
-          },
-        },
-      };
-
-      expect(() =>
-        seasoningListResponseSchema.parse(validResponse)
-      ).not.toThrow();
-    });
-
-    test("空の一覧レスポンスを受け入れる", () => {
-      const validResponse = {
-        result_code: "OK",
-        data: {
-          items: [],
-          pagination: {
-            page: 1,
-            limit: 20,
-            total: 0,
-            totalPages: 0,
-          },
-        },
-      };
-
-      expect(() =>
-        seasoningListResponseSchema.parse(validResponse)
-      ).not.toThrow();
-    });
-
-    test("successがfalseの場合にバリデーションエラーになる", () => {
-      const invalidResponse = {
-        result_code: "ERROR",
-        data: {
-          items: [],
-          pagination: {
-            page: 1,
-            limit: 20,
-            total: 0,
-            totalPages: 0,
-          },
-        },
-      };
-
-      expect(() =>
-        seasoningListResponseSchema.parse(invalidResponse)
-      ).toThrow();
-    });
-  });
+  expect(() => SeasoningListResponseSchema.parse(payload)).not.toThrow();
 });
