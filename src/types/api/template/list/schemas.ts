@@ -1,6 +1,5 @@
 import { z } from "zod";
-import { successResponseSchema } from "@/types/api/common/response";
-import { paginationSchema } from "@/types/api/common/pagination";
+import { paginatedResponseSchema } from "@/types/api/common/response";
 
 /**
  * テンプレート一覧クエリパラメータのスキーマ
@@ -42,14 +41,10 @@ const templateItemSchema = z.object({
 /**
  * テンプレート一覧データのスキーマ
  */
-export const templateListDataSchema = z.object({
-  items: z.array(templateItemSchema),
-  pagination: paginationSchema,
-});
+export const templateListDataSchema = z.array(templateItemSchema);
 
 /**
  * テンプレート一覧レスポンスのスキーマ
  */
-export const templateListResponseSchema = successResponseSchema(
-  templateListDataSchema
-);
+export const templateListResponseSchema =
+  paginatedResponseSchema(templateItemSchema);

@@ -26,7 +26,7 @@ test("templateListQuerySchema: pageSize が100を超えると失敗", () => {
 });
 
 const baseResponse = {
-  items: [
+  data: [
     {
       id: 1,
       name: "和食の基本",
@@ -45,7 +45,7 @@ const baseResponse = {
       updatedAt: "2024-01-01T00:00:00Z",
     },
   ],
-  pagination: {
+  meta: {
     page: 1,
     pageSize: 20,
     totalItems: 1,
@@ -56,9 +56,7 @@ const baseResponse = {
 };
 
 test("templateListResponseSchema: 正常レスポンスを受け入れる", () => {
-  expect(() =>
-    templateListResponseSchema.parse({ data: baseResponse })
-  ).not.toThrow();
+  expect(() => templateListResponseSchema.parse(baseResponse)).not.toThrow();
 });
 
 test("templateListResponseSchema: data が無いと失敗", () => {
@@ -66,5 +64,5 @@ test("templateListResponseSchema: data が無いと失敗", () => {
 });
 
 test("templateListDataSchema: 一覧データ単体を検証できる", () => {
-  expect(() => templateListDataSchema.parse(baseResponse)).not.toThrow();
+  expect(() => templateListDataSchema.parse(baseResponse.data)).not.toThrow();
 });
