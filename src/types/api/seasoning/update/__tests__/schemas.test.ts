@@ -9,12 +9,12 @@ const validRequestBase = {
   id: 1,
   name: "soysauce",
   seasoningTypeId: 1,
+  imageId: null,
 };
 
 test("seasoningUpdateRequestSchema: すべてのフィールドを受け入れる", () => {
   const payload = {
     ...validRequestBase,
-    image: null,
     bestBeforeAt: "2024-12-31",
     expiresAt: "2024-11-30",
     purchasedAt: "2024-01-01",
@@ -29,10 +29,10 @@ test("seasoningUpdateRequestSchema: 必須項目だけでも有効", () => {
   ).not.toThrow();
 });
 
-test("seasoningUpdateRequestSchema: base64 画像文字列も許可", () => {
+test("seasoningUpdateRequestSchema: imageId を指定しても有効", () => {
   const payload = {
     ...validRequestBase,
-    image: "base64encodedimage",
+    imageId: 10,
   };
 
   expect(() => seasoningUpdateRequestSchema.parse(payload)).not.toThrow();
@@ -87,6 +87,7 @@ test("seasoningUpdateResponseSchema: 正常レスポンスを受け入れる", (
       name: "醤油",
       seasoningTypeId: 1,
       seasoningTypeName: "液体調味料",
+      imageId: null,
       imageUrl: null,
       bestBeforeAt: "2024-12-31",
       expiresAt: "2024-11-30",
@@ -109,6 +110,7 @@ test("seasoningUpdateDataSchema: 単体データの検証ができる", () => {
     name: "醤油",
     seasoningTypeId: 1,
     seasoningTypeName: "液体調味料",
+    imageId: null,
     imageUrl: null,
     bestBeforeAt: "2024-12-31",
     expiresAt: "2024-11-30",

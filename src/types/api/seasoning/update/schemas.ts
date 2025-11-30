@@ -20,7 +20,12 @@ export const seasoningUpdateRequestSchema = z.object({
     .number({ message: "調味料の種類を選択してください" })
     .int()
     .min(1, "調味料の種類を選択してください"),
-  image: z.string().nullable().optional(),
+  imageId: z
+    .number({ message: "画像IDは数値である必要があります" })
+    .int("画像IDは整数である必要があります")
+    .min(1, "画像IDは1以上である必要があります")
+    .nullable()
+    .optional(),
   bestBeforeAt: z.string().date().nullable().optional(),
   expiresAt: z.string().date().nullable().optional(),
   purchasedAt: z.string().date().nullable().optional(),
@@ -34,6 +39,7 @@ export const seasoningUpdateDataSchema = z.object({
   name: z.string(),
   seasoningTypeId: z.number().int().positive(),
   seasoningTypeName: z.string(),
+  imageId: z.number().int().positive().nullable(),
   imageUrl: z.string().nullable(),
   bestBeforeAt: z.string().date().nullable(),
   expiresAt: z.string().date().nullable(),
