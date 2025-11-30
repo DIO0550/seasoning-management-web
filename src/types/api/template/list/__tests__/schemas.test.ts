@@ -7,7 +7,7 @@ import {
 
 const baseQuery = {
   page: 1,
-  limit: 20,
+  pageSize: 20,
   search: null,
 };
 
@@ -16,12 +16,12 @@ test("templateListQuerySchema: 基本的なクエリを受け入れる", () => {
 });
 
 test("templateListQuerySchema: search ありでも有効", () => {
-  const payload = { ...baseQuery, page: 2, limit: 10, search: "和食" };
+  const payload = { ...baseQuery, page: 2, pageSize: 10, search: "和食" };
   expect(() => templateListQuerySchema.parse(payload)).not.toThrow();
 });
 
-test("templateListQuerySchema: limit が100を超えると失敗", () => {
-  const payload = { ...baseQuery, limit: 101 };
+test("templateListQuerySchema: pageSize が100を超えると失敗", () => {
+  const payload = { ...baseQuery, pageSize: 101 };
   expect(() => templateListQuerySchema.parse(payload)).toThrow();
 });
 

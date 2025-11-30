@@ -7,11 +7,11 @@ import { paginationSchema } from "@/types/api/common/pagination";
  */
 export const templateListQuerySchema = z.object({
   page: z.number().int().min(1, "ページ番号は1以上である必要があります"),
-  limit: z
+  pageSize: z
     .number()
     .int()
-    .min(1, "リミットは1以上である必要があります")
-    .max(100, "リミットは100以下である必要があります"),
+    .min(1, "ページサイズは1以上である必要があります")
+    .max(100, "ページサイズは100以下である必要があります"),
   search: z.string().nullable(),
 });
 

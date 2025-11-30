@@ -1,7 +1,7 @@
 import { ZodError, ZodIssue, ZodIssueCode } from "zod";
 
 // フィールド名の型定義
-type FieldName = "page" | "limit" | "search";
+type FieldName = "page" | "pageSize" | "search";
 
 /**
  * テンプレート一覧APIのエラーコード
@@ -66,9 +66,9 @@ const pageFieldErrorCode = (
 };
 
 /**
- * limitフィールドのZodエラーコードに対応するテンプレート一覧APIエラーコード
+ * pageSizeフィールドのZodエラーコードに対応するテンプレート一覧APIエラーコード
  */
-const limitFieldErrorCode = (
+const pageSizeFieldErrorCode = (
   zodErrorCode: ZodIssueCode
 ): TemplateListErrorCode => {
   switch (zodErrorCode) {
@@ -116,8 +116,8 @@ const issueToErrorCode = (issue: ZodIssue): TemplateListErrorCode => {
     return pageFieldErrorCode(issue.code);
   }
 
-  if (isFieldName(issue.path, "limit")) {
-    return limitFieldErrorCode(issue.code);
+  if (isFieldName(issue.path, "pageSize")) {
+    return pageSizeFieldErrorCode(issue.code);
   }
 
   if (isFieldName(issue.path, "search")) {
