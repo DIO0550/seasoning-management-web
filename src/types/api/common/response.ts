@@ -5,22 +5,35 @@ import {
 } from "@/types/api/common/pagination";
 
 /**
- * 一般的な成功レスポンスのスキーマ
+ * 一般的な成功レスポンスのスキーマを生成する
+ * @param dataSchema - レスポンスの data フィールドに格納されるデータのスキーマ
+ * @returns data フィールドを持つオブジェクトスキーマ
  */
-export const successResponseSchema = <T extends z.ZodTypeAny>(
-  dataSchema: T
-) => {
+export const successResponseSchema = <T extends z.ZodType>(dataSchema: T) => {
   return z.object({
     data: dataSchema,
   });
 };
 
 /**
- * ページネーション付きレスポンスのスキーマ
+ * ページネーション付きレスポンスのスキーマを生成する
+ *
+ * @param itemSchema - 配列内の各アイテムのスキーマ
+ * @param options - オプション設定
+ * @param options.summarySchema - サマリー情報のスキーマ（指定時のみ summary フィールドが追加される）
+ * @returns data, meta, および任意で summary フィールドを持つオブジェクトスキーマ
+ *
+ * @example
+ * // サマリーなし
+ * const schema = paginatedResponseSchema(itemSchema);
+ *
+ * @example
+ * // サマリーあり
+ * const schema = paginatedResponseSchema(itemSchema, { summarySchema: summarySchema });
  */
 export const paginatedResponseSchema = <
-  TItem extends z.ZodTypeAny,
-  TSummary extends z.ZodTypeAny | undefined = undefined
+  TItem extends z.ZodType,
+  TSummary extends z.ZodType | undefined = undefined
 >(
   itemSchema: TItem,
   options?: { summarySchema?: TSummary }
@@ -49,6 +62,10 @@ export type DataResponse<T> = {
 
 /**
  * ページネーション付きレスポンス型
+ */
+
+/**
+ * TSummary が undefined の場合は空オブジェクト、それ以外は { summary: TSummary } を表す内部ヘルパー型
  */
 type SummaryPart<TSummary> = TSummary extends undefined
   ? Record<string, never>
