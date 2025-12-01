@@ -2,6 +2,7 @@ import { z } from "zod";
 import {
   seasoningDeleteRequestSchema,
   seasoningDeleteResponseSchema,
+  seasoningDeleteDataSchema,
 } from "@/types/api/seasoning/delete/schemas";
 
 /**
@@ -14,7 +15,7 @@ export type SeasoningDeleteRequest = z.infer<
 /**
  * 調味料削除成功時のデータ型
  */
-export type SeasoningDeleteData = z.infer<typeof seasoningDeleteResponseSchema>;
+export type SeasoningDeleteData = z.infer<typeof seasoningDeleteDataSchema>;
 
 /**
  * 調味料削除レスポンスの型
