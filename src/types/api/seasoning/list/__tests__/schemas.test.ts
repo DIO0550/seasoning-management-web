@@ -1,10 +1,10 @@
 import { test, expect } from "vitest";
 import {
-  SeasoningListQuerySchema,
-  SeasoningListResponseSchema,
+  seasoningListQuerySchema,
+  seasoningListResponseSchema,
 } from "@/types/api/seasoning/list/types";
 
-test("SeasoningListQuerySchema: 基本的なクエリを受け入れる", () => {
+test("seasoningListQuerySchema: 基本的なクエリを受け入れる", () => {
   const payload = {
     page: 1,
     pageSize: 20,
@@ -13,16 +13,16 @@ test("SeasoningListQuerySchema: 基本的なクエリを受け入れる", () => 
     sort: "expiryAsc",
   };
 
-  expect(() => SeasoningListQuerySchema.parse(payload)).not.toThrow();
+  expect(() => seasoningListQuerySchema.parse(payload)).not.toThrow();
 });
 
-test("SeasoningListQuerySchema: page は1未満で失敗する", () => {
+test("seasoningListQuerySchema: page は1未満で失敗する", () => {
   expect(() =>
-    SeasoningListQuerySchema.parse({ page: 0, pageSize: 10 })
+    seasoningListQuerySchema.parse({ page: 0, pageSize: 10 })
   ).toThrow();
 });
 
-test("SeasoningListResponseSchema: メタ情報付き一覧を受け入れる", () => {
+test("seasoningListResponseSchema: メタ情報付き一覧を受け入れる", () => {
   const payload = {
     data: [
       {
@@ -52,5 +52,5 @@ test("SeasoningListResponseSchema: メタ情報付き一覧を受け入れる", 
     },
   };
 
-  expect(() => SeasoningListResponseSchema.parse(payload)).not.toThrow();
+  expect(() => seasoningListResponseSchema.parse(payload)).not.toThrow();
 });

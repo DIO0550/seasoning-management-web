@@ -50,13 +50,13 @@ export type SeasoningListSummary = z.infer<typeof SeasoningListSummarySchema>;
 /**
  * 調味料一覧レスポンス
  */
-export const SeasoningListResponseSchema = z.object({
+export const seasoningListResponseSchema = z.object({
   data: z.array(SeasoningListItemSchema),
   meta: PaginationMetaSchema,
   summary: SeasoningListSummarySchema,
 });
 
-export type SeasoningListResponse = z.infer<typeof SeasoningListResponseSchema>;
+export type SeasoningListResponse = z.infer<typeof seasoningListResponseSchema>;
 
 /**
  * ソートキーの型定義
@@ -73,7 +73,7 @@ export type SortKey = z.infer<typeof SortKeySchema>;
 /**
  * 調味料一覧取得クエリパラメータ
  */
-export const SeasoningListQuerySchema = z.object({
+export const seasoningListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
   typeId: z.coerce.number().int().min(1).optional(),
@@ -82,7 +82,7 @@ export const SeasoningListQuerySchema = z.object({
   sort: SortKeySchema.default("expiryAsc"),
 });
 
-export type SeasoningListQuery = z.infer<typeof SeasoningListQuerySchema>;
+export type SeasoningListQuery = z.infer<typeof seasoningListQuerySchema>;
 
 /**
  * エラーレスポンスの詳細
