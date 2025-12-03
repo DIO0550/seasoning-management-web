@@ -1,8 +1,8 @@
 import { test, expect } from "vitest";
 import {
-  templateListResponseSchema,
-  templateListQuerySchema,
-  templateListDataSchema,
+  TemplateListResponseSchema,
+  TemplateListQuerySchema,
+  TemplateListDataSchema,
 } from "@/types/api/template/list/schemas";
 
 const baseQuery = {
@@ -12,17 +12,17 @@ const baseQuery = {
 };
 
 test("templateListQuerySchema: 基本的なクエリを受け入れる", () => {
-  expect(() => templateListQuerySchema.parse(baseQuery)).not.toThrow();
+  expect(() => TemplateListQuerySchema.parse(baseQuery)).not.toThrow();
 });
 
 test("templateListQuerySchema: search ありでも有効", () => {
   const payload = { ...baseQuery, page: 2, pageSize: 10, search: "和食" };
-  expect(() => templateListQuerySchema.parse(payload)).not.toThrow();
+  expect(() => TemplateListQuerySchema.parse(payload)).not.toThrow();
 });
 
 test("templateListQuerySchema: pageSize が100を超えると失敗", () => {
   const payload = { ...baseQuery, pageSize: 101 };
-  expect(() => templateListQuerySchema.parse(payload)).toThrow();
+  expect(() => TemplateListQuerySchema.parse(payload)).toThrow();
 });
 
 const baseResponse = {
@@ -56,13 +56,13 @@ const baseResponse = {
 };
 
 test("templateListResponseSchema: 正常レスポンスを受け入れる", () => {
-  expect(() => templateListResponseSchema.parse(baseResponse)).not.toThrow();
+  expect(() => TemplateListResponseSchema.parse(baseResponse)).not.toThrow();
 });
 
 test("templateListResponseSchema: data が無いと失敗", () => {
-  expect(() => templateListResponseSchema.parse({})).toThrow();
+  expect(() => TemplateListResponseSchema.parse({})).toThrow();
 });
 
 test("templateListDataSchema: 一覧データ単体を検証できる", () => {
-  expect(() => templateListDataSchema.parse(baseResponse.data)).not.toThrow();
+  expect(() => TemplateListDataSchema.parse(baseResponse.data)).not.toThrow();
 });
