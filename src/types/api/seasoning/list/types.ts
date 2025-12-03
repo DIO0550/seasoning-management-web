@@ -4,20 +4,7 @@
  */
 
 import { z } from "zod";
-
-/**
- * ページネーションメタデータ
- */
-export const PaginationMetaSchema = z.object({
-  page: z.number().int().min(1),
-  pageSize: z.number().int().min(1),
-  totalItems: z.number().int().min(0),
-  totalPages: z.number().int().min(0),
-  hasNext: z.boolean().default(false),
-  hasPrevious: z.boolean().default(false),
-});
-
-export type PaginationMeta = z.infer<typeof PaginationMetaSchema>;
+import { paginationSchema } from "@/types/api/common/pagination";
 
 /**
  * 調味料一覧アイテム
@@ -50,13 +37,13 @@ export type SeasoningListSummary = z.infer<typeof SeasoningListSummarySchema>;
 /**
  * 調味料一覧レスポンス
  */
-export const seasoningListResponseSchema = z.object({
+export const SeasoningListResponseSchema = z.object({
   data: z.array(SeasoningListItemSchema),
-  meta: PaginationMetaSchema,
+  meta: paginationSchema,
   summary: SeasoningListSummarySchema,
 });
 
-export type SeasoningListResponse = z.infer<typeof seasoningListResponseSchema>;
+export type SeasoningListResponse = z.infer<typeof SeasoningListResponseSchema>;
 
 /**
  * ソートキーの型定義
@@ -73,7 +60,7 @@ export type SortKey = z.infer<typeof SortKeySchema>;
 /**
  * 調味料一覧取得クエリパラメータ
  */
-export const seasoningListQuerySchema = z.object({
+export const SeasoningListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
   typeId: z.coerce.number().int().min(1).optional(),
@@ -82,7 +69,7 @@ export const seasoningListQuerySchema = z.object({
   sort: SortKeySchema.default("expiryAsc"),
 });
 
-export type SeasoningListQuery = z.infer<typeof seasoningListQuerySchema>;
+export type SeasoningListQuery = z.infer<typeof SeasoningListQuerySchema>;
 
 /**
  * エラーレスポンスの詳細

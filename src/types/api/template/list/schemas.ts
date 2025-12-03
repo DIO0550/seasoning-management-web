@@ -4,14 +4,19 @@ import { paginatedResponseSchema } from "@/types/api/common/response";
 /**
  * テンプレート一覧クエリパラメータのスキーマ
  */
-export const templateListQuerySchema = z.object({
-  page: z.number().int().min(1, "ページ番号は1以上である必要があります"),
+export const TemplateListQuerySchema = z.object({
+  page: z
+    .number()
+    .int()
+    .min(1, "ページ番号は1以上である必要があります")
+    .default(1),
   pageSize: z
     .number()
     .int()
     .min(1, "ページサイズは1以上である必要があります")
-    .max(100, "ページサイズは100以下である必要があります"),
-  search: z.string().nullable(),
+    .max(100, "ページサイズは100以下である必要があります")
+    .default(20),
+  search: z.string().nullable().default(null),
 });
 
 /**
@@ -41,10 +46,10 @@ const templateItemSchema = z.object({
 /**
  * テンプレート一覧データのスキーマ
  */
-export const templateListDataSchema = z.array(templateItemSchema);
+export const TemplateListDataSchema = z.array(templateItemSchema);
 
 /**
  * テンプレート一覧レスポンスのスキーマ
  */
-export const templateListResponseSchema =
+export const TemplateListResponseSchema =
   paginatedResponseSchema(templateItemSchema);

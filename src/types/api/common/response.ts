@@ -20,7 +20,7 @@ export const successResponseSchema = <T extends z.ZodType>(dataSchema: T) => {
  *
  * @param itemSchema - 配列内の各アイテムのスキーマ
  * @param options - オプション設定
- * @param options.summarySchema - サマリー情報のスキーマ（指定時のみ summary フィールドが追加される）
+ * @param options.summarySchema - サマリー情報のスキーマ。指定した場合のみ `summary` フィールドが必須で追加される。未指定の場合は `summary` を持たないレスポンスを許容する。
  * @returns data, meta, および任意で summary フィールドを持つオブジェクトスキーマ
  *
  * @example
@@ -64,9 +64,7 @@ export type DataResponse<T> = {
  * ページネーション付きレスポンス型
  */
 
-/**
- * TSummary が undefined の場合は空オブジェクト、それ以外は { summary: TSummary } を表す内部ヘルパー型
- */
+// 内部型: TSummary が undefined の場合は空オブジェクト、それ以外は { summary: TSummary } を表す
 type SummaryPart<TSummary> = TSummary extends undefined
   ? Record<string, never>
   : { summary: TSummary };
