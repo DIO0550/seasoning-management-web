@@ -66,7 +66,7 @@ export type DataResponse<T> = {
  * ページネーション付きレスポンス型
  */
 
-// 内部型: TSummary が undefined の場合は空オブジェクト、それ以外は { summary: TSummary } を表す
+// 内部型: PaginatedResponse 用の summary 部分。TSummary が undefined なら空オブジェクト、それ以外は { summary: TSummary }
 type SummaryPart<TSummary> = TSummary extends undefined
   ? Record<string, never>
   : { summary: TSummary };
