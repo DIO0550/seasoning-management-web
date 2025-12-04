@@ -2,7 +2,6 @@ import { test, expect } from "vitest";
 import {
   templateListResponseSchema,
   templateListQuerySchema,
-  templateListDataSchema,
 } from "@/types/api/template/list/schemas";
 
 const baseQuery = {
@@ -61,8 +60,4 @@ test("templateListResponseSchema: 正常レスポンスを受け入れる", () =
 
 test("templateListResponseSchema: data が無いと失敗", () => {
   expect(() => templateListResponseSchema.parse({})).toThrow();
-});
-
-test("templateListDataSchema: 一覧データ単体を検証できる", () => {
-  expect(() => templateListDataSchema.parse(baseResponse.data)).not.toThrow();
 });

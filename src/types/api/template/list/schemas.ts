@@ -44,11 +44,6 @@ const templateItemSchema = z.object({
 });
 
 /**
- * テンプレート一覧データのスキーマ
- */
-export const templateListDataSchema = z.array(templateItemSchema);
-
-/**
  * テンプレート一覧レスポンスのスキーマ
  */
 export const templateListResponseSchema =

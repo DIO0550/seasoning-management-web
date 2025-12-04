@@ -2,7 +2,6 @@ import { z } from "zod";
 import {
   templateListQuerySchema,
   templateListResponseSchema,
-  templateListDataSchema,
 } from "@/types/api/template/list/schemas";
 
 /**
@@ -13,7 +12,14 @@ export type TemplateListQuery = z.infer<typeof templateListQuerySchema>;
 /**
  * テンプレート一覧成功時のデータ型
  */
-export type TemplateListData = z.infer<typeof templateListDataSchema>;
+export type TemplateListData = z.infer<
+  typeof templateListResponseSchema
+>["data"];
+
+/**
+ * テンプレート一覧アイテムの型
+ */
+export type TemplateListItem = TemplateListData[number];
 
 /**
  * テンプレート一覧レスポンスの型
