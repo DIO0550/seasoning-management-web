@@ -18,6 +18,8 @@ export const successResponseSchema = <T extends z.ZodType>(dataSchema: T) => {
 /**
  * ページネーション付きレスポンスのスキーマを生成する
  *
+ * @template TItem - `data` 配列の各要素となるスキーマ
+ * @template TSummary - `summary` に割り当てるスキーマ（未指定なら `summary` は存在しない）
  * @param itemSchema - 配列内の各アイテムのスキーマ
  * @param options - オプション設定
  * @param options.summarySchema - サマリー情報のスキーマ。指定した場合のみ `summary` フィールドが必須で追加される。未指定の場合は `summary` を持たないレスポンスを許容する。
