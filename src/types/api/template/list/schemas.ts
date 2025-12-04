@@ -4,7 +4,7 @@ import { paginatedResponseSchema } from "@/types/api/common/response";
 /**
  * テンプレート一覧クエリパラメータのスキーマ
  */
-export const TemplateListQuerySchema = z.object({
+export const templateListQuerySchema = z.object({
   page: z
     .number()
     .int()
@@ -46,10 +46,10 @@ const templateItemSchema = z.object({
 /**
  * テンプレート一覧データのスキーマ
  */
-export const TemplateListDataSchema = z.array(templateItemSchema);
+export const templateListDataSchema = z.array(templateItemSchema);
 
 /**
  * テンプレート一覧レスポンスのスキーマ
  */
-export const TemplateListResponseSchema =
+export const templateListResponseSchema =
   paginatedResponseSchema(templateItemSchema);
