@@ -9,7 +9,7 @@ import { paginationSchema } from "@/types/api/common/pagination";
 /**
  * 調味料一覧アイテム
  */
-export const SeasoningListItemSchema = z.object({
+export const seasoningListItemSchema = z.object({
   id: z.number().int().min(1),
   name: z.string().max(100),
   typeId: z.number().int().min(1),
@@ -21,55 +21,55 @@ export const SeasoningListItemSchema = z.object({
   expiryStatus: z.enum(["fresh", "expiring_soon", "expired", "unknown"]),
 });
 
-export type SeasoningListItem = z.infer<typeof SeasoningListItemSchema>;
+export type SeasoningListItem = z.infer<typeof seasoningListItemSchema>;
 
 /**
  * 調味料一覧サマリー
  */
-export const SeasoningListSummarySchema = z.object({
+export const seasoningListSummarySchema = z.object({
   totalCount: z.number().int().min(0),
   expiringCount: z.number().int().min(0),
   expiredCount: z.number().int().min(0),
 });
 
-export type SeasoningListSummary = z.infer<typeof SeasoningListSummarySchema>;
+export type SeasoningListSummary = z.infer<typeof seasoningListSummarySchema>;
 
 /**
  * 調味料一覧レスポンス
  */
-export const SeasoningListResponseSchema = z.object({
-  data: z.array(SeasoningListItemSchema),
+export const seasoningListResponseSchema = z.object({
+  data: z.array(seasoningListItemSchema),
   meta: paginationSchema,
-  summary: SeasoningListSummarySchema,
+  summary: seasoningListSummarySchema,
 });
 
-export type SeasoningListResponse = z.infer<typeof SeasoningListResponseSchema>;
+export type SeasoningListResponse = z.infer<typeof seasoningListResponseSchema>;
 
 /**
  * ソートキーの型定義
  */
-export const SortKeySchema = z.enum([
+export const seasoningListSortKeySchema = z.enum([
   "expiryAsc",
   "expiryDesc",
   "nameAsc",
   "nameDesc",
 ]);
 
-export type SortKey = z.infer<typeof SortKeySchema>;
+export type SortKey = z.infer<typeof seasoningListSortKeySchema>;
 
 /**
  * 調味料一覧取得クエリパラメータ
  */
-export const SeasoningListQuerySchema = z.object({
+export const seasoningListQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(20),
   typeId: z.coerce.number().int().min(1).optional(),
   expiresWithinDays: z.coerce.number().int().min(0).optional(),
   search: z.string().max(100).optional(),
-  sort: SortKeySchema.default("expiryAsc"),
+  sort: seasoningListSortKeySchema.default("expiryAsc"),
 });
 
-export type SeasoningListQuery = z.infer<typeof SeasoningListQuerySchema>;
+export type SeasoningListQuery = z.infer<typeof seasoningListQuerySchema>;
 
 /**
  * エラーレスポンスの詳細

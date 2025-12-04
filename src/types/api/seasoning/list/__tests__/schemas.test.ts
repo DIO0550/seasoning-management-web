@@ -1,7 +1,7 @@
 import { test, expect } from "vitest";
 import {
-  SeasoningListQuerySchema,
-  SeasoningListResponseSchema,
+  seasoningListQuerySchema,
+  seasoningListResponseSchema,
 } from "@/types/api/seasoning/list/types";
 
 test("seasoningListQuerySchema: 基本的なクエリを受け入れる", () => {
@@ -13,12 +13,12 @@ test("seasoningListQuerySchema: 基本的なクエリを受け入れる", () => 
     sort: "expiryAsc",
   };
 
-  expect(() => SeasoningListQuerySchema.parse(payload)).not.toThrow();
+  expect(() => seasoningListQuerySchema.parse(payload)).not.toThrow();
 });
 
 test("seasoningListQuerySchema: page は1未満で失敗する", () => {
   expect(() =>
-    SeasoningListQuerySchema.parse({ page: 0, pageSize: 10 })
+    seasoningListQuerySchema.parse({ page: 0, pageSize: 10 })
   ).toThrow();
 });
 
@@ -52,5 +52,5 @@ test("seasoningListResponseSchema: メタ情報付き一覧を受け入れる", 
     },
   };
 
-  expect(() => SeasoningListResponseSchema.parse(payload)).not.toThrow();
+  expect(() => seasoningListResponseSchema.parse(payload)).not.toThrow();
 });
