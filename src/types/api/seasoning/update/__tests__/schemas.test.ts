@@ -38,6 +38,26 @@ test("seasoningUpdateRequestSchema: imageId を指定しても有効", () => {
   expect(() => seasoningUpdateRequestSchema.parse(payload)).not.toThrow();
 });
 
+test("seasoningUpdateRequestSchema: imageId が数値でない場合は失敗", () => {
+  const payload = {
+    ...validRequestBase,
+    imageId: "invalid",
+  };
+  expect(() => seasoningUpdateRequestSchema.parse(payload)).toThrow(
+    "画像IDは数値である必要があります"
+  );
+});
+
+test("seasoningUpdateRequestSchema: imageId が0以下の場合は失敗", () => {
+  const payload = {
+    ...validRequestBase,
+    imageId: 0,
+  };
+  expect(() => seasoningUpdateRequestSchema.parse(payload)).toThrow(
+    "画像IDは1以上である必要があります"
+  );
+});
+
 test("seasoningUpdateRequestSchema: id 未指定は失敗", () => {
   const payload = {
     name: "soysauce",
@@ -121,3 +141,4 @@ test("seasoningUpdateDataSchema: 単体データの検証ができる", () => {
 
   expect(() => seasoningUpdateDataSchema.parse(payload)).not.toThrow();
 });
+
