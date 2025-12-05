@@ -16,7 +16,7 @@ export const templateListQuerySchema = z.object({
     .min(1, "ページサイズは1以上である必要があります")
     .max(100, "ページサイズは100以下である必要があります")
     .default(20),
-  search: z.string().optional(),
+  search: z.string().nullable().default(null),
 });
 
 /**

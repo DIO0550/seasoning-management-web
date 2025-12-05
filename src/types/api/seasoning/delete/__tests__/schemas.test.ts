@@ -2,6 +2,7 @@ import { test, expect } from "vitest";
 import {
   seasoningDeleteRequestSchema,
   seasoningDeleteResponseSchema,
+  seasoningDeleteDataSchema,
 } from "@/types/api/seasoning/delete/schemas";
 
 test("seasoningDeleteRequestSchema: 有効な調味料削除リクエストを受け入れる", () => {
@@ -85,4 +86,12 @@ test("seasoningDeleteResponseSchema: data.deletedAtが不正な日時形式の�
   };
 
   expect(() => seasoningDeleteResponseSchema.parse(invalidResponse)).toThrow();
+});
+
+test("seasoningDeleteDataSchema: 単体データを検証できる", () => {
+  const payload = {
+    id: 1,
+    deletedAt: "2024-01-01T00:00:00Z",
+  };
+  expect(() => seasoningDeleteDataSchema.parse(payload)).not.toThrow();
 });

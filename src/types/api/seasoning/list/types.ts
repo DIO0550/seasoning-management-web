@@ -75,8 +75,8 @@ export type SeasoningListQuery = z.infer<typeof seasoningListQuerySchema>;
  * 共通定義を再エクスポート
  */
 export {
-  errorDetailSchema as ErrorDetailSchema,
+  errorDetailSchema,
   type ErrorDetail,
-  errorResponseSchema as ErrorResponseSchema,
+  errorResponseSchema,
   type ErrorResponse,
 } from "@/types/api/common/error";
