@@ -20,6 +20,25 @@ test("templateAddRequestSchema: description を省略しても成功", () => {
   expect(() => templateAddRequestSchema.parse(payload)).not.toThrow();
 });
 
+test("templateAddRequestSchema: imageId を指定しても成功", () => {
+  const payload = { ...baseRequest, imageId: 10 };
+  expect(() => templateAddRequestSchema.parse(payload)).not.toThrow();
+});
+
+test("templateAddRequestSchema: imageId が数値でない場合は失敗", () => {
+  const payload = { ...baseRequest, imageId: "invalid" };
+  expect(() => templateAddRequestSchema.parse(payload)).toThrow(
+    "画像IDは数値である必要があります"
+  );
+});
+
+test("templateAddRequestSchema: imageId が0以下の場合は失敗", () => {
+  const payload = { ...baseRequest, imageId: 0 };
+  expect(() => templateAddRequestSchema.parse(payload)).toThrow(
+    "画像IDは1以上である必要があります"
+  );
+});
+
 test("templateAddRequestSchema: name が空文字だと失敗", () => {
   const payload = { ...baseRequest, name: "" };
   expect(() => templateAddRequestSchema.parse(payload)).toThrow();
@@ -44,6 +63,7 @@ test("templateAddResponseSchema: 正常レスポンスを受け入れる", () =>
           name: "醤油",
           seasoningTypeId: 1,
           seasoningTypeName: "液体調味料",
+          imageId: null,
           imageUrl: null,
         },
       ],
@@ -72,6 +92,7 @@ test("templateAddDataSchema: 単体データを検証できる", () => {
         name: "醤油",
         seasoningTypeId: 1,
         seasoningTypeName: "液体調味料",
+        imageId: null,
         imageUrl: null,
       },
     ],
