@@ -18,11 +18,17 @@ export const successResponseSchema = <T extends z.ZodType>(dataSchema: T) => {
 /**
  * ページネーション付きレスポンスのスキーマを生成する
  *
- * @template TItem - `data` 配列の各要素となるスキーマ
- * @template TSummary - `summary` に割り当てるスキーマ（未指定なら `summary` は存在しない）
+ * @template TItem - 配列内の各アイテムの型
+ * @template TSummary - サマリー情報の型（省略可能、デフォルトは undefined）
+ *
+ * @description
+ * - `data`: アイテムの配列
+ * - `meta`: ページネーション情報
+ * - `summary`: サマリー情報（TSummary が指定された場合のみ追加）
+ *
  * @param itemSchema - 配列内の各アイテムのスキーマ
  * @param options - オプション設定
- * @param options.summarySchema - サマリー情報のスキーマ。指定した場合のみ `summary` フィールドが必須で追加される。未指定の場合は `summary` を持たないレスポンスを許容する。
+ * @param options.summarySchema - サマリー情報のスキーマ（指定時のみ summary フィールドが追加される）
  * @returns data, meta, および任意で summary フィールドを持つオブジェクトスキーマ
  *
  * @example
@@ -64,9 +70,17 @@ export type DataResponse<T> = {
 
 /**
  * ページネーション付きレスポンス型
+ *
+ * @template TItem - 配列内の各アイテムの型
+ * @template TSummary - サマリー情報の型（省略可能、デフォルトは undefined）
+ *
+ * @description
+ * - `data`: アイテムの配列
+ * - `meta`: ページネーション情報
+ * - `summary`: サマリー情報（TSummary が指定された場合のみ追加）
  */
 
-// 内部型: PaginatedResponse 用の summary 部分。TSummary が undefined なら空オブジェクト、それ以外は { summary: TSummary }
+// 内部型: PaginatedResponse 用の summary 部分の型
 type SummaryPart<TSummary> = TSummary extends undefined
   ? Record<string, never>
   : { summary: TSummary };
