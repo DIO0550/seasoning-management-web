@@ -36,6 +36,8 @@ test("templateAddResponseSchema: 正常レスポンスを受け入れる", () =>
       id: 1,
       name: "和食の基本",
       description: baseRequest.description,
+      imageId: null,
+      imageUrl: null,
       seasonings: [
         {
           id: 1,
@@ -62,6 +64,8 @@ test("templateAddDataSchema: 単体データを検証できる", () => {
     id: 1,
     name: "和食の基本",
     description: baseRequest.description,
+    imageId: null,
+    imageUrl: null,
     seasonings: [
       {
         id: 1,

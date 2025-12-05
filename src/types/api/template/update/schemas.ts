@@ -41,6 +41,8 @@ export const templateUpdateDataSchema = z.object({
   id: z.number().int().positive(),
   name: z.string(),
   description: z.string().nullable(),
+  imageId: z.number().int().positive().nullable(),
+  imageUrl: z.string().nullable(),
   seasonings: z.array(templateSeasoningSchema),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

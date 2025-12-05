@@ -40,6 +40,8 @@ const baseResponse = {
     id: 1,
     name: "朝食セット",
     description: baseRequest.description,
+    imageId: null,
+    imageUrl: null,
     seasonings: [
       {
         id: 1,
