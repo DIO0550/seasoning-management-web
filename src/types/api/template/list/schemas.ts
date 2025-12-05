@@ -5,18 +5,18 @@ import { paginatedResponseSchema } from "@/types/api/common/response";
  * テンプレート一覧クエリパラメータのスキーマ
  */
 export const templateListQuerySchema = z.object({
-  page: z
+  page: z.coerce
     .number()
     .int()
     .min(1, "ページ番号は1以上である必要があります")
     .default(1),
-  pageSize: z
+  pageSize: z.coerce
     .number()
     .int()
     .min(1, "ページサイズは1以上である必要があります")
     .max(100, "ページサイズは100以下である必要があります")
     .default(20),
-  search: z.string().nullable().default(null),
+  search: z.string().optional(),
 });
 
 /**

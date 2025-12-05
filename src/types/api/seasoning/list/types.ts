@@ -4,7 +4,7 @@
  */
 
 import { z } from "zod";
-import { paginationSchema } from "@/types/api/common/pagination";
+import { paginatedResponseSchema } from "@/types/api/common/response";
 
 /**
  * 調味料一覧アイテム
@@ -37,11 +37,10 @@ export type SeasoningListSummary = z.infer<typeof seasoningListSummarySchema>;
 /**
  * 調味料一覧レスポンス
  */
-export const seasoningListResponseSchema = z.object({
-  data: z.array(seasoningListItemSchema),
-  meta: paginationSchema,
-  summary: seasoningListSummarySchema,
-});
+export const seasoningListResponseSchema = paginatedResponseSchema(
+  seasoningListItemSchema,
+  { summarySchema: seasoningListSummarySchema }
+);
 
 export type SeasoningListResponse = z.infer<typeof seasoningListResponseSchema>;
 
@@ -72,23 +71,12 @@ export const seasoningListQuerySchema = z.object({
 export type SeasoningListQuery = z.infer<typeof seasoningListQuerySchema>;
 
 /**
- * エラーレスポンスの詳細
- */
-export const ErrorDetailSchema = z.object({
-  field: z.string().optional(),
-  message: z.string(),
-  code: z.string().optional(),
-});
-
-export type ErrorDetail = z.infer<typeof ErrorDetailSchema>;
-
-/**
  * エラーレスポンス
+ * 共通定義を再エクスポート
  */
-export const ErrorResponseSchema = z.object({
-  code: z.string(),
-  message: z.string(),
-  details: z.array(ErrorDetailSchema).optional(),
-});
-
-export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;
+export {
+  errorDetailSchema as ErrorDetailSchema,
+  type ErrorDetail,
+  errorResponseSchema as ErrorResponseSchema,
+  type ErrorResponse,
+} from "@/types/api/common/error";

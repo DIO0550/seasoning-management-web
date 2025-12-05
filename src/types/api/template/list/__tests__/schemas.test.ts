@@ -7,11 +7,17 @@ import {
 const baseQuery = {
   page: 1,
   pageSize: 20,
-  search: null,
 };
 
 test("templateListQuerySchema: 基本的なクエリを受け入れる", () => {
   expect(() => templateListQuerySchema.parse(baseQuery)).not.toThrow();
+});
+
+test("templateListQuerySchema: 文字列の数値を変換する", () => {
+  const payload = { page: "2", pageSize: "10" };
+  const result = templateListQuerySchema.parse(payload);
+  expect(result.page).toBe(2);
+  expect(result.pageSize).toBe(10);
 });
 
 test("templateListQuerySchema: search ありでも有効", () => {
