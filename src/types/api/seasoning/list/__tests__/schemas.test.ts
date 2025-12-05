@@ -16,6 +16,21 @@ test("seasoningListQuerySchema: 基本的なクエリを受け入れる", () => 
   expect(() => seasoningListQuerySchema.parse(payload)).not.toThrow();
 });
 
+test("seasoningListQuerySchema: 文字列の数値を変換する", () => {
+  const payload = {
+    page: "2",
+    pageSize: "50",
+    typeId: "3",
+    expiresWithinDays: "7",
+  };
+
+  const result = seasoningListQuerySchema.parse(payload);
+  expect(result.page).toBe(2);
+  expect(result.pageSize).toBe(50);
+  expect(result.typeId).toBe(3);
+  expect(result.expiresWithinDays).toBe(7);
+});
+
 test("seasoningListQuerySchema: page は1未満で失敗する", () => {
   expect(() =>
     seasoningListQuerySchema.parse({ page: 0, pageSize: 10 })
