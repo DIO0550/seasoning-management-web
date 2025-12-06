@@ -8,13 +8,6 @@
     }
   ],
   "servers": {
-    "github": {
-      "command": "sh",
-      "args": [
-        "-c",
-        "docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN=\"$GITHUB_PERSONAL_ACCESS_TOKEN\" ghcr.io/github/github-mcp-server"
-      ]
-    },
     "github-mcp": {
       "command": "/usr/local/bin/github-mcp-server",
       "args": ["stdio"],
@@ -23,8 +16,8 @@
       }
     },
     "prompt-mcp-server": {
-      "type": "sse",
-      "url": "http://prompt-mcp-server:3002/sse"
+      "type": "http",
+      "url": "http://prompt-mcp-server:3002/mcp"
     }
   }
 }

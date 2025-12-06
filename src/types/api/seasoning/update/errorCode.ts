@@ -5,7 +5,7 @@ type FieldName =
   | "id"
   | "name"
   | "seasoningTypeId"
-  | "image"
+  | "imageId"
   | "bestBeforeAt"
   | "expiresAt"
   | "purchasedAt";
@@ -20,8 +20,7 @@ export type SeasoningUpdateErrorCode =
   | "VALIDATION_ERROR_NAME_TOO_LONG"
   | "VALIDATION_ERROR_NAME_INVALID_FORMAT"
   | "VALIDATION_ERROR_TYPE_REQUIRED"
-  | "VALIDATION_ERROR_IMAGE_INVALID_TYPE"
-  | "VALIDATION_ERROR_IMAGE_TOO_LARGE"
+  | "VALIDATION_ERROR_IMAGE_ID_INVALID"
   | "VALIDATION_ERROR_DATE_INVALID"
   | "SEASONING_NOT_FOUND"
   | "DUPLICATE_NAME"
@@ -59,8 +58,7 @@ export const SeasoningUpdateErrorCode = {
   NAME_TOO_LONG: "VALIDATION_ERROR_NAME_TOO_LONG" as const,
   NAME_INVALID_FORMAT: "VALIDATION_ERROR_NAME_INVALID_FORMAT" as const,
   TYPE_REQUIRED: "VALIDATION_ERROR_TYPE_REQUIRED" as const,
-  IMAGE_INVALID_TYPE: "VALIDATION_ERROR_IMAGE_INVALID_TYPE" as const,
-  IMAGE_TOO_LARGE: "VALIDATION_ERROR_IMAGE_TOO_LARGE" as const,
+  IMAGE_ID_INVALID: "VALIDATION_ERROR_IMAGE_ID_INVALID" as const,
   DATE_INVALID: "VALIDATION_ERROR_DATE_INVALID" as const,
   SEASONING_NOT_FOUND: "SEASONING_NOT_FOUND" as const,
   DUPLICATE_NAME: "DUPLICATE_NAME" as const,
@@ -117,18 +115,17 @@ const seasoningTypeIdFieldErrorCode = (
 };
 
 /**
- * imageフィールドのZodエラーコードに対応する調味料更新APIエラーコード
+ * imageIdフィールドのZodエラーコードに対応する調味料更新APIエラーコード
  */
-const imageFieldErrorCode = (
+const imageIdFieldErrorCode = (
   zodErrorCode: ZodIssueCode
 ): SeasoningUpdateErrorCode => {
   switch (zodErrorCode) {
     case "invalid_type":
-      return SeasoningUpdateErrorCode.IMAGE_INVALID_TYPE;
-    case "too_big":
-      return SeasoningUpdateErrorCode.IMAGE_TOO_LARGE;
+    case "too_small":
+      return SeasoningUpdateErrorCode.IMAGE_ID_INVALID;
     default:
-      return SeasoningUpdateErrorCode.IMAGE_INVALID_TYPE;
+      return SeasoningUpdateErrorCode.IMAGE_ID_INVALID;
   }
 };
 
@@ -185,8 +182,8 @@ const issueToErrorCode = (issue: ZodIssue): SeasoningUpdateErrorCode => {
     return seasoningTypeIdFieldErrorCode(issue.code);
   }
 
-  if (isFieldName(issue.path, "image")) {
-    return imageFieldErrorCode(issue.code);
+  if (isFieldName(issue.path, "imageId")) {
+    return imageIdFieldErrorCode(issue.code);
   }
 
   if (isDateField(issue.path)) {

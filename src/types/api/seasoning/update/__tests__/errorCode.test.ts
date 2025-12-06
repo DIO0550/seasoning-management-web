@@ -103,38 +103,38 @@ describe("SeasoningUpdateErrorCode", () => {
       expect(result).toBe("VALIDATION_ERROR_TYPE_REQUIRED");
     });
 
-    it("imageフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_IMAGE_INVALID_TYPEを返す", () => {
+    it("imageIdフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_IMAGE_ID_INVALIDを返す", () => {
       const zodError = new ZodError([
         {
           code: "invalid_type",
-          expected: "object",
+          expected: "number",
           received: "string",
-          message: "画像は適切な形式である必要があります",
-          path: ["image"],
+          message: "画像IDは数値である必要があります",
+          path: ["imageId"],
         },
       ]);
 
       const result = SeasoningUpdateErrorCode.fromValidationError(zodError);
 
-      expect(result).toBe("VALIDATION_ERROR_IMAGE_INVALID_TYPE");
+      expect(result).toBe("VALIDATION_ERROR_IMAGE_ID_INVALID");
     });
 
-    it("imageフィールドのtoo_bigエラーの場合、VALIDATION_ERROR_IMAGE_TOO_LARGEを返す", () => {
+    it("imageIdフィールドのtoo_smallエラーの場合、VALIDATION_ERROR_IMAGE_ID_INVALIDを返す", () => {
       const zodError = new ZodError([
         {
-          code: "too_big",
-          maximum: 5000000,
-          type: "string",
+          code: "too_small",
+          minimum: 1,
+          type: "number",
           inclusive: true,
           exact: false,
-          message: "画像ファイルサイズが大きすぎます",
-          path: ["image"],
+          message: "画像IDは1以上である必要があります",
+          path: ["imageId"],
         },
       ]);
 
       const result = SeasoningUpdateErrorCode.fromValidationError(zodError);
 
-      expect(result).toBe("VALIDATION_ERROR_IMAGE_TOO_LARGE");
+      expect(result).toBe("VALIDATION_ERROR_IMAGE_ID_INVALID");
     });
 
     it("bestBeforeAtフィールドのinvalid_dateエラーの場合、VALIDATION_ERROR_DATE_INVALIDを返す", () => {
@@ -225,11 +225,8 @@ describe("SeasoningUpdateErrorCode", () => {
       expect(SeasoningUpdateErrorCode.TYPE_REQUIRED).toBe(
         "VALIDATION_ERROR_TYPE_REQUIRED"
       );
-      expect(SeasoningUpdateErrorCode.IMAGE_INVALID_TYPE).toBe(
-        "VALIDATION_ERROR_IMAGE_INVALID_TYPE"
-      );
-      expect(SeasoningUpdateErrorCode.IMAGE_TOO_LARGE).toBe(
-        "VALIDATION_ERROR_IMAGE_TOO_LARGE"
+      expect(SeasoningUpdateErrorCode.IMAGE_ID_INVALID).toBe(
+        "VALIDATION_ERROR_IMAGE_ID_INVALID"
       );
       expect(SeasoningUpdateErrorCode.DATE_INVALID).toBe(
         "VALIDATION_ERROR_DATE_INVALID"

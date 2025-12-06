@@ -37,23 +37,23 @@ describe("TemplateListErrorCode", () => {
       expect(result).toBe("VALIDATION_ERROR_PAGE_TOO_SMALL");
     });
 
-    it("limitフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_LIMIT_INVALIDを返す", () => {
+    it("pageSizeフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_PAGE_SIZE_INVALIDを返す", () => {
       const zodError = new ZodError([
         {
           code: "invalid_type",
           expected: "number",
           received: "string",
-          message: "リミットは数値である必要があります",
-          path: ["limit"],
+          message: "ページサイズは数値である必要があります",
+          path: ["pageSize"],
         },
       ]);
 
       const result = TemplateListErrorCode.fromValidationError(zodError);
 
-      expect(result).toBe("VALIDATION_ERROR_LIMIT_INVALID");
+      expect(result).toBe("VALIDATION_ERROR_PAGE_SIZE_INVALID");
     });
 
-    it("limitフィールドのtoo_smallエラーの場合、VALIDATION_ERROR_LIMIT_TOO_SMALLを返す", () => {
+    it("pageSizeフィールドのtoo_smallエラーの場合、VALIDATION_ERROR_PAGE_SIZE_TOO_SMALLを返す", () => {
       const zodError = new ZodError([
         {
           code: "too_small",
@@ -61,17 +61,17 @@ describe("TemplateListErrorCode", () => {
           type: "number",
           inclusive: true,
           exact: false,
-          message: "リミットは1以上である必要があります",
-          path: ["limit"],
+          message: "ページサイズは1以上である必要があります",
+          path: ["pageSize"],
         },
       ]);
 
       const result = TemplateListErrorCode.fromValidationError(zodError);
 
-      expect(result).toBe("VALIDATION_ERROR_LIMIT_TOO_SMALL");
+      expect(result).toBe("VALIDATION_ERROR_PAGE_SIZE_TOO_SMALL");
     });
 
-    it("limitフィールドのtoo_bigエラーの場合、VALIDATION_ERROR_LIMIT_TOO_LARGEを返す", () => {
+    it("pageSizeフィールドのtoo_bigエラーの場合、VALIDATION_ERROR_PAGE_SIZE_TOO_LARGEを返す", () => {
       const zodError = new ZodError([
         {
           code: "too_big",
@@ -79,14 +79,14 @@ describe("TemplateListErrorCode", () => {
           type: "number",
           inclusive: true,
           exact: false,
-          message: "リミットは100以下である必要があります",
-          path: ["limit"],
+          message: "ページサイズは100以下である必要があります",
+          path: ["pageSize"],
         },
       ]);
 
       const result = TemplateListErrorCode.fromValidationError(zodError);
 
-      expect(result).toBe("VALIDATION_ERROR_LIMIT_TOO_LARGE");
+      expect(result).toBe("VALIDATION_ERROR_PAGE_SIZE_TOO_LARGE");
     });
 
     it("searchフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_SEARCH_INVALIDを返す", () => {
@@ -138,14 +138,14 @@ describe("TemplateListErrorCode", () => {
       expect(TemplateListErrorCode.PAGE_TOO_SMALL).toBe(
         "VALIDATION_ERROR_PAGE_TOO_SMALL"
       );
-      expect(TemplateListErrorCode.LIMIT_INVALID).toBe(
-        "VALIDATION_ERROR_LIMIT_INVALID"
+      expect(TemplateListErrorCode.PAGE_SIZE_INVALID).toBe(
+        "VALIDATION_ERROR_PAGE_SIZE_INVALID"
       );
-      expect(TemplateListErrorCode.LIMIT_TOO_SMALL).toBe(
-        "VALIDATION_ERROR_LIMIT_TOO_SMALL"
+      expect(TemplateListErrorCode.PAGE_SIZE_TOO_SMALL).toBe(
+        "VALIDATION_ERROR_PAGE_SIZE_TOO_SMALL"
       );
-      expect(TemplateListErrorCode.LIMIT_TOO_LARGE).toBe(
-        "VALIDATION_ERROR_LIMIT_TOO_LARGE"
+      expect(TemplateListErrorCode.PAGE_SIZE_TOO_LARGE).toBe(
+        "VALIDATION_ERROR_PAGE_SIZE_TOO_LARGE"
       );
       expect(TemplateListErrorCode.SEARCH_INVALID).toBe(
         "VALIDATION_ERROR_SEARCH_INVALID"

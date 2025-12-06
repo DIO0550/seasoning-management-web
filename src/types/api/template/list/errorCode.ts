@@ -1,7 +1,7 @@
 import { ZodError, ZodIssue, ZodIssueCode } from "zod";
 
 // フィールド名の型定義
-type FieldName = "page" | "limit" | "search";
+type FieldName = "page" | "pageSize" | "search";
 
 /**
  * テンプレート一覧APIのエラーコード
@@ -9,9 +9,9 @@ type FieldName = "page" | "limit" | "search";
 export type TemplateListErrorCode =
   | "VALIDATION_ERROR_PAGE_INVALID"
   | "VALIDATION_ERROR_PAGE_TOO_SMALL"
-  | "VALIDATION_ERROR_LIMIT_INVALID"
-  | "VALIDATION_ERROR_LIMIT_TOO_SMALL"
-  | "VALIDATION_ERROR_LIMIT_TOO_LARGE"
+  | "VALIDATION_ERROR_PAGE_SIZE_INVALID"
+  | "VALIDATION_ERROR_PAGE_SIZE_TOO_SMALL"
+  | "VALIDATION_ERROR_PAGE_SIZE_TOO_LARGE"
   | "VALIDATION_ERROR_SEARCH_INVALID"
   | "INTERNAL_ERROR";
 
@@ -42,9 +42,9 @@ export const TemplateListErrorCode = {
   // 公開エラーコード定数 - 外部でのエラーハンドリングやテストで使用
   PAGE_INVALID: "VALIDATION_ERROR_PAGE_INVALID" as const,
   PAGE_TOO_SMALL: "VALIDATION_ERROR_PAGE_TOO_SMALL" as const,
-  LIMIT_INVALID: "VALIDATION_ERROR_LIMIT_INVALID" as const,
-  LIMIT_TOO_SMALL: "VALIDATION_ERROR_LIMIT_TOO_SMALL" as const,
-  LIMIT_TOO_LARGE: "VALIDATION_ERROR_LIMIT_TOO_LARGE" as const,
+  PAGE_SIZE_INVALID: "VALIDATION_ERROR_PAGE_SIZE_INVALID" as const,
+  PAGE_SIZE_TOO_SMALL: "VALIDATION_ERROR_PAGE_SIZE_TOO_SMALL" as const,
+  PAGE_SIZE_TOO_LARGE: "VALIDATION_ERROR_PAGE_SIZE_TOO_LARGE" as const,
   SEARCH_INVALID: "VALIDATION_ERROR_SEARCH_INVALID" as const,
   INTERNAL_ERROR: "INTERNAL_ERROR" as const,
 } as const;
@@ -66,20 +66,20 @@ const pageFieldErrorCode = (
 };
 
 /**
- * limitフィールドのZodエラーコードに対応するテンプレート一覧APIエラーコード
+ * pageSizeフィールドのZodエラーコードに対応するテンプレート一覧APIエラーコード
  */
-const limitFieldErrorCode = (
+const pageSizeFieldErrorCode = (
   zodErrorCode: ZodIssueCode
 ): TemplateListErrorCode => {
   switch (zodErrorCode) {
     case "invalid_type":
-      return TemplateListErrorCode.LIMIT_INVALID;
+      return TemplateListErrorCode.PAGE_SIZE_INVALID;
     case "too_small":
-      return TemplateListErrorCode.LIMIT_TOO_SMALL;
+      return TemplateListErrorCode.PAGE_SIZE_TOO_SMALL;
     case "too_big":
-      return TemplateListErrorCode.LIMIT_TOO_LARGE;
+      return TemplateListErrorCode.PAGE_SIZE_TOO_LARGE;
     default:
-      return TemplateListErrorCode.LIMIT_INVALID;
+      return TemplateListErrorCode.PAGE_SIZE_INVALID;
   }
 };
 
@@ -116,8 +116,8 @@ const issueToErrorCode = (issue: ZodIssue): TemplateListErrorCode => {
     return pageFieldErrorCode(issue.code);
   }
 
-  if (isFieldName(issue.path, "limit")) {
-    return limitFieldErrorCode(issue.code);
+  if (isFieldName(issue.path, "pageSize")) {
+    return pageSizeFieldErrorCode(issue.code);
   }
 
   if (isFieldName(issue.path, "search")) {

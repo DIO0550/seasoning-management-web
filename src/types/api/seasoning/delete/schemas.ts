@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { successResponseSchema } from "@/types/api/common/schemas";
+import { successResponseSchema } from "@/types/api/common/response";
 
 /**
  * 調味料削除リクエストのスキーマ
@@ -14,7 +14,7 @@ export const seasoningDeleteRequestSchema = z.object({
 /**
  * 調味料削除成功時のデータスキーマ
  */
-const seasoningDeleteDataSchema = z.object({
+export const seasoningDeleteDataSchema = z.object({
   id: z.number().int().positive(),
   deletedAt: z.string().datetime(),
 });

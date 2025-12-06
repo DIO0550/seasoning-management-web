@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { seasoningAddRequestSchema } from "@/types/api/seasoning/add/schemas";
 import { SeasoningAddErrorCode } from "@/types/api/seasoning/add/errorCode";
 import {
-  SeasoningListQuerySchema,
+  seasoningListQuerySchema,
   type SeasoningListResponse,
   type ErrorResponse as ApiErrorResponse,
 } from "@/types/api/seasoning/list/types";
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const queryParams = Object.fromEntries(searchParams);
 
-    const validationResult = SeasoningListQuerySchema.safeParse(queryParams);
+    const validationResult = seasoningListQuerySchema.safeParse(queryParams);
 
     if (!validationResult.success) {
       const errorCode = SeasoningListErrorCode.fromValidationError(

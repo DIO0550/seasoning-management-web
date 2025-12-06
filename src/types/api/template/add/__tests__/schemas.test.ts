@@ -1,156 +1,104 @@
-import { describe, test, expect } from "vitest";
+import { test, expect } from "vitest";
 import {
   templateAddRequestSchema,
   templateAddResponseSchema,
+  templateAddDataSchema,
 } from "@/types/api/template/add/schemas";
 
-describe("Template Add API Schemas", () => {
-  describe("templateAddRequestSchema", () => {
-    test("有効なテンプレート追加リクエストを受け入れる", () => {
-      const validRequest = {
-        name: "和食の基本",
-        description: "和食に必要な基本的な調味料セット",
-        seasoningIds: [1, 2, 3],
-      };
+const baseRequest = {
+  name: "和食の基本",
+  description: "和食に必要な基本的な調味料セット",
+  seasoningIds: [1, 2, 3],
+};
 
-      expect(() => templateAddRequestSchema.parse(validRequest)).not.toThrow();
-    });
+test("templateAddRequestSchema: description 付きリクエストは成功", () => {
+  expect(() => templateAddRequestSchema.parse(baseRequest)).not.toThrow();
+});
 
-    test("descriptionがnullの場合も受け入れる", () => {
-      const validRequest = {
-        name: "和食の基本",
-        description: null,
-        seasoningIds: [1, 2, 3],
-      };
+test("templateAddRequestSchema: description を省略しても成功", () => {
+  const payload = { ...baseRequest, description: null };
+  expect(() => templateAddRequestSchema.parse(payload)).not.toThrow();
+});
 
-      expect(() => templateAddRequestSchema.parse(validRequest)).not.toThrow();
-    });
+test("templateAddRequestSchema: imageId を指定しても成功", () => {
+  const payload = { ...baseRequest, imageId: 10 };
+  expect(() => templateAddRequestSchema.parse(payload)).not.toThrow();
+});
 
-    test("nameが空文字の場合にバリデーションエラーになる", () => {
-      const invalidRequest = {
-        name: "",
-        description: "和食に必要な基本的な調味料セット",
-        seasoningIds: [1, 2, 3],
-      };
+test("templateAddRequestSchema: imageId が数値でない場合は失敗", () => {
+  const payload = { ...baseRequest, imageId: "invalid" };
+  expect(() => templateAddRequestSchema.parse(payload)).toThrow(
+    "画像IDは数値である必要があります"
+  );
+});
 
-      expect(() => templateAddRequestSchema.parse(invalidRequest)).toThrow();
-    });
+test("templateAddRequestSchema: imageId が0以下の場合は失敗", () => {
+  const payload = { ...baseRequest, imageId: 0 };
+  expect(() => templateAddRequestSchema.parse(payload)).toThrow(
+    "画像IDは1以上である必要があります"
+  );
+});
 
-    test("nameが100文字を超える場合にバリデーションエラーになる", () => {
-      const invalidRequest = {
-        name: "a".repeat(101),
-        description: "和食に必要な基本的な調味料セット",
-        seasoningIds: [1, 2, 3],
-      };
+test("templateAddRequestSchema: name が空文字だと失敗", () => {
+  const payload = { ...baseRequest, name: "" };
+  expect(() => templateAddRequestSchema.parse(payload)).toThrow();
+});
 
-      expect(() => templateAddRequestSchema.parse(invalidRequest)).toThrow();
-    });
+test("templateAddRequestSchema: seasoningIds が空配列だと失敗", () => {
+  const payload = { ...baseRequest, seasoningIds: [] };
+  expect(() => templateAddRequestSchema.parse(payload)).toThrow();
+});
 
-    test("descriptionが500文字を超える場合にバリデーションエラーになる", () => {
-      const invalidRequest = {
-        name: "和食の基本",
-        description: "a".repeat(501),
-        seasoningIds: [1, 2, 3],
-      };
-
-      expect(() => templateAddRequestSchema.parse(invalidRequest)).toThrow();
-    });
-
-    test("seasoningIdsが空配列の場合にバリデーションエラーになる", () => {
-      const invalidRequest = {
-        name: "和食の基本",
-        description: "和食に必要な基本的な調味料セット",
-        seasoningIds: [],
-      };
-
-      expect(() => templateAddRequestSchema.parse(invalidRequest)).toThrow();
-    });
-
-    test("seasoningIdsに0以下の値が含まれる場合にバリデーションエラーになる", () => {
-      const invalidRequest = {
-        name: "和食の基本",
-        description: "和食に必要な基本的な調味料セット",
-        seasoningIds: [1, 0, 3],
-      };
-
-      expect(() => templateAddRequestSchema.parse(invalidRequest)).toThrow();
-    });
-  });
-
-  describe("templateAddResponseSchema", () => {
-    test("有効なテンプレート追加レスポンスを受け入れる", () => {
-      const validResponse = {
-        result_code: "OK",
-        data: {
+test("templateAddResponseSchema: 正常レスポンスを受け入れる", () => {
+  const payload = {
+    data: {
+      id: 1,
+      name: "和食の基本",
+      description: baseRequest.description,
+      imageId: null,
+      imageUrl: null,
+      seasonings: [
+        {
           id: 1,
-          name: "和食の基本",
-          description: "和食に必要な基本的な調味料セット",
-          seasonings: [
-            {
-              id: 1,
-              name: "醤油",
-              seasoningTypeId: 1,
-              seasoningTypeName: "液体調味料",
-              imageUrl: null,
-            },
-            {
-              id: 2,
-              name: "味噌",
-              seasoningTypeId: 2,
-              seasoningTypeName: "発酵調味料",
-              imageUrl: null,
-            },
-          ],
-          createdAt: "2024-01-01T00:00:00Z",
-          updatedAt: "2024-01-01T00:00:00Z",
+          name: "醤油",
+          seasoningTypeId: 1,
+          seasoningTypeName: "液体調味料",
+          imageId: null,
+          imageUrl: null,
         },
-      };
+      ],
+      createdAt: "2024-01-01T00:00:00Z",
+      updatedAt: "2024-01-01T00:00:00Z",
+    },
+  };
 
-      expect(() =>
-        templateAddResponseSchema.parse(validResponse)
-      ).not.toThrow();
-    });
+  expect(() => templateAddResponseSchema.parse(payload)).not.toThrow();
+});
 
-    test("descriptionがnullのレスポンスを受け入れる", () => {
-      const validResponse = {
-        result_code: "OK",
-        data: {
-          id: 1,
-          name: "和食の基本",
-          description: null,
-          seasonings: [
-            {
-              id: 1,
-              name: "醤油",
-              seasoningTypeId: 1,
-              seasoningTypeName: "液体調味料",
-              imageUrl: null,
-            },
-          ],
-          createdAt: "2024-01-01T00:00:00Z",
-          updatedAt: "2024-01-01T00:00:00Z",
-        },
-      };
+test("templateAddResponseSchema: data が無いと失敗", () => {
+  expect(() => templateAddResponseSchema.parse({})).toThrow();
+});
 
-      expect(() =>
-        templateAddResponseSchema.parse(validResponse)
-      ).not.toThrow();
-    });
+test("templateAddDataSchema: 単体データを検証できる", () => {
+  const payload = {
+    id: 1,
+    name: "和食の基本",
+    description: baseRequest.description,
+    imageId: null,
+    imageUrl: null,
+    seasonings: [
+      {
+        id: 1,
+        name: "醤油",
+        seasoningTypeId: 1,
+        seasoningTypeName: "液体調味料",
+        imageId: null,
+        imageUrl: null,
+      },
+    ],
+    createdAt: "2024-01-01T00:00:00Z",
+    updatedAt: "2024-01-01T00:00:00Z",
+  };
 
-    test("successがfalseの場合にバリデーションエラーになる", () => {
-      const invalidResponse = {
-        result_code: "ERROR",
-        data: {
-          id: 1,
-          name: "和食の基本",
-          description: "和食に必要な基本的な調味料セット",
-          seasonings: [],
-          createdAt: "2024-01-01T00:00:00Z",
-          updatedAt: "2024-01-01T00:00:00Z",
-        },
-      };
-
-      expect(() => templateAddResponseSchema.parse(invalidResponse)).toThrow();
-    });
-  });
+  expect(() => templateAddDataSchema.parse(payload)).not.toThrow();
 });

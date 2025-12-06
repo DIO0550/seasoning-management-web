@@ -1,7 +1,7 @@
 import { ZodError, ZodIssue, ZodIssueCode } from "zod";
 
 // フィールド名の型定義
-type FieldName = "page" | "limit" | "typeId" | "search";
+type FieldName = "page" | "pageSize" | "typeId" | "search";
 
 /**
  * 調味料一覧APIのエラーコード
@@ -9,9 +9,9 @@ type FieldName = "page" | "limit" | "typeId" | "search";
 export type SeasoningListErrorCode =
   | "VALIDATION_ERROR_PAGE_INVALID"
   | "VALIDATION_ERROR_PAGE_TOO_SMALL"
-  | "VALIDATION_ERROR_LIMIT_INVALID"
-  | "VALIDATION_ERROR_LIMIT_TOO_SMALL"
-  | "VALIDATION_ERROR_LIMIT_TOO_LARGE"
+  | "VALIDATION_ERROR_PAGE_SIZE_INVALID"
+  | "VALIDATION_ERROR_PAGE_SIZE_TOO_SMALL"
+  | "VALIDATION_ERROR_PAGE_SIZE_TOO_LARGE"
   | "VALIDATION_ERROR_TYPE_ID_INVALID"
   | "VALIDATION_ERROR_SEARCH_INVALID"
   | "SEASONING_TYPE_NOT_FOUND"
@@ -44,9 +44,9 @@ export const SeasoningListErrorCode = {
   // 公開エラーコード定数 - 外部でのエラーハンドリングやテストで使用
   PAGE_INVALID: "VALIDATION_ERROR_PAGE_INVALID" as const,
   PAGE_TOO_SMALL: "VALIDATION_ERROR_PAGE_TOO_SMALL" as const,
-  LIMIT_INVALID: "VALIDATION_ERROR_LIMIT_INVALID" as const,
-  LIMIT_TOO_SMALL: "VALIDATION_ERROR_LIMIT_TOO_SMALL" as const,
-  LIMIT_TOO_LARGE: "VALIDATION_ERROR_LIMIT_TOO_LARGE" as const,
+  PAGE_SIZE_INVALID: "VALIDATION_ERROR_PAGE_SIZE_INVALID" as const,
+  PAGE_SIZE_TOO_SMALL: "VALIDATION_ERROR_PAGE_SIZE_TOO_SMALL" as const,
+  PAGE_SIZE_TOO_LARGE: "VALIDATION_ERROR_PAGE_SIZE_TOO_LARGE" as const,
   TYPE_ID_INVALID: "VALIDATION_ERROR_TYPE_ID_INVALID" as const,
   SEARCH_INVALID: "VALIDATION_ERROR_SEARCH_INVALID" as const,
   SEASONING_TYPE_NOT_FOUND: "SEASONING_TYPE_NOT_FOUND" as const,
@@ -70,20 +70,20 @@ const pageFieldErrorCode = (
 };
 
 /**
- * limitフィールドのZodエラーコードに対応する調味料一覧APIエラーコード
+ * pageSizeフィールドのZodエラーコードに対応する調味料一覧APIエラーコード
  */
-const limitFieldErrorCode = (
+const pageSizeFieldErrorCode = (
   zodErrorCode: ZodIssueCode
 ): SeasoningListErrorCode => {
   switch (zodErrorCode) {
     case "invalid_type":
-      return SeasoningListErrorCode.LIMIT_INVALID;
+      return SeasoningListErrorCode.PAGE_SIZE_INVALID;
     case "too_small":
-      return SeasoningListErrorCode.LIMIT_TOO_SMALL;
+      return SeasoningListErrorCode.PAGE_SIZE_TOO_SMALL;
     case "too_big":
-      return SeasoningListErrorCode.LIMIT_TOO_LARGE;
+      return SeasoningListErrorCode.PAGE_SIZE_TOO_LARGE;
     default:
-      return SeasoningListErrorCode.LIMIT_INVALID;
+      return SeasoningListErrorCode.PAGE_SIZE_INVALID;
   }
 };
 
@@ -134,8 +134,8 @@ const issueToErrorCode = (issue: ZodIssue): SeasoningListErrorCode => {
     return pageFieldErrorCode(issue.code);
   }
 
-  if (isFieldName(issue.path, "limit")) {
-    return limitFieldErrorCode(issue.code);
+  if (isFieldName(issue.path, "pageSize")) {
+    return pageSizeFieldErrorCode(issue.code);
   }
 
   if (isFieldName(issue.path, "typeId")) {

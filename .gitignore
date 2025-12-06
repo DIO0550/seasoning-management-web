@@ -3,6 +3,10 @@
 specs/
 .specify/
 
+# Speckit agents and prompts
+.github/agents/speckit.*.agent.md
+.github/prompts/speckit.*.prompt.md
+
 # Node / Next standard ignores (partial, keep minimal)
 node_modules/
 /.next/
