@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "mysql2": "^3.14.1",
-    "next": "15.3.2",
+    "next": "^15.3.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "zod": "^3.25.74"
@@ -32,7 +32,6 @@
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^16.3.0",
-    "@testing-library/react-hooks": "^8.0.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

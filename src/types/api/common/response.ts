@@ -39,13 +39,32 @@ export const successResponseSchema = <T extends z.ZodType>(dataSchema: T) => {
  * // サマリーあり
  * const schema = paginatedResponseSchema(itemSchema, { summarySchema: summarySchema });
  */
-export const paginatedResponseSchema = <
+export function paginatedResponseSchema<TItem extends z.ZodType>(
+  itemSchema: TItem
+): z.ZodObject<{
+  data: z.ZodArray<TItem>;
+  meta: typeof paginationSchema;
+}>;
+
+export function paginatedResponseSchema<
+  TItem extends z.ZodType,
+  TSummary extends z.ZodType
+>(
+  itemSchema: TItem,
+  options: { summarySchema: TSummary }
+): z.ZodObject<{
+  data: z.ZodArray<TItem>;
+  meta: typeof paginationSchema;
+  summary: TSummary;
+}>;
+
+export function paginatedResponseSchema<
   TItem extends z.ZodType,
   TSummary extends z.ZodType | undefined = undefined
 >(
   itemSchema: TItem,
   options?: { summarySchema?: TSummary }
-) => {
+): z.ZodObject<z.ZodRawShape> {
   const baseShape = {
     data: z.array(itemSchema),
     meta: paginationSchema,
@@ -59,7 +78,7 @@ export const paginatedResponseSchema = <
   }
 
   return z.object(baseShape);
-};
+}
 
 /**
  * data フィールドのみを持つレスポンス型
