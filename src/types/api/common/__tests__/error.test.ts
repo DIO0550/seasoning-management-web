@@ -69,7 +69,6 @@ test("errorResponseSchema: details が配列以外ならバリデーションエ
   const payload = {
     code: "VALIDATION_ERROR",
     message: "入力内容を確認してください",
-    // @ts-expect-error intentionally wrong type for validation test
     details: "invalid",
   };
 

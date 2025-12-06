@@ -73,7 +73,6 @@ test("paginationSchema: hasNext が boolean でない場合は失敗する", () 
       pageSize: 10,
       totalItems: 0,
       totalPages: 0,
-      // @ts-expect-error テスト目的の不正値
       hasNext: "true",
       hasPrevious: false,
     })
@@ -88,7 +87,6 @@ test("paginationSchema: hasPrevious が boolean でない場合は失敗する",
       totalItems: 0,
       totalPages: 0,
       hasNext: false,
-      // @ts-expect-error テスト目的の不正値
       hasPrevious: "false",
     })
   ).toThrow();
