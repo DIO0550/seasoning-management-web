@@ -28,7 +28,7 @@ export interface SeasoningListItem {
  */
 export interface SeasoningType {
   /** 一意識別子 */
-  id: string;
+  id: number;
   /** 調味料の種類名 */
   name: string;
   /** 作成日時 */

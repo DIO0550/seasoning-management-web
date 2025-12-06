@@ -7,6 +7,7 @@ interface ButtonProps {
   size?: 'sm' | 'md' | 'lg';
   className?: string;
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 export const Button = ({
@@ -16,6 +17,7 @@ export const Button = ({
   size = 'md',
   className = '',
   disabled = false,
+  type = 'button',
 }: ButtonProps) => {
   const baseStyles = 'font-medium rounded focus:outline-none transition-colors';
   
@@ -37,6 +39,7 @@ export const Button = ({
     <button
       onClick={onClick}
       disabled={disabled}
+      type={type}
       className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${disabledStyles} ${className}`}
     >
       {children}
