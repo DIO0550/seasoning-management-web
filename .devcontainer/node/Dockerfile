@@ -1,5 +1,5 @@
 # Use Go 1.23 for building, then switch to Node.js for runtime
-FROM golang:1.23-bullseye AS builder
+FROM golang:1.24-bullseye AS builder
 
 # Build GitHub MCP Server
 RUN git clone https://github.com/github/github-mcp-server.git /tmp/github-mcp-server \
@@ -8,7 +8,7 @@ RUN git clone https://github.com/github/github-mcp-server.git /tmp/github-mcp-se
 
 
 # Use Ubuntu as the base image
-FROM ubuntu:22.04
+FROM ubuntu:24.04 
 
 # Set environment variables to prevent interactive prompts during installation
 ENV DEBIAN_FRONTEND=noninteractive
