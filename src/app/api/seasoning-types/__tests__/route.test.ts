@@ -13,10 +13,12 @@ describe("API: /api/seasoning-types", () => {
     findAll: vi.fn(),
     create: vi.fn(),
     findById: vi.fn(),
+    existsByName: vi.fn(),
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockSeasoningTypeRepository.existsByName.mockResolvedValue(false);
     (ConnectionManager.getInstance as ReturnType<typeof vi.fn>).mockReturnValue(
       {}
     );
@@ -121,6 +123,22 @@ describe("API: /api/seasoning-types", () => {
       const response = await POST(request);
 
       expect(response.status).toBe(500);
+    });
+
+    it("異常系: 重複した名前の場合、409エラーを返すこと", async () => {
+      const requestBody = { name: "既存の種類" };
+      const request = new NextRequest("http://localhost/api/seasoning-types", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+      });
+
+      mockSeasoningTypeRepository.existsByName.mockResolvedValue(true);
+
+      const response = await POST(request);
+      const body = await response.json();
+
+      expect(response.status).toBe(409);
+      expect(body.code).toBe("DUPLICATE_ERROR");
     });
   });
 });

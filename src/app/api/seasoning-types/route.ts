@@ -5,6 +5,8 @@ import { SeasoningTypeAddErrorCode } from "@/types/api/seasoningType/add/errorCo
 import { ConnectionManager } from "@/infrastructure/database/ConnectionManager";
 import { RepositoryFactory } from "@/infrastructure/di/RepositoryFactory";
 import { errorMapper } from "@/utils/api/error-mapper";
+import { DuplicateError } from "@/domain/errors";
+import { ConflictError } from "@/libs/database/errors";
 
 /**
  * GET /api/seasoning-types
@@ -41,6 +43,7 @@ export async function GET() {
  * 調味料種類を追加する
  */
 export async function POST(request: NextRequest) {
+  let requestedName = "";
   try {
     const body = await request.json();
     const validationResult = seasoningTypeAddRequestSchema.safeParse(body);
@@ -63,10 +66,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    requestedName = validationResult.data.name;
+
     const connectionManager = ConnectionManager.getInstance();
     const repositoryFactory = new RepositoryFactory(connectionManager);
     const seasoningTypeRepository =
       await repositoryFactory.createSeasoningTypeRepository();
+
+    const isDuplicate = await seasoningTypeRepository.existsByName(
+      validationResult.data.name
+    );
+    if (isDuplicate) {
+      throw new DuplicateError("name", validationResult.data.name);
+    }
 
     const createResult = await seasoningTypeRepository.create({
       name: validationResult.data.name,
@@ -95,6 +107,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
+    if (error instanceof ConflictError) {
+      const duplicateError = new DuplicateError("name", requestedName || "name");
+      const { status, body } = errorMapper.toHttpResponse(duplicateError);
+      return NextResponse.json(body, { status });
+    }
+
     // 重複などドメインエラーは共通マッパーに委譲
     const { status, body } = errorMapper.toHttpResponse(error);
 
