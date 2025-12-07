@@ -7,6 +7,7 @@ import {
   getSeasoningTypeValidationMessage,
 } from "@/features/seasoning/utils";
 import type { SeasoningType } from "@/types/seasoning";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
 
 type SeasoningTypeAddModalProps = {
   isOpen: boolean;
@@ -24,7 +25,6 @@ export const SeasoningTypeAddModal = ({
     error,
     submitError,
     isSubmitting,
-    isFormValid,
     onBlur,
     onChange,
     submit,
@@ -42,10 +42,11 @@ export const SeasoningTypeAddModal = ({
 
     if (!response.ok) {
       const errorMessage =
-        body?.message ?? (response.status >= 500 ? "Server Error" : "");
-      const errorInstance = new Error(
-        errorMessage || "調味料の種類の追加に失敗しました"
-      );
+        body?.message ??
+        (response.status >= 500
+          ? "Server Error"
+          : "調味料の種類の追加に失敗しました");
+      const errorInstance = new Error(errorMessage);
       errorInstance.name =
         response.status >= 500 ? "NetworkError" : "ValidationError";
       throw errorInstance;
@@ -65,18 +66,25 @@ export const SeasoningTypeAddModal = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+      <div
+        className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-gray-900">
+          <h2 id="modal-title" className="text-lg font-bold text-gray-900">
             調味料の種類を追加
           </h2>
           <button
             type="button"
             onClick={handleClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="flex h-8 w-8 items-center justify-center rounded text-gray-500 hover:bg-gray-100 hover:text-gray-700"
             aria-label="閉じる"
           >
-            ×
+            <span className="text-2xl leading-none" aria-hidden="true">
+              ×
+            </span>
           </button>
         </div>
 
@@ -89,7 +97,7 @@ export const SeasoningTypeAddModal = ({
             onChange={onChange}
             onBlur={onBlur}
             placeholder="例）液体調味料"
-            maxLength={50}
+            maxLength={SEASONING_TYPE_NAME_MAX_LENGTH}
             required={true}
             errorMessage={getSeasoningTypeValidationMessage(error)}
           />

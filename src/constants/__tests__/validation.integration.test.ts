@@ -10,7 +10,9 @@ describe("統合されたvalidation constants", () => {
       expect(VALIDATION_CONSTANTS.NAME).toBeDefined();
       expect(VALIDATION_CONSTANTS.NAME.SEASONING_NAME_MAX_LENGTH).toBe(256);
       expect(VALIDATION_CONSTANTS.NAME.TEMPLATE_NAME_MAX_LENGTH).toBe(256);
-      expect(VALIDATION_CONSTANTS.NAME.SEASONING_TYPE_NAME_MAX_LENGTH).toBe(50);
+      expect(VALIDATION_CONSTANTS.NAME.SEASONING_TYPE_NAME_MAX_LENGTH).toBe(
+        256
+      );
     });
 
     test("説明系定数が正しく統合されている", () => {

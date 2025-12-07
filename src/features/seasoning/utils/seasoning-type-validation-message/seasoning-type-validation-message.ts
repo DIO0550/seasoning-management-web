@@ -1,5 +1,6 @@
 import type { ValidationErrorState } from "@/types/validationErrorState";
 import type { SubmitErrorState } from "@/types/submitErrorState";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
 
 /**
  * 調味料の種類追加時のバリデーションエラーメッセージを取得
@@ -14,7 +15,7 @@ export const getSeasoningTypeValidationMessage = (
     case "REQUIRED":
       return "調味料の種類名は必須です";
     case "TOO_LONG":
-      return "調味料の種類名は50文字以内で入力してください";
+      return `調味料の種類名は${SEASONING_TYPE_NAME_MAX_LENGTH}文字以内で入力してください`;
     case "NONE":
     default:
       return "";

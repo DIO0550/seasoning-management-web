@@ -93,9 +93,7 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
   const handleTypeAdded = (newType: SeasoningType) => {
     const option = { id: String(newType.id), name: newType.name };
     setSeasoningTypes((prev) => [...prev, option]);
-    seasoningType.onChange({
-      target: { value: option.id },
-    } as React.ChangeEvent<HTMLSelectElement>);
+    seasoningType.setValue(option.id);
     setTypeSuccessMessage("調味料の種類を追加しました");
     setIsTypeModalOpen(false);
   };
@@ -173,9 +171,7 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
         {typeFetchLoading ? (
           <p className="text-sm text-gray-500">種類を読み込み中です...</p>
         ) : null}
-        {typeFetchError ? (
-          <ErrorMessage message={typeFetchError} />
-        ) : null}
+        {typeFetchError ? <ErrorMessage message={typeFetchError} /> : null}
         {typeSuccessMessage ? (
           <p className="text-sm text-green-600">{typeSuccessMessage}</p>
         ) : null}

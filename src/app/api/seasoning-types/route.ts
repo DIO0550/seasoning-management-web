@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
       await repositoryFactory.createSeasoningTypeRepository();
 
     const createResult = await seasoningTypeRepository.create({
-      name: validationResult.data.name.trim(),
+      name: validationResult.data.name,
     });
 
     const created = await seasoningTypeRepository.findById(createResult.id);

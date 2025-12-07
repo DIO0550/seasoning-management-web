@@ -8,6 +8,7 @@ import {
   type ValidationErrorState,
 } from "@/types/validationErrorState";
 import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
 
 describe("getSeasoningTypeValidationMessage", () => {
   test("REQUIREDエラーの場合、必須メッセージを返す", () => {
@@ -21,7 +22,9 @@ describe("getSeasoningTypeValidationMessage", () => {
     const result = getSeasoningTypeValidationMessage(
       VALIDATION_ERROR_STATES.TOO_LONG
     );
-    expect(result).toBe("調味料の種類名は50文字以内で入力してください");
+    expect(result).toBe(
+      `調味料の種類名は${SEASONING_TYPE_NAME_MAX_LENGTH}文字以内で入力してください`
+    );
   });
 
   test("NONEエラーの場合、空文字を返す", () => {
