@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { TextInput } from "@/components/elements/inputs/TextInput";
 import { Button } from "@/components/elements/buttons/button";
 import { useSeasoningTypeAdd } from "@/features/seasoning/hooks";
@@ -20,6 +20,7 @@ export const SeasoningTypeAddModal = ({
   onClose,
   onAdded,
 }: SeasoningTypeAddModalProps): React.JSX.Element | null => {
+  const modalRef = useRef<HTMLDivElement | null>(null);
   const {
     name,
     error,
@@ -55,14 +56,92 @@ export const SeasoningTypeAddModal = ({
     onAdded(body.data);
   }, onClose);
 
+  const handleClose = useCallback(() => {
+    reset();
+    onClose();
+  }, [onClose, reset]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const previousActiveElement = document.activeElement as HTMLElement | null;
+    const previousBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusableSelector =
+      'a[href], button:not([disabled]), textarea, input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+    const focusFirstElement = () => {
+      const explicitTarget = document.getElementById(
+        "seasoning-type-name"
+      ) as HTMLElement | null;
+      if (explicitTarget) {
+        explicitTarget.focus();
+        return;
+      }
+      const modalElement = modalRef.current;
+      const firstFocusable =
+        modalElement?.querySelector<HTMLElement>(focusableSelector);
+      firstFocusable?.focus();
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        handleClose();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const modalElement = modalRef.current;
+      if (!modalElement) {
+        return;
+      }
+
+      const focusableElements = Array.from(
+        modalElement.querySelectorAll<HTMLElement>(focusableSelector)
+      ).filter((element) => !element.hasAttribute("aria-hidden"));
+
+      if (focusableElements.length === 0) {
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement as HTMLElement | null;
+
+      if (event.shiftKey) {
+        if (activeElement === firstElement || !modalElement.contains(activeElement)) {
+          event.preventDefault();
+          lastElement.focus();
+        }
+        return;
+      }
+
+      if (activeElement === lastElement || !modalElement.contains(activeElement)) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    focusFirstElement();
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousBodyOverflow;
+      previousActiveElement?.focus?.();
+    };
+  }, [handleClose, isOpen]);
+
   if (!isOpen) {
     return null;
   }
-
-  const handleClose = () => {
-    reset();
-    onClose();
-  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
@@ -71,6 +150,7 @@ export const SeasoningTypeAddModal = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
+        ref={modalRef}
       >
         <div className="flex items-center justify-between">
           <h2 id="modal-title" className="text-lg font-bold text-gray-900">

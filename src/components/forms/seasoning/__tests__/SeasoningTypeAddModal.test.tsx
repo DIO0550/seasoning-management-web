@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { SeasoningTypeAddModal } from "../SeasoningTypeAddModal";
 import * as hooks from "@/features/seasoning/hooks";
@@ -136,5 +137,74 @@ describe("SeasoningTypeAddModal", () => {
         "通信エラーが発生しました。しばらくしてから再度お試しください"
       )
     ).toBeInTheDocument();
+  });
+
+  it("モーダル表示時に入力へ初期フォーカスが移動すること", () => {
+    render(
+      <SeasoningTypeAddModal
+        isOpen={true}
+        onClose={mockOnClose}
+        onAdded={mockOnAdded}
+      />
+    );
+
+    expect(document.activeElement?.id).toBe("seasoning-type-name");
+  });
+
+  it("Escapeキーでモーダルが閉じられること", () => {
+    render(
+      <SeasoningTypeAddModal
+        isOpen={true}
+        onClose={mockOnClose}
+        onAdded={mockOnAdded}
+      />
+    );
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    expect(mockReset).toHaveBeenCalled();
+    expect(mockOnClose).toHaveBeenCalled();
+  });
+
+  it("Tabキーでフォーカスがモーダル内を循環すること", async () => {
+    const user = userEvent.setup();
+    render(
+      <SeasoningTypeAddModal
+        isOpen={true}
+        onClose={mockOnClose}
+        onAdded={mockOnAdded}
+      />
+    );
+
+    const saveButton = screen.getByRole("button", { name: "保存" });
+    saveButton.focus();
+
+    await user.tab();
+    expect(screen.getByLabelText("閉じる")).toHaveFocus();
+
+    await user.tab();
+    expect(document.getElementById("seasoning-type-name")).toHaveFocus();
+  });
+
+  it("モーダル表示中は背景スクロールが無効化され、閉じると復元されること", () => {
+    const { rerender } = render(
+      <SeasoningTypeAddModal
+        isOpen={true}
+        onClose={mockOnClose}
+        onAdded={mockOnAdded}
+      />
+    );
+
+    expect(document.body.style.overflow).toBe("hidden");
+
+    rerender(
+      <SeasoningTypeAddModal
+        isOpen={false}
+        onClose={mockOnClose}
+        onAdded={mockOnAdded}
+      />
+    );
+
+    expect(document.body.style.overflow).toBe("");
   });
 });
