@@ -113,7 +113,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(body, { status });
     }
 
-    // 重複などドメインエラーは共通マッパーに委譲
+    // ConflictError以外のドメインエラーは共通マッパーに委譲
     const { status, body } = errorMapper.toHttpResponse(error);
 
     return NextResponse.json(body, { status });

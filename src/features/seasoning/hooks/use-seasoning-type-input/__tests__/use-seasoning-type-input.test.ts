@@ -116,4 +116,15 @@ describe("useSeasoningTypeInput", () => {
     expect(result.current.value).toBe("");
     expect(result.current.error).toBe("");
   });
+
+  test("setValueで値を直接設定できること", () => {
+    const { result } = renderHook(() => useSeasoningTypeInput());
+
+    act(() => {
+      result.current.setValue("salt");
+    });
+
+    expect(result.current.value).toBe("salt");
+    expect(result.current.error).toBe("");
+  });
 });

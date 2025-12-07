@@ -53,6 +53,10 @@ export const SeasoningTypeAddModal = ({
       throw errorInstance;
     }
 
+    if (!body?.data) {
+      throw new Error("調味料の種類の追加に失敗しました");
+    }
+
     onAdded(body.data);
   }, onClose);
 
