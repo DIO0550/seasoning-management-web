@@ -43,7 +43,7 @@ export async function GET() {
  * 調味料種類を追加する
  */
 export async function POST(request: NextRequest) {
-  let requestedName = "";
+  let requestedName: string | undefined;
   try {
     const body = await request.json();
     const validationResult = seasoningTypeAddRequestSchema.safeParse(body);
@@ -73,6 +73,7 @@ export async function POST(request: NextRequest) {
     const seasoningTypeRepository =
       await repositoryFactory.createSeasoningTypeRepository();
 
+    // UX向上のための事前重複チェック。UNIQUE制約で最終的な整合性は保証される。
     const isDuplicate = await seasoningTypeRepository.existsByName(
       validationResult.data.name
     );
@@ -108,7 +109,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
     if (error instanceof ConflictError) {
-      const duplicateError = new DuplicateError("name", requestedName || "name");
+      const contextValue =
+        (error.context as { value?: unknown } | undefined)?.value;
+      const duplicateValue =
+        typeof contextValue === "string"
+          ? contextValue
+          : requestedName ?? "unknown";
+      const duplicateError = new DuplicateError(
+        "name",
+        duplicateValue
+      );
       const { status, body } = errorMapper.toHttpResponse(duplicateError);
       return NextResponse.json(body, { status });
     }
