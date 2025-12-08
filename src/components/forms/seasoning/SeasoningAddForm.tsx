@@ -10,7 +10,7 @@ import { useSeasoningTypeInput } from "@/features/seasoning/hooks";
 import { useSeasoningImageInput } from "@/features/seasoning/hooks";
 import { useSeasoningSubmit, FormData } from "@/features/seasoning/hooks";
 import { VALIDATION_CONSTANTS } from "@/constants/validation";
-import { SeasoningTypeAddModal } from "./SeasoningTypeAddModal";
+import { SeasoningTypeAddModal } from "@/components/forms/seasoning/SeasoningTypeAddModal";
 import type { SeasoningType } from "@/types/seasoning";
 
 /**

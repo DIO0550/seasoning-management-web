@@ -45,7 +45,7 @@ export const SeasoningTypeAddModal = ({
       const errorMessage =
         body?.message ??
         (response.status >= 500
-          ? "Server Error"
+          ? "サーバーエラーが発生しました"
           : "調味料の種類の追加に失敗しました");
       const errorInstance = new Error(errorMessage);
       errorInstance.name =
