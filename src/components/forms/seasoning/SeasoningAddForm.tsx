@@ -12,6 +12,7 @@ import { useSeasoningSubmit, FormData } from "@/features/seasoning/hooks";
 import { VALIDATION_CONSTANTS } from "@/constants/validation";
 import { SeasoningTypeAddModal } from "@/components/forms/seasoning/SeasoningTypeAddModal";
 import type { SeasoningType } from "@/types/seasoning";
+import { seasoningTypeListResponseSchema } from "@/types/api/seasoningType/list/schemas";
 
 /**
  * 調味料追加フォームのProps
@@ -74,7 +75,8 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
         }
 
         const body = await response.json();
-        const options = (body.data as SeasoningType[]).map((type) => ({
+        const parsed = seasoningTypeListResponseSchema.parse(body);
+        const options = parsed.data.map((type) => ({
           id: String(type.id),
           name: type.name,
         }));

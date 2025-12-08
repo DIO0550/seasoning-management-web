@@ -109,7 +109,7 @@ export const SeasoningTypeAddModal = ({
 
       const focusableElements = Array.from(
         modalElement.querySelectorAll<HTMLElement>(focusableSelector)
-      ).filter((element) => !element.hasAttribute("aria-hidden"));
+      );
 
       if (focusableElements.length === 0) {
         return;
@@ -148,7 +148,14 @@ export const SeasoningTypeAddModal = ({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) {
+          handleClose();
+        }
+      }}
+    >
       <div
         className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl"
         role="dialog"

@@ -185,6 +185,24 @@ it("Tabキーでフォーカスがモーダル内を循環すること", async (
   expect(document.getElementById("seasoning-type-name")).toHaveFocus();
 });
 
+it("オーバーレイをクリックするとモーダルが閉じること", () => {
+  render(
+    <SeasoningTypeAddModal
+      isOpen={true}
+      onClose={mockOnClose}
+      onAdded={mockOnAdded}
+    />
+  );
+
+  const overlay = screen.getByRole("dialog").parentElement as HTMLElement;
+  fireEvent.mouseDown(overlay);
+  fireEvent.mouseUp(overlay);
+  fireEvent.click(overlay);
+
+  expect(mockReset).toHaveBeenCalled();
+  expect(mockOnClose).toHaveBeenCalled();
+});
+
 it("モーダル表示中は背景スクロールが無効化され、閉じると復元されること", () => {
   const { rerender } = render(
     <SeasoningTypeAddModal
