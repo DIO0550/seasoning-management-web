@@ -25,6 +25,7 @@ const defaultHookValues = {
   error: "NONE",
   submitError: null,
   isSubmitting: false,
+  isFormValid: false,
   onBlur: mockOnBlur,
   onChange: mockOnChange,
   submit: mockSubmit,
@@ -90,6 +91,12 @@ it("キャンセルボタンをクリックするとonCloseが呼ばれること
 });
 
 it("保存ボタンをクリックするとsubmitが呼ばれること", () => {
+  (hooks.useSeasoningTypeAdd as ReturnType<typeof vi.fn>).mockReturnValue({
+    ...defaultHookValues,
+    name: "新しい種類",
+    isFormValid: true,
+  });
+
   render(
     <SeasoningTypeAddModal
       isOpen={true}
@@ -100,6 +107,19 @@ it("保存ボタンをクリックするとsubmitが呼ばれること", () => {
   const saveButton = screen.getByText("保存");
   fireEvent.click(saveButton);
   expect(mockSubmit).toHaveBeenCalled();
+});
+
+it("フォームが無効な場合、保存ボタンが無効化されること", () => {
+  render(
+    <SeasoningTypeAddModal
+      isOpen={true}
+      onClose={mockOnClose}
+      onAdded={mockOnAdded}
+    />
+  );
+
+  const saveButton = screen.getByRole("button", { name: "保存" });
+  expect(saveButton).toBeDisabled();
 });
 
 it("バリデーションエラーがある場合、エラーメッセージが表示されること", () => {
@@ -166,6 +186,12 @@ it("Escapeキーでモーダルが閉じられること", () => {
 });
 
 it("Tabキーでフォーカスがモーダル内を循環すること", async () => {
+  (hooks.useSeasoningTypeAdd as ReturnType<typeof vi.fn>).mockReturnValue({
+    ...defaultHookValues,
+    name: "新しい種類",
+    isFormValid: true,
+  });
+
   const user = userEvent.setup();
   render(
     <SeasoningTypeAddModal

@@ -26,6 +26,7 @@ export const SeasoningTypeAddModal = ({
     error,
     submitError,
     isSubmitting,
+    isFormValid,
     onBlur,
     onChange,
     submit,
@@ -212,7 +213,7 @@ export const SeasoningTypeAddModal = ({
               type="button"
               variant="primary"
               onClick={submit}
-              disabled={isSubmitting}
+              disabled={isSubmitting || !isFormValid}
               className="min-w-[96px]"
             >
               {isSubmitting ? "保存中..." : "保存"}
