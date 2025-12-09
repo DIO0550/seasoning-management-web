@@ -73,6 +73,14 @@ export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
     setErrorState(newErrorState);
   };
 
+  const setValueWithValidation = (newValue: string) => {
+    setValue(newValue);
+
+    const validationError = validateType(newValue);
+    const newErrorState = convertValidationError(validationError);
+    setErrorState(newErrorState);
+  };
+
   // 値とエラーをクリアするリセット関数
   const reset = () => {
     setValue("");
@@ -85,6 +93,6 @@ export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
     onChange,
     onBlur,
     reset,
-    setValue,
+    setValue: setValueWithValidation,
   };
 };
