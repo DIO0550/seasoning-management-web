@@ -20,6 +20,45 @@ describe("SeasoningAddForm", () => {
     vi.restoreAllMocks();
   });
 
+  test("種類一覧取得中はローディングメッセージを表示する", async () => {
+    let resolveFetch: (value: unknown) => void;
+    const fetchPromise = new Promise((resolve) => {
+      resolveFetch = resolve;
+    });
+
+    global.fetch = vi.fn().mockReturnValue(
+      fetchPromise as unknown as ReturnType<typeof fetch>
+    );
+
+    render(<SeasoningAddForm />);
+
+    expect(screen.getByText("種類を読み込み中です...")).toBeInTheDocument();
+
+    resolveFetch({
+      ok: true,
+      json: async () => ({ data: mockSeasoningTypes }),
+    });
+
+    await waitFor(() => {
+      expect(global.fetch).toHaveBeenCalled();
+    });
+  });
+
+  test("種類一覧取得に失敗した場合にエラーメッセージを表示する", async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({}),
+    }) as unknown as typeof fetch;
+
+    render(<SeasoningAddForm />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("調味料の種類一覧の取得に失敗しました")
+      ).toBeInTheDocument();
+    });
+  });
+
   test("renders the form with all required fields", async () => {
     render(<SeasoningAddForm />);
 
