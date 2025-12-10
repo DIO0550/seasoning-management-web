@@ -15,6 +15,12 @@ test("名前が空だとバリデーションエラーになる", () => {
   expect(result.success).toBe(false);
 });
 
+test("名前が空白のみだとバリデーションエラーになる", () => {
+  const result = seasoningTypeAddRequestSchema.safeParse({ name: "   " });
+
+  expect(result.success).toBe(false);
+});
+
 test("名前が最大文字数を超えるとバリデーションエラーになる", () => {
   const longName = "あ".repeat(SEASONING_TYPE_NAME_MAX_LENGTH + 1);
 
