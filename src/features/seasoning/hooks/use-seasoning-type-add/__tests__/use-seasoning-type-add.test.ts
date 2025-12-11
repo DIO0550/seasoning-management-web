@@ -4,6 +4,7 @@ import { useSeasoningTypeAdd } from "@/features/seasoning/hooks/use-seasoning-ty
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
 import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
 import { TEST_ASYNC_DELAY } from "@/constants/ui";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
 
 describe("useSeasoningTypeAdd", () => {
   describe("初期状態", () => {
@@ -58,9 +59,9 @@ describe("useSeasoningTypeAdd", () => {
       expect(result.current.isFormValid).toBe(false);
     });
 
-    test("50文字を超える名前でバリデーションエラーが表示されること", () => {
+    test("最大文字数を超える名前でバリデーションエラーが表示されること", () => {
       const { result } = renderHook(() => useSeasoningTypeAdd());
-      const longName = "あ".repeat(51);
+      const longName = "あ".repeat(SEASONING_TYPE_NAME_MAX_LENGTH + 1);
 
       act(() => {
         result.current.onChange({
@@ -72,9 +73,9 @@ describe("useSeasoningTypeAdd", () => {
       expect(result.current.isFormValid).toBe(false);
     });
 
-    test("50文字ちょうどの名前でエラーが発生しないこと", () => {
+    test("最大文字数ちょうどの名前でエラーが発生しないこと", () => {
       const { result } = renderHook(() => useSeasoningTypeAdd());
-      const maxLengthName = "あ".repeat(50);
+      const maxLengthName = "あ".repeat(SEASONING_TYPE_NAME_MAX_LENGTH);
 
       act(() => {
         result.current.onChange({

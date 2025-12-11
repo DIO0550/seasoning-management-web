@@ -1,5 +1,8 @@
 import { useState, ChangeEvent, FocusEvent } from "react";
-import { validateType, type TypeValidationError } from "@/utils/type-validation/type-validation";
+import {
+  validateType,
+  type TypeValidationError,
+} from "@/utils/type-validation/type-validation";
 import { typeValidationErrorMessage } from "@/features/seasoning/utils";
 import type { ValidationErrorState } from "@/types/validationErrorState";
 import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
@@ -10,6 +13,7 @@ export interface UseSeasoningTypeInputReturn {
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
   onBlur: (e: FocusEvent<HTMLSelectElement>) => void;
   reset: () => void;
+  setValue: (value: string) => void;
 }
 
 /**
@@ -69,6 +73,14 @@ export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
     setErrorState(newErrorState);
   };
 
+  const setValueWithValidation = (newValue: string) => {
+    setValue(newValue);
+
+    const validationError = validateType(newValue);
+    const newErrorState = convertValidationError(validationError);
+    setErrorState(newErrorState);
+  };
+
   // 値とエラーをクリアするリセット関数
   const reset = () => {
     setValue("");
@@ -81,5 +93,6 @@ export const useSeasoningTypeInput = (): UseSeasoningTypeInputReturn => {
     onChange,
     onBlur,
     reset,
+    setValue: setValueWithValidation,
   };
 };

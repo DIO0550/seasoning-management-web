@@ -1,27 +1,18 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { ErrorMessage } from "@/components/elements/errors/ErrorMessage";
 import { TextInput } from "@/components/elements/inputs/TextInput";
 import { SelectInput } from "@/components/elements/inputs/SelectInput";
 import { FileInput } from "@/components/elements/inputs/FileInput";
 import { SubmitButton } from "@/components/elements/buttons/SubmitButton";
+import { Button } from "@/components/elements/buttons/button";
 import { useSeasoningNameInput } from "@/features/seasoning/hooks";
 import { useSeasoningTypeInput } from "@/features/seasoning/hooks";
 import { useSeasoningImageInput } from "@/features/seasoning/hooks";
 import { useSeasoningSubmit, FormData } from "@/features/seasoning/hooks";
 import { VALIDATION_CONSTANTS } from "@/constants/validation";
-
-/**
- * 調味料の種類定義
- * 通常はAPIから取得される想定
- */
-const SEASONING_TYPES = [
-  { id: "salt", name: "塩" },
-  { id: "sugar", name: "砂糖" },
-  { id: "pepper", name: "胡椒" },
-  { id: "vinegar", name: "酢" },
-  { id: "soySauce", name: "醤油" },
-  { id: "other", name: "その他" },
-];
+import { SeasoningTypeAddModal } from "@/components/forms/seasoning/SeasoningTypeAddModal";
+import type { SeasoningType } from "@/types/seasoning";
+import { seasoningTypeListResponseSchema } from "@/types/api/seasoningType/list/schemas";
 
 /**
  * 調味料追加フォームのProps
@@ -41,6 +32,14 @@ type Props = {
  * @returns 調味料追加フォームのJSX要素
  */
 export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
+  const [seasoningTypes, setSeasoningTypes] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [isTypeModalOpen, setIsTypeModalOpen] = useState(false);
+  const [typeFetchError, setTypeFetchError] = useState("");
+  const [typeFetchLoading, setTypeFetchLoading] = useState(false);
+  const [typeSuccessMessage, setTypeSuccessMessage] = useState("");
+
   // 調味料名入力用のカスタムフックを使用
   const seasoningName = useSeasoningNameInput();
 
@@ -60,6 +59,53 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
     formData,
     onSubmit,
     () => seasoningImage.reset() // リセット時に画像フックをリセット
+  );
+
+  useEffect(() => {
+    const fetchSeasoningTypes = async () => {
+      setTypeFetchLoading(true);
+      setTypeFetchError("");
+      try {
+        const response = await fetch("/api/seasoning-types", {
+          method: "GET",
+        });
+
+        if (!response.ok) {
+          throw new Error("調味料の種類一覧の取得に失敗しました");
+        }
+
+        const body = await response.json();
+        const parsed = seasoningTypeListResponseSchema.parse(body);
+        const options = parsed.data.map((type) => ({
+          id: String(type.id),
+          name: type.name,
+        }));
+        setSeasoningTypes(options);
+      } catch (error) {
+        console.error("Failed to fetch seasoning types", error);
+        setTypeFetchError("調味料の種類一覧の取得に失敗しました");
+      } finally {
+        setTypeFetchLoading(false);
+      }
+    };
+
+    fetchSeasoningTypes();
+  }, []);
+
+  const handleTypeAdded = (newType: SeasoningType) => {
+    const option = { id: String(newType.id), name: newType.name };
+    setSeasoningTypes((prev) => [...prev, option]);
+    seasoningType.setValue(option.id);
+    setTypeSuccessMessage("調味料の種類を追加しました");
+    setIsTypeModalOpen(false);
+  };
+
+  const typeOptions = useMemo(
+    () =>
+      [...seasoningTypes].sort((a, b) =>
+        a.name.localeCompare(b.name, "ja-JP", { sensitivity: "base" })
+      ),
+    [seasoningTypes]
   );
 
   /**
@@ -107,20 +153,45 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
       />
 
       {/* 種類フィールド */}
-      <SelectInput
-        id="type"
-        name="type"
-        label="調味料の種類"
-        value={seasoningType.value}
-        onChange={seasoningType.onChange}
-        onBlur={seasoningType.onBlur}
-        options={SEASONING_TYPES}
-        required={true}
-        errorMessage={seasoningType.error !== "NONE" ? seasoningType.error : ""}
-        aria-describedby={
-          seasoningType.error !== "NONE" ? "type-error" : undefined
-        }
-      />
+      <div className="space-y-2">
+        <SelectInput
+          id="type"
+          name="type"
+          label="調味料の種類"
+          value={seasoningType.value}
+          onChange={seasoningType.onChange}
+          onBlur={seasoningType.onBlur}
+          options={typeOptions}
+          required={true}
+          errorMessage={
+            seasoningType.error !== "NONE" ? seasoningType.error : ""
+          }
+          aria-describedby={
+            seasoningType.error !== "NONE" ? "type-error" : undefined
+          }
+        />
+        {typeFetchLoading ? (
+          <p className="text-sm text-gray-500">種類を読み込み中です...</p>
+        ) : null}
+        {typeFetchError ? <ErrorMessage message={typeFetchError} /> : null}
+        {typeSuccessMessage ? (
+          <p className="text-sm text-green-600">{typeSuccessMessage}</p>
+        ) : null}
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="w-full"
+          onClick={() => {
+            setTypeSuccessMessage("");
+            setIsTypeModalOpen(true);
+          }}
+          disabled={typeFetchLoading}
+          aria-label="新しい調味料の種類を追加"
+        >
+          新しい調味料の種類を追加
+        </Button>
+      </div>
 
       {/* 画像フィールド */}
       <FileInput
@@ -155,6 +226,12 @@ export const SeasoningAddForm = ({ onSubmit }: Props): React.JSX.Element => {
           aria-label="調味料を追加する"
         />
       </div>
+
+      <SeasoningTypeAddModal
+        isOpen={isTypeModalOpen}
+        onClose={() => setIsTypeModalOpen(false)}
+        onAdded={handleTypeAdded}
+      />
     </form>
   );
 };

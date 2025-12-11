@@ -17,8 +17,9 @@ export const TEMPLATE_NAME_MAX_LENGTH = 256;
 
 /**
  * 調味料種類名の最大文字数制限
+ * @description データベース定義(VARCHAR(256))に合わせた制限
  */
-export const SEASONING_TYPE_NAME_MAX_LENGTH = 50;
+export const SEASONING_TYPE_NAME_MAX_LENGTH = 256;
 
 /**
  * 名前バリデーション定数をまとめたオブジェクト

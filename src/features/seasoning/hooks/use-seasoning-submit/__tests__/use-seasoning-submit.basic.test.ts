@@ -25,6 +25,7 @@ const createMockSeasoningTypeInput = (
   onChange: vi.fn(),
   onBlur: vi.fn(),
   reset: vi.fn(),
+  setValue: vi.fn(),
 });
 
 // モック作成

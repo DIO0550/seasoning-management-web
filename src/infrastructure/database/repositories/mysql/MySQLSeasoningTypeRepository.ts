@@ -104,9 +104,21 @@ export class MySQLSeasoningTypeRepository implements ISeasoningTypeRepository {
     throw new Error("Method not implemented.");
   }
 
-  async existsByName(_name: string, _excludeId?: number): Promise<boolean> {
-    // 最小限の実装
-    throw new Error("Method not implemented.");
+  async existsByName(name: string, excludeId?: number): Promise<boolean> {
+    const conditions: string[] = ["name = ?"];
+    const params: Array<string | number> = [name];
+
+    if (excludeId !== undefined) {
+      conditions.push("id <> ?");
+      params.push(excludeId);
+    }
+
+    const whereClause = conditions.join(" AND ");
+    const sql = `SELECT COUNT(*) as cnt FROM seasoning_type WHERE ${whereClause}`;
+    const result = await this.connection.query<{ cnt: number }>(sql, params);
+    const count = Number(result.rows[0]?.cnt ?? 0);
+
+    return count > 0;
   }
 
   async count(): Promise<number> {

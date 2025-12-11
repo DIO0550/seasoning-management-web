@@ -116,4 +116,42 @@ describe("useSeasoningTypeInput", () => {
     expect(result.current.value).toBe("");
     expect(result.current.error).toBe("");
   });
+
+  test("setValueで値を直接設定できること", () => {
+    const { result } = renderHook(() => useSeasoningTypeInput());
+
+    act(() => {
+      result.current.setValue("salt");
+    });
+
+    expect(result.current.value).toBe("salt");
+    expect(result.current.error).toBe("");
+  });
+
+  test("setValueで空文字を設定すると必須エラーが表示されること", () => {
+    const { result } = renderHook(() => useSeasoningTypeInput());
+
+    act(() => {
+      result.current.setValue("");
+    });
+
+    expect(result.current.error).toBe("調味料の種類を選択してください");
+  });
+
+  test("setValueで無効な値の後に有効な値を設定するとエラーが解消すること", () => {
+    const { result } = renderHook(() => useSeasoningTypeInput());
+
+    act(() => {
+      result.current.setValue("");
+    });
+
+    expect(result.current.error).toBe("調味料の種類を選択してください");
+
+    act(() => {
+      result.current.setValue("salt");
+    });
+
+    expect(result.current.value).toBe("salt");
+    expect(result.current.error).toBe("");
+  });
 });
