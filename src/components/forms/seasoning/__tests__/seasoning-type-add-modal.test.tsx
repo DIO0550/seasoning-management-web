@@ -1,6 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { afterEach, beforeEach, expect, test, vi, type Mock } from "vitest";
 import { SeasoningTypeAddModal } from "@/components/forms/seasoning/SeasoningTypeAddModal";
 import { useSeasoningTypeAdd } from "@/features/seasoning/hooks";
 import {
@@ -17,8 +18,12 @@ type SeasoningTypeAddHookReturn = {
   submitError: string;
   isSubmitting: boolean;
   isFormValid: boolean;
-  onBlur: (event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => void;
-  onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
+  onBlur: (
+    event: React.FocusEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
+  onChange: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
   submit: () => void | Promise<void>;
   reset: () => void;
 };
@@ -38,11 +43,10 @@ const createHookReturn = (
   ...override,
 });
 
-const useSeasoningTypeAddMock = useSeasoningTypeAdd as unknown as vi.Mock;
-const getSubmitMessageMock =
-  getSeasoningTypeSubmitMessage as unknown as vi.Mock;
+const useSeasoningTypeAddMock = useSeasoningTypeAdd as unknown as Mock;
+const getSubmitMessageMock = getSeasoningTypeSubmitMessage as unknown as Mock;
 const getValidationMessageMock =
-  getSeasoningTypeValidationMessage as unknown as vi.Mock;
+  getSeasoningTypeValidationMessage as unknown as Mock;
 
 beforeEach(() => {
   useSeasoningTypeAddMock.mockReturnValue(createHookReturn());
