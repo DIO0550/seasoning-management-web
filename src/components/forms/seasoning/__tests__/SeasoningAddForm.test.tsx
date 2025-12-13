@@ -21,14 +21,14 @@ describe("SeasoningAddForm", () => {
   });
 
   test("種類一覧取得中はローディングメッセージを表示する", async () => {
-    let resolveFetch: (value: unknown) => void;
+    let resolveFetch!: (value: unknown) => void;
     const fetchPromise = new Promise((resolve) => {
       resolveFetch = resolve;
     });
 
-    global.fetch = vi.fn().mockReturnValue(
-      fetchPromise as unknown as ReturnType<typeof fetch>
-    );
+    global.fetch = vi
+      .fn()
+      .mockReturnValue(fetchPromise as unknown as ReturnType<typeof fetch>);
 
     render(<SeasoningAddForm />);
 
