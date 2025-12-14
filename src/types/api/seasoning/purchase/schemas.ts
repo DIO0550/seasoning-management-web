@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { SEASONING_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
-import { isValidDateString } from "@/utils/date-conversion";
+import {
+  getTodayJstDateString,
+  isValidDateString,
+} from "@/utils/date-conversion";
 
 const dateStringSchema = z
   .string()
@@ -11,17 +14,6 @@ const dateStringSchema = z
 
 const nullableDateStringSchema = dateStringSchema.nullable();
 const optionalNullableDateStringSchema = nullableDateStringSchema.optional();
-
-const getTodayJstDateString = (): string => {
-  return new Date()
-    .toLocaleDateString("ja-JP", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      timeZone: "Asia/Tokyo",
-    })
-    .replace(/\//gu, "-");
-};
 
 /**
  * 購入調味料登録リクエストのスキーマ

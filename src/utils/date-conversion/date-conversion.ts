@@ -37,3 +37,18 @@ export const utcDateToString = (value: Date | null): string | null => {
 export const isValidDateString = (value: string): boolean => {
   return DateFormat.isValid(DateFormat.Standard, value);
 };
+
+/**
+ * JST基準の今日の日付をYYYY-MM-DD形式で取得する
+ * @returns YYYY-MM-DD形式の日付文字列
+ */
+export const getTodayJstDateString = (): string => {
+  return new Date()
+    .toLocaleDateString("ja-JP", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      timeZone: "Asia/Tokyo",
+    })
+    .replace(/\//gu, "-");
+};
