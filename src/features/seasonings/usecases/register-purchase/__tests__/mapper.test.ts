@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
 import { Seasoning } from "@/domain/entities/seasoning/seasoning";
-import { RegisterPurchaseMapper } from "../mapper";
+import { RegisterPurchaseMapper } from "@/features/seasonings/usecases/register-purchase/mapper";
 
-test("RegisterPurchaseMapper.toDetailDto: Seasoning EntityをPurchasedSeasoningDetailDtoに変換する", () => {
+test("RegisterPurchaseMapper.toDetailDto: Seasoning EntityをRegisterPurchaseOutputに変換する", () => {
   const entity = new Seasoning({
     id: 10,
     name: "醤油",
