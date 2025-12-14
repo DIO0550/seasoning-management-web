@@ -5,8 +5,11 @@ import type {
 } from "@/infrastructure/database/interfaces";
 import { NotFoundError } from "@/domain/errors";
 import { stringToUtcDate } from "@/utils/date-conversion";
-import type { RegisterPurchaseInput, RegisterPurchaseOutput } from "./dto";
-import { RegisterPurchaseMapper } from "./mapper";
+import type {
+  RegisterPurchaseInput,
+  RegisterPurchaseOutput,
+} from "@/features/seasonings/usecases/register-purchase/dto";
+import { RegisterPurchaseMapper } from "@/features/seasonings/usecases/register-purchase/mapper";
 
 export class RegisterPurchaseUseCase {
   constructor(

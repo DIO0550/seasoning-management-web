@@ -1,5 +1,5 @@
 import { beforeEach, expect, test, vi } from "vitest";
-import { RegisterPurchaseUseCase } from "../index";
+import { RegisterPurchaseUseCase } from "@/features/seasonings/usecases/register-purchase";
 import type {
   ISeasoningImageRepository,
   ISeasoningRepository,
@@ -10,7 +10,7 @@ import { Seasoning } from "@/domain/entities/seasoning/seasoning";
 import { SeasoningImage } from "@/libs/database/entities/SeasoningImage";
 import { SeasoningType } from "@/libs/database/entities/SeasoningType";
 import { NotFoundError } from "@/domain/errors";
-import type { RegisterPurchaseInput } from "../dto";
+import type { RegisterPurchaseInput } from "@/features/seasonings/usecases/register-purchase/dto";
 
 let mockSeasoningRepository: ISeasoningRepository;
 let mockSeasoningTypeRepository: ISeasoningTypeRepository;
