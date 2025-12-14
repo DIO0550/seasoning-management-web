@@ -1,6 +1,6 @@
 import type { Seasoning } from "@/domain/entities/seasoning/seasoning";
 import { utcDateToString } from "@/utils/date-conversion";
-import type { PurchasedSeasoningDetailDto } from "./dto";
+import type { RegisterPurchaseOutput } from "./dto";
 
 const toRequiredDateString = (value: Date | null): string => {
   const converted = utcDateToString(value);
@@ -11,10 +11,7 @@ const toRequiredDateString = (value: Date | null): string => {
 };
 
 export class RegisterPurchaseMapper {
-  static toDetailDto(
-    entity: Seasoning,
-    typeName: string
-  ): PurchasedSeasoningDetailDto {
+  static toDetailDto(entity: Seasoning, typeName: string): RegisterPurchaseOutput {
     return {
       id: entity.id,
       name: entity.name,

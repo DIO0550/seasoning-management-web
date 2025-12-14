@@ -11,7 +11,7 @@ export interface RegisterPurchaseInput {
   expiresAt?: string | null;
 }
 
-export interface PurchasedSeasoningDetailDto {
+export interface RegisterPurchaseOutput {
   id: number;
   name: string;
   typeId: number;
