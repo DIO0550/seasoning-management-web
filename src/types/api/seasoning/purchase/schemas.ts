@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { SEASONING_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
 import { isValidDateString } from "@/utils/date-conversion";
 
 const dateStringSchema = z
@@ -30,7 +31,10 @@ export const seasoningPurchaseRequestSchema = z.object({
     .string()
     .trim()
     .min(1, "調味料名は必須です")
-    .max(100, "調味料名は100文字以内で入力してください"),
+    .max(
+      SEASONING_NAME_MAX_LENGTH,
+      `調味料名は${SEASONING_NAME_MAX_LENGTH}文字以内で入力してください`
+    ),
   typeId: z
     .number({ message: "調味料の種類を選択してください" })
     .int()
