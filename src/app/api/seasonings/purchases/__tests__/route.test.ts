@@ -180,3 +180,51 @@ test("POST /api/seasonings/purchases - SeasoningImage が存在しない場合�
   const payload = await response.json();
   expect(payload.code).toBe("SEASONING_IMAGE_NOT_FOUND");
 });
+
+test("POST /api/seasonings/purchases - リクエストボディが不正なJSONの場合は400", async () => {
+  const consoleErrorSpy = vi
+    .spyOn(console, "error")
+    .mockImplementation(() => undefined);
+
+  const url = new URL("http://localhost:3000/api/seasonings/purchases");
+  const request = new NextRequest(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: "{invalid-json",
+  });
+
+  const response = await POST(request);
+
+  expect(response.status).toBe(400);
+  const payload = await response.json();
+  expect(payload.code).toBe("INTERNAL_ERROR");
+
+  consoleErrorSpy.mockRestore();
+});
+
+test("POST /api/seasonings/purchases - 無効な日付エラーの場合は400", async () => {
+  const consoleErrorSpy = vi
+    .spyOn(console, "error")
+    .mockImplementation(() => undefined);
+
+  registerPurchaseExecuteMock.mockRejectedValueOnce(new Error("Invalid date"));
+
+  const response = await POST(
+    createRequest({
+      method: "POST",
+      body: {
+        name: "醤油",
+        typeId: 2,
+        purchasedAt: "2025-11-01",
+      },
+    })
+  );
+
+  expect(response.status).toBe(400);
+  const payload = await response.json();
+  expect(payload.code).toBe("VALIDATION_ERROR_DATE_INVALID");
+
+  consoleErrorSpy.mockRestore();
+});
