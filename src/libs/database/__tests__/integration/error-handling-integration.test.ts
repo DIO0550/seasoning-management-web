@@ -124,7 +124,7 @@ describe("Error Handling and Logging System Integration", () => {
     expect(logOutput).toHaveProperty("source", "error-notifier");
     expect(logOutput).toHaveProperty("metadata");
     expect(logOutput.metadata).toHaveProperty(
-      "error-code",
+      "errorCode",
       ErrorCode.VALIDATION_ERROR
     );
     expect(logOutput.metadata).toHaveProperty("severity", ErrorSeverity.HIGH);
