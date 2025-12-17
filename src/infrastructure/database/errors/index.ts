@@ -8,8 +8,8 @@ export {
   DatabaseError,
   DATABASE_ERROR_CODES,
   isDatabaseError,
-} from "./DatabaseError";
-export type { DatabaseErrorCode } from "./DatabaseError";
+} from "./database-error";
+export type { DatabaseErrorCode } from "./database-error";
 
 // 接続関連エラー
 export {
@@ -21,10 +21,10 @@ export {
   isConfigurationError,
   isTimeoutError,
   isPoolError,
-} from "./ConnectionErrors";
+} from "./connection-errors";
 
 // トランザクション関連エラー
-export { TransactionError, isTransactionError } from "./TransactionErrors";
+export { TransactionError, isTransactionError } from "./transaction-errors";
 
 // クエリ関連エラー
-export { QueryError, isQueryError } from "./QueryErrors";
+export { QueryError, isQueryError } from "./query-errors";

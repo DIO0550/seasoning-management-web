@@ -4,7 +4,7 @@ import {
   IMAGE_MAX_SIZE_MB,
   IMAGE_MAX_SIZE_BYTES,
   IMAGE_VALIDATION_CONSTANTS,
-} from "../imageValidation";
+} from "../image-validation";
 
 describe("imageValidation constants", () => {
   test("画像バリデーション定数が正しく定義されている", () => {

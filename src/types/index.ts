@@ -10,9 +10,9 @@ export * from "./seasoning";
 export * from "./validation";
 
 // 既存の型（後方互換）
-export * from "./seasoningType";
-export * from "./submitErrorState";
-export * from "./validationErrorState";
+export * from "./seasoning-type";
+export * from "./submit-error-state";
+export * from "./validation-error-state";
 
 // API 型は別途 @/types/api から import することを推奨
 // 例: import type { SeasoningAddRequest } from "@/types/api/seasoning/add/types";

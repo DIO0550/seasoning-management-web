@@ -2,7 +2,7 @@
  * @fileoverview 外部キー制約違反エラー
  */
 
-import { DomainError } from "./DomainError";
+import { DomainError } from "./domain-error";
 
 /**
  * 外部キー制約違反エラー

@@ -1,9 +1,9 @@
 import { describe, test, expect } from "vitest";
-import { DatabaseError } from "../../../errors/base/DatabaseError";
-import { ErrorCode } from "../../../errors/base/ErrorCode";
-import { ErrorSeverity } from "../../../errors/base/ErrorSeverity";
+import { DatabaseError } from "../../../errors/base/database-error";
+import { ErrorCode } from "../../../errors/base/error-code";
+import { ErrorSeverity } from "../../../errors/base/error-severity";
 
-describe("DatabaseError", () => {
+describe("database-error", () => {
   test("基本的なエラー情報を保持できる", () => {
     const error = new DatabaseError(
       "テストエラーメッセージ",
@@ -14,7 +14,7 @@ describe("DatabaseError", () => {
     expect(error.message).toBe("テストエラーメッセージ");
     expect(error.code).toBe(ErrorCode.VALIDATION_ERROR);
     expect(error.severity).toBe(ErrorSeverity.MEDIUM);
-    expect(error.name).toBe("DatabaseError");
+    expect(error.name).toBe("database-error");
     expect(error instanceof Error).toBe(true);
   });
 
@@ -71,7 +71,7 @@ describe("DatabaseError", () => {
     );
 
     expect(error.stack).toBeDefined();
-    expect(error.stack).toContain("DatabaseError");
+    expect(error.stack).toContain("database-error");
   });
 
   test("JSON形式でシリアライズできる", () => {
@@ -86,7 +86,7 @@ describe("DatabaseError", () => {
     const json = error.toJSON();
 
     expect(json).toEqual({
-      name: "DatabaseError",
+      name: "database-error",
       message: "JSONテストメッセージ",
       code: ErrorCode.DUPLICATE_KEY,
       severity: ErrorSeverity.MEDIUM,
@@ -104,7 +104,7 @@ describe("DatabaseError", () => {
 
     const stringRepresentation = error.toString();
 
-    expect(stringRepresentation).toContain("DatabaseError");
+    expect(stringRepresentation).toContain("database-error");
     expect(stringRepresentation).toContain("テスト文字列メッセージ");
     expect(stringRepresentation).toContain(ErrorCode.NETWORK_ERROR);
     expect(stringRepresentation).toContain(ErrorSeverity.HIGH);

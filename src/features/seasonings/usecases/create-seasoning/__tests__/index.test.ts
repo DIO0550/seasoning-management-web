@@ -5,10 +5,10 @@ import type {
   ISeasoningTypeRepository,
   ISeasoningImageRepository,
 } from "@/infrastructure/database/interfaces";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/core/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces/core/i-database-connection";
 import { Seasoning } from "@/domain/entities/seasoning/seasoning";
-import { SeasoningType } from "@/libs/database/entities/SeasoningType";
-import { SeasoningImage } from "@/libs/database/entities/SeasoningImage";
+import { SeasoningType } from "@/libs/database/entities/seasoning-type";
+import { SeasoningImage } from "@/libs/database/entities/seasoning-image";
 import type { CreateSeasoningInput } from "../dto";
 import { DuplicateError, NotFoundError } from "@/domain/errors";
 

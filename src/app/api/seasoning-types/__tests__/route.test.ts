@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { GET, POST } from "../route";
 import { NextRequest } from "next/server";
-import { ConnectionManager } from "@/infrastructure/database/ConnectionManager";
-import { RepositoryFactory } from "@/infrastructure/di/RepositoryFactory";
+import { ConnectionManager } from "@/infrastructure/database/connection-manager";
+import { RepositoryFactory } from "@/infrastructure/di/repository-factory";
 
 // モックの設定
-vi.mock("@/infrastructure/database/ConnectionManager");
-vi.mock("@/infrastructure/di/RepositoryFactory");
+vi.mock("@/infrastructure/database/connection-manager");
+vi.mock("@/infrastructure/di/repository-factory");
 
 describe("API: /api/seasoning-types", () => {
   const mockSeasoningTypeRepository = {

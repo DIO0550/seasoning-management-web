@@ -1,5 +1,5 @@
 import type { Connection } from "mysql2/promise";
-import type { ITransactionAdapter } from "@/infrastructure/database/interfaces/IConnectionAdapter";
+import type { ITransactionAdapter } from "@/infrastructure/database/interfaces/i-connection-adapter";
 import type { QueryResult } from "@/infrastructure/database/interfaces";
 
 /**

@@ -2,7 +2,7 @@
  * データベースクエリ関連のエラー型定義
  */
 
-import { DatabaseError } from "./DatabaseError";
+import { DatabaseError } from "./database-error";
 
 /**
  * クエリ実行エラー

@@ -15,7 +15,7 @@ import type {
   SeasoningTemplateUpdateInput,
   UpdateResult,
 } from "@/infrastructure/database/interfaces";
-import { SeasoningTemplate } from "@/libs/database/entities/SeasoningTemplate";
+import { SeasoningTemplate } from "@/libs/database/entities/seasoning-template";
 
 /**
  * データベースから取得した生データの型定義

@@ -1,6 +1,6 @@
-import { DatabaseError } from "../base/DatabaseError";
-import { ErrorCode } from "../base/ErrorCode";
-import { ErrorSeverity } from "../base/ErrorSeverity";
+import { DatabaseError } from "../base/database-error";
+import { ErrorCode } from "../base/error-code";
+import { ErrorSeverity } from "../base/error-severity";
 
 /**
  * 競合エラークラス
@@ -13,6 +13,6 @@ export class ConflictError extends DatabaseError {
     severity: ErrorSeverity = ErrorSeverity.MEDIUM
   ) {
     super(message, ErrorCode.DUPLICATE_KEY, severity, context);
-    this.name = "ConflictError";
+    this.name = "conflict-error";
   }
 }

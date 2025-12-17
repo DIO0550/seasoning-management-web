@@ -3,8 +3,8 @@
  * 複数のデータベース実装をサポートする真のファクトリーパターン
  */
 
-import type { IDatabaseConnection } from "../interfaces/IDatabaseConnection";
-import type { IConnectionPool } from "../interfaces/IConnectionPool";
+import type { IDatabaseConnection } from "../interfaces/i-database-connection";
+import type { IConnectionPool } from "../interfaces/i-connection-pool";
 import type { ConnectionConfig } from "@/libs/database/interfaces/core";
 
 /**

@@ -4,7 +4,7 @@
  */
 
 export { INFRASTRUCTURE_IDENTIFIERS } from "./identifiers";
-export { RepositoryFactory } from "./RepositoryFactory";
+export { RepositoryFactory } from "./repository-factory";
 export {
   configureInfrastructureForDevelopment,
   configureInfrastructureForProduction,

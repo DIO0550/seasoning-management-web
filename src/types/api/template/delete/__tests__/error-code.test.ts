@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { TemplateDeleteErrorCode } from "../errorCode";
+import { TemplateDeleteErrorCode } from "../error-code";
 
 describe("TemplateDeleteErrorCode", () => {
   describe("fromValidationError", () => {

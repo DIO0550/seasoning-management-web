@@ -1,14 +1,14 @@
 import { describe, test, expect } from "vitest";
-import { MySQLErrorMapper } from "../../../errors/mapping/MySQLErrorMapper";
-import { ValidationError } from "../../../errors/domain/ValidationError";
-import { ConflictError } from "../../../errors/domain/ConflictError";
-import { ConnectionError } from "../../../errors/domain/ConnectionError";
-import { NotFoundError } from "../../../errors/domain/NotFoundError";
-import { DatabaseError } from "../../../errors/base/DatabaseError";
-import { ErrorCode } from "../../../errors/base/ErrorCode";
-import { MySQLError } from "../../../errors/mapping/ErrorContext";
+import { MySQLErrorMapper } from "../../../errors/mapping/my-sql-error-mapper";
+import { ValidationError } from "../../../errors/domain/validation-error";
+import { ConflictError } from "../../../errors/domain/conflict-error";
+import { ConnectionError } from "../../../errors/domain/connection-error";
+import { NotFoundError } from "../../../errors/domain/not-found-error";
+import { DatabaseError } from "../../../errors/base/database-error";
+import { ErrorCode } from "../../../errors/base/error-code";
+import { MySQLError } from "../../../errors/mapping/error-context";
 
-describe("MySQLErrorMapper", () => {
+describe("my-sql-error-mapper", () => {
   test("MySQL重複キーエラーをConflictErrorにマップできる", () => {
     const mysqlError: MySQLError = new Error(
       "Duplicate entry 'test@example.com' for key 'email'"

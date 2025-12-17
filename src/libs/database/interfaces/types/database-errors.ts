@@ -7,7 +7,7 @@
  * データベース操作の基底エラークラス
  */
 export class DatabaseError extends Error {
-  public readonly name: string = "DatabaseError";
+  public readonly name: string = "database-error";
   public readonly code: string;
   public readonly cause?: Error;
 
@@ -22,7 +22,7 @@ export class DatabaseError extends Error {
  * データベース接続関連のエラー
  */
 export class ConnectionError extends DatabaseError {
-  public readonly name: string = "ConnectionError";
+  public readonly name: string = "connection-error";
 
   constructor(message: string, code: string, cause?: Error) {
     super(message, code, cause);

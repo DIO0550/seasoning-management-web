@@ -2,8 +2,8 @@ import type {
   ConnectionConfig,
   QueryResult,
   PoolStats,
-} from "./IDatabaseConnection";
-import type { IDatabaseConnection } from "./IDatabaseConnection";
+} from "./i-database-connection";
+import type { IDatabaseConnection } from "./i-database-connection";
 
 /**
  * データベースプールの抽象インターフェース

@@ -1,8 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
-import type { SubmitErrorState } from "@/types/submitErrorState";
-import type { ValidationErrorState } from "@/types/validationErrorState";
-import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
-import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
+import type { SubmitErrorState } from "@/types/submit-error-state";
+import type { ValidationErrorState } from "@/types/validation-error-state";
+import { SUBMIT_ERROR_STATES } from "@/types/submit-error-state";
+import { VALIDATION_ERROR_STATES } from "@/types/validation-error-state";
 import { UseSeasoningNameInputReturn } from "@/features/seasoning/hooks/use-seasoning-name-input/use-seasoning-name-input";
 import { UseSeasoningTypeInputReturn } from "@/features/seasoning/hooks/use-seasoning-type-input/use-seasoning-type-input";
 import { validateImage } from "@/utils/image-validation/image-validation";
@@ -70,7 +70,7 @@ export const useSeasoningSubmit = (
     if (error instanceof Error) {
       if (error.name === "NetworkError") {
         errorType = SUBMIT_ERROR_STATES.NETWORK_ERROR;
-      } else if (error.name === "ValidationError") {
+      } else if (error.name === "validation-error") {
         errorType = SUBMIT_ERROR_STATES.VALIDATION_ERROR;
       } else if (error.message?.includes("Server Error")) {
         errorType = SUBMIT_ERROR_STATES.SERVER_ERROR;

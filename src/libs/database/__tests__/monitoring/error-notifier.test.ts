@@ -1,10 +1,10 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { ErrorNotifier } from "../../monitoring/ErrorNotifier";
-import { DatabaseError } from "../../errors/base/DatabaseError";
-import { ErrorCode } from "../../errors/base/ErrorCode";
-import { ErrorSeverity } from "../../errors/base/ErrorSeverity";
-import { ILogger } from "../../logging/interfaces/ILogger";
-import { LogLevel } from "../../logging/formatters/LogLevel";
+import { ErrorNotifier } from "../../monitoring/error-notifier";
+import { DatabaseError } from "../../errors/base/database-error";
+import { ErrorCode } from "../../errors/base/error-code";
+import { ErrorSeverity } from "../../errors/base/error-severity";
+import { ILogger } from "../../logging/interfaces/i-logger";
+import { LogLevel } from "../../logging/formatters/log-level";
 
 // モックロガー
 const mockLogger: ILogger = {
@@ -18,7 +18,7 @@ const mockLogger: ILogger = {
   isLevelEnabled: vi.fn().mockReturnValue(true),
 };
 
-describe("ErrorNotifier", () => {
+describe("error-notifier", () => {
   let notifier: ErrorNotifier;
 
   beforeEach(() => {
@@ -47,7 +47,7 @@ describe("ErrorNotifier", () => {
         severity: ErrorSeverity.CRITICAL,
         timestamp: expect.any(String),
       }),
-      "ErrorNotifier"
+      "error-notifier"
     );
   });
 
@@ -67,7 +67,7 @@ describe("ErrorNotifier", () => {
         errorCode: ErrorCode.VALIDATION_ERROR,
         severity: ErrorSeverity.HIGH,
       }),
-      "ErrorNotifier"
+      "error-notifier"
     );
   });
 
@@ -86,7 +86,7 @@ describe("ErrorNotifier", () => {
         errorCode: ErrorCode.DUPLICATE_KEY,
         severity: ErrorSeverity.MEDIUM,
       }),
-      "ErrorNotifier"
+      "error-notifier"
     );
   });
 
@@ -105,7 +105,7 @@ describe("ErrorNotifier", () => {
         errorCode: ErrorCode.NOT_FOUND,
         severity: ErrorSeverity.LOW,
       }),
-      "ErrorNotifier"
+      "error-notifier"
     );
   });
 
@@ -124,7 +124,7 @@ describe("ErrorNotifier", () => {
         errorCode: ErrorCode.UNKNOWN_ERROR,
         severity: ErrorSeverity.INFO,
       }),
-      "ErrorNotifier"
+      "error-notifier"
     );
   });
 
@@ -150,7 +150,7 @@ describe("ErrorNotifier", () => {
           table: "seasoning",
         },
       }),
-      "ErrorNotifier"
+      "error-notifier"
     );
   });
 

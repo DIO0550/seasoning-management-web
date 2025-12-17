@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { MySQLConnectionPool } from "../MySQLConnectionPool";
+import { MySQLConnectionPool } from "../my-sql-connection-pool";
 import { PoolError } from "../../../errors";
 
-describe("MySQLConnectionPool", () => {
+describe("my-sql-connection-pool", () => {
   let pool: MySQLConnectionPool;
 
   beforeEach(() => {

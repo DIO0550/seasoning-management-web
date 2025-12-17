@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, expect, test, vi, type Mock } from "vitest";
-import { SeasoningTypeAddModal } from "@/components/forms/seasoning/SeasoningTypeAddModal";
+import { SeasoningTypeAddModal } from "@/components/forms/seasoning/seasoning-type-add-modal";
 import { useSeasoningTypeAdd } from "@/features/seasoning/hooks";
 import {
   getSeasoningTypeSubmitMessage,

@@ -1,9 +1,9 @@
 import { describe, test, expect } from "vitest";
-import type { ITransaction } from "../ITransaction";
+import type { ITransaction } from "../i-transaction";
 import type {
   QueryResult,
   TransactionStatus,
-} from "../IDatabaseConnection";
+} from "../i-database-connection";
 
 // テスト用のモック実装
 class MockTransaction implements ITransaction {
@@ -66,7 +66,7 @@ class MockTransaction implements ITransaction {
   }
 }
 
-describe("ITransaction", () => {
+describe("i-transaction", () => {
   test("queryメソッドが呼び出せる", async () => {
     const transaction = new MockTransaction();
 

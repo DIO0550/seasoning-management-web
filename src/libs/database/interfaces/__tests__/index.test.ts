@@ -35,7 +35,7 @@ describe("Database Interfaces Index", () => {
     const connError = new ConnectionError("connection failed", "CONN_FAILED");
     expect(connError).toBeInstanceOf(DatabaseError);
     expect(connError).toBeInstanceOf(ConnectionError);
-    expect(connError.name).toBe("ConnectionError");
+    expect(connError.name).toBe("connection-error");
   });
 
   test("TransactionErrorが正しく動作する", () => {

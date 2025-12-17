@@ -4,7 +4,7 @@
  */
 
 import { describe, test, expect } from "vitest";
-import { SeasoningType, SeasoningTypeSchema } from "../SeasoningType";
+import { SeasoningType, SeasoningTypeSchema } from "../seasoning-type";
 
 describe("SeasoningType Entity", () => {
   describe("エンティティの作成", () => {

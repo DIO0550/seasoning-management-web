@@ -1,7 +1,7 @@
 // Error Monitoring
-export { ErrorNotifier } from "./ErrorNotifier";
-export type { ErrorNotificationOptions } from "./ErrorNotifier";
+export { ErrorNotifier } from "./error-notifier";
+export type { ErrorNotificationOptions } from "./error-notifier";
 
 // Error Tracking
-export { ErrorTracker } from "./ErrorTracker";
-export type { ErrorStatistics } from "./ErrorTracker";
+export { ErrorTracker } from "./error-tracker";
+export type { ErrorStatistics } from "./error-tracker";

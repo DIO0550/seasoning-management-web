@@ -1,6 +1,6 @@
-import { ILogger } from "../interfaces/ILogger";
-import { ILogEntry } from "../interfaces/ILogEntry";
-import { LogLevel, LogLevelPriority } from "../formatters/LogLevel";
+import { ILogger } from "../interfaces/i-logger";
+import { ILogEntry } from "../interfaces/i-log-entry";
+import { LogLevel, LogLevelPriority } from "../formatters/log-level";
 
 /**
  * 構造化ログ出力を行うロガー実装

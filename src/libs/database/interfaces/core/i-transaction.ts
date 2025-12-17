@@ -1,4 +1,4 @@
-import type { QueryResult, TransactionStatus } from "./IDatabaseConnection";
+import type { QueryResult, TransactionStatus } from "./i-database-connection";
 
 /**
  * データベーストランザクションのインターフェース

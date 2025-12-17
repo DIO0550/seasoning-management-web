@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { SeasoningListErrorCode } from "../errorCode";
+import { SeasoningListErrorCode } from "../error-code";
 
 test("fromValidationError: page の invalid_type は VALIDATION_ERROR_PAGE_INVALID を返す", () => {
   const zodError = new ZodError([

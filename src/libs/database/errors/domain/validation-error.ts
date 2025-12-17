@@ -1,6 +1,6 @@
-import { DatabaseError } from "../base/DatabaseError";
-import { ErrorCode } from "../base/ErrorCode";
-import { ErrorSeverity } from "../base/ErrorSeverity";
+import { DatabaseError } from "../base/database-error";
+import { ErrorCode } from "../base/error-code";
+import { ErrorSeverity } from "../base/error-severity";
 
 /**
  * バリデーションエラークラス
@@ -13,6 +13,6 @@ export class ValidationError extends DatabaseError {
     severity: ErrorSeverity = ErrorSeverity.MEDIUM
   ) {
     super(message, ErrorCode.VALIDATION_ERROR, severity, context);
-    this.name = "ValidationError";
+    this.name = "validation-error";
   }
 }

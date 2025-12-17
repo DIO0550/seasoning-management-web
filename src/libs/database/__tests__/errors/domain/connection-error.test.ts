@@ -1,16 +1,16 @@
 import { describe, test, expect } from "vitest";
-import { ConnectionError } from "../../../errors/domain/ConnectionError";
-import { ErrorCode } from "../../../errors/base/ErrorCode";
-import { ErrorSeverity } from "../../../errors/base/ErrorSeverity";
+import { ConnectionError } from "../../../errors/domain/connection-error";
+import { ErrorCode } from "../../../errors/base/error-code";
+import { ErrorSeverity } from "../../../errors/base/error-severity";
 
-describe("ConnectionError", () => {
+describe("connection-error", () => {
   test("接続エラーを作成できる", () => {
     const error = new ConnectionError("データベースに接続できません");
 
     expect(error.message).toBe("データベースに接続できません");
     expect(error.code).toBe(ErrorCode.CONNECTION_ERROR);
     expect(error.severity).toBe(ErrorSeverity.HIGH);
-    expect(error.name).toBe("ConnectionError");
+    expect(error.name).toBe("connection-error");
   });
 
   test("接続情報を保持できる", () => {

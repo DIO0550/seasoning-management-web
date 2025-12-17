@@ -2,13 +2,13 @@ import type { Connection } from "mysql2/promise";
 import type {
   IConnectionAdapter,
   ITransactionAdapter,
-} from "@/infrastructure/database/interfaces/IConnectionAdapter";
+} from "@/infrastructure/database/interfaces/i-connection-adapter";
 import type {
   ConnectionConfig,
   PoolStats,
   QueryResult,
 } from "@/infrastructure/database/interfaces";
-import { MySQL2TransactionAdapter } from "./MySQL2TransactionAdapter";
+import { MySQL2TransactionAdapter } from "./my-sql2-transaction-adapter";
 
 /**
  * MySQL2ライブラリのConnectionを単純にラップするアダプター

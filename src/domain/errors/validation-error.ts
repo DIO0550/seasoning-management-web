@@ -2,7 +2,7 @@
  * @fileoverview バリデーションエラー
  */
 
-import { DomainError } from "./DomainError";
+import { DomainError } from "./domain-error";
 
 /**
  * バリデーションエラー

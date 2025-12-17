@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { seasoningTypeAddRequestSchema } from "@/types/api/seasoningType/add/schemas";
 import { seasoningTypeListResponseSchema } from "@/types/api/seasoningType/list/schemas";
-import { SeasoningTypeAddErrorCode } from "@/types/api/seasoningType/add/errorCode";
-import { ConnectionManager } from "@/infrastructure/database/ConnectionManager";
-import { RepositoryFactory } from "@/infrastructure/di/RepositoryFactory";
+import { SeasoningTypeAddErrorCode } from "@/types/api/seasoningType/add/error-code";
+import { ConnectionManager } from "@/infrastructure/database/connection-manager";
+import { RepositoryFactory } from "@/infrastructure/di/repository-factory";
 import { errorMapper } from "@/utils/api/error-mapper";
 import { DuplicateError } from "@/domain/errors";
 import { ConflictError } from "@/libs/database/errors";

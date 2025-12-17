@@ -1,8 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { ConnectionManager } from "../ConnectionManager";
+import { ConnectionManager } from "../connection-manager";
 import { ConfigurationError } from "../errors";
 
-describe("ConnectionManager", () => {
+describe("connection-manager", () => {
   let manager: ConnectionManager;
 
   beforeEach(() => {

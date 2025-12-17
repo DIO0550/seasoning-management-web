@@ -8,16 +8,16 @@ import {
   isConnectionError,
   isTransactionError,
   isQueryError,
-} from "../DatabaseErrors";
+} from "../database-errors";
 
-describe("DatabaseErrors", () => {
-  describe("DatabaseError", () => {
+describe("database-errors", () => {
+  describe("database-error", () => {
     test("基本的なエラー情報を持つ", () => {
       const error = new DatabaseError("テストエラー", "TEST_ERROR");
 
       expect(error.message).toBe("テストエラー");
       expect(error.code).toBe("TEST_ERROR");
-      expect(error.name).toBe("DatabaseError");
+      expect(error.name).toBe("database-error");
       expect(error).toBeInstanceOf(Error);
     });
 
@@ -29,7 +29,7 @@ describe("DatabaseErrors", () => {
     });
   });
 
-  describe("ConnectionError", () => {
+  describe("connection-error", () => {
     test("接続エラーを表現する", () => {
       const error = new ConnectionError(
         "接続に失敗しました",
@@ -38,7 +38,7 @@ describe("DatabaseErrors", () => {
 
       expect(error.message).toBe("接続に失敗しました");
       expect(error.code).toBe("CONNECTION_FAILED");
-      expect(error.name).toBe("ConnectionError");
+      expect(error.name).toBe("connection-error");
       expect(error).toBeInstanceOf(DatabaseError);
     });
   });

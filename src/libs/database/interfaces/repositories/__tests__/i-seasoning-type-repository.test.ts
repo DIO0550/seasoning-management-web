@@ -9,15 +9,15 @@ import type {
   SeasoningTypeSearchOptions,
   SeasoningTypeCreateInput,
   SeasoningTypeUpdateInput,
-} from "../ISeasoningTypeRepository";
-import type { SeasoningType } from "../../../entities/SeasoningType";
+} from "../i-seasoning-type-repository";
+import type { SeasoningType } from "../../../entities/seasoning-type";
 import type {
   PaginatedResult,
   CreateResult,
   UpdateResult,
   DeleteResult,
 } from "../../common/types";
-import type { IDatabaseConnection } from "../../core/IDatabaseConnection";
+import type { IDatabaseConnection } from "../../core/i-database-connection";
 
 // モック実装（テスト用）
 class MockSeasoningTypeRepository implements ISeasoningTypeRepository {

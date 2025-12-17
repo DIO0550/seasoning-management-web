@@ -3,7 +3,7 @@ import type {
   ISeasoningTypeRepository,
   SeasoningCreateInput,
 } from "@/infrastructure/database/interfaces";
-import { Seasoning } from "@/libs/database/entities/Seasoning";
+import { Seasoning } from "@/libs/database/entities/seasoning";
 import { VALIDATION_CONSTANTS } from "@/constants/validation";
 
 // 依存性注入用型

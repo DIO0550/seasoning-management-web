@@ -1,5 +1,5 @@
 import type * as mysql from "mysql2/promise";
-import type { ITransaction } from "../../interfaces/ITransaction";
+import type { ITransaction } from "../../interfaces/i-transaction";
 import type {
   QueryResult,
   TransactionStatus,

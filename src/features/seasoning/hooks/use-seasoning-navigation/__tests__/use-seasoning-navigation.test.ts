@@ -2,7 +2,7 @@ import { renderHook, act } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 import { useRouter } from "next/navigation";
 import { useSeasoningNavigation } from "@/features/seasoning/hooks/use-seasoning-navigation/use-seasoning-navigation";
-import { SEASONING_PAGE_PATHS } from "@/constants/pagePaths";
+import { SEASONING_PAGE_PATHS } from "@/constants/page-paths";
 
 // Next.jsのuseRouterをモック化
 vi.mock("next/navigation", () => ({

@@ -1,5 +1,5 @@
-import { ErrorCode } from "./ErrorCode";
-import { ErrorSeverity } from "./ErrorSeverity";
+import { ErrorCode } from "./error-code";
+import { ErrorSeverity } from "./error-severity";
 
 /**
  * データベース操作関連エラーの基底クラス
@@ -33,7 +33,7 @@ export class DatabaseError extends Error {
   ) {
     super(message);
 
-    this.name = "DatabaseError";
+    this.name = "database-error";
     this.code = code;
     this.severity = severity;
     this.timestamp = new Date();

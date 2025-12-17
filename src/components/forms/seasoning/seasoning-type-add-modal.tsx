@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { TextInput } from "@/components/elements/inputs/TextInput";
+import { TextInput } from "@/components/elements/inputs/text-input";
 import { Button } from "@/components/elements/buttons/button";
 import { useSeasoningTypeAdd } from "@/features/seasoning/hooks";
 import {
@@ -7,7 +7,7 @@ import {
   getSeasoningTypeValidationMessage,
 } from "@/features/seasoning/utils";
 import type { SeasoningType } from "@/types/seasoning";
-import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 
 type SeasoningTypeAddModalProps = {
   isOpen: boolean;
@@ -50,7 +50,7 @@ export const SeasoningTypeAddModal = ({
           : "調味料の種類の追加に失敗しました");
       const errorInstance = new Error(errorMessage);
       errorInstance.name =
-        response.status >= 500 ? "NetworkError" : "ValidationError";
+        response.status >= 500 ? "NetworkError" : "validation-error";
       throw errorInstance;
     }
 

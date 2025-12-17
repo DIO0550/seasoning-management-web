@@ -6,9 +6,9 @@ import {
 import {
   VALIDATION_ERROR_STATES,
   type ValidationErrorState,
-} from "@/types/validationErrorState";
-import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
-import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+} from "@/types/validation-error-state";
+import { SUBMIT_ERROR_STATES } from "@/types/submit-error-state";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 
 describe("getSeasoningTypeValidationMessage", () => {
   test("REQUIREDエラーの場合、必須メッセージを返す", () => {

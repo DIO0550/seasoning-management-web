@@ -1,5 +1,5 @@
 import { ZodError } from "zod";
-import { SeasoningTypeUpdateErrorCode } from "../errorCode";
+import { SeasoningTypeUpdateErrorCode } from "../error-code";
 
 describe("SeasoningTypeUpdateErrorCode", () => {
   describe("fromValidationError", () => {

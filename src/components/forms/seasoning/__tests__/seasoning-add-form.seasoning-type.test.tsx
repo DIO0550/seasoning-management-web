@@ -1,7 +1,7 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi, afterEach } from "vitest";
-import { SeasoningAddForm } from "@/components/forms/seasoning/SeasoningAddForm";
+import { SeasoningAddForm } from "@/components/forms/seasoning/seasoning-add-form";
 import { FormData } from "@/features/seasoning/hooks";
 
 const createFetchMock = () => {

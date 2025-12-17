@@ -1,13 +1,13 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { DatabaseError } from "../../errors/base/DatabaseError";
-import { ErrorCode } from "../../errors/base/ErrorCode";
-import { ErrorSeverity } from "../../errors/base/ErrorSeverity";
-import { MySQLErrorMapper } from "../../errors/mapping/MySQLErrorMapper";
-import { MySQLError } from "../../errors/mapping/ErrorContext";
-import { StructuredLogger } from "../../logging/implementations/StructuredLogger";
-import { LogLevel } from "../../logging/formatters/LogLevel";
-import { ErrorNotifier } from "../../monitoring/ErrorNotifier";
-import { ErrorTracker } from "../../monitoring/ErrorTracker";
+import { DatabaseError } from "../../errors/base/database-error";
+import { ErrorCode } from "../../errors/base/error-code";
+import { ErrorSeverity } from "../../errors/base/error-severity";
+import { MySQLErrorMapper } from "../../errors/mapping/my-sql-error-mapper";
+import { MySQLError } from "../../errors/mapping/error-context";
+import { StructuredLogger } from "../../logging/implementations/structured-logger";
+import { LogLevel } from "../../logging/formatters/log-level";
+import { ErrorNotifier } from "../../monitoring/error-notifier";
+import { ErrorTracker } from "../../monitoring/error-tracker";
 
 describe("Error Handling and Logging System Integration", () => {
   let logger: StructuredLogger;
@@ -121,10 +121,10 @@ describe("Error Handling and Logging System Integration", () => {
     expect(logOutput).toHaveProperty("level");
     expect(logOutput).toHaveProperty("message");
     expect(logOutput).toHaveProperty("timestamp");
-    expect(logOutput).toHaveProperty("source", "ErrorNotifier");
+    expect(logOutput).toHaveProperty("source", "error-notifier");
     expect(logOutput).toHaveProperty("metadata");
     expect(logOutput.metadata).toHaveProperty(
-      "errorCode",
+      "error-code",
       ErrorCode.VALIDATION_ERROR
     );
     expect(logOutput.metadata).toHaveProperty("severity", ErrorSeverity.HIGH);

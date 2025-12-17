@@ -15,7 +15,7 @@ import type {
   SeasoningImageUpdateInput,
   UpdateResult,
 } from "@/infrastructure/database/interfaces";
-import { SeasoningImage } from "@/libs/database/entities/SeasoningImage";
+import { SeasoningImage } from "@/libs/database/entities/seasoning-image";
 
 /**
  * データベースから取得した生データの型定義

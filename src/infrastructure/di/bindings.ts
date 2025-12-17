@@ -10,7 +10,7 @@ import {
   createProductionConnectionProvider,
   createTestConnectionProvider,
 } from "./factories";
-import { RepositoryFactory } from "./RepositoryFactory";
+import { RepositoryFactory } from "./repository-factory";
 
 /**
  * 開発環境用のバインディング設定

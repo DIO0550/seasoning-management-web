@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { TextInput } from "@/components/elements/inputs/TextInput";
-import { SubmitButton } from "@/components/elements/buttons/SubmitButton";
-import { ErrorMessage } from "@/components/elements/errors/ErrorMessage";
+import { TextInput } from "@/components/elements/inputs/text-input";
+import { SubmitButton } from "@/components/elements/buttons/submit-button";
+import { ErrorMessage } from "@/components/elements/errors/error-message";
 import {
   useTemplateNameInput,
   useTemplateDescriptionInput,

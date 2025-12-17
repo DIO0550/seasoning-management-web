@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { TemplateAddForm } from "@/components/forms/template/TemplateAddForm";
+import { TemplateAddForm } from "@/components/forms/template/template-add-form";
 import { TemplateFormData } from "@/features/template/hooks";
 import { STORYBOOK_DELAY_MEDIUM } from "@/constants/ui";
 
 const meta: Meta<typeof TemplateAddForm> = {
-  title: "Forms/Template/TemplateAddForm",
+  title: "Forms/Template/template-add-form",
   component: TemplateAddForm,
   parameters: {
     layout: "centered",

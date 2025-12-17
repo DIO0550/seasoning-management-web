@@ -3,7 +3,7 @@ import type {
   IDatabaseConnection,
   QueryResult,
 } from "@/libs/database/interfaces/core";
-import { MySQLSeasoningTypeRepository } from "@/infrastructure/database/repositories/mysql/MySQLSeasoningTypeRepository";
+import { MySQLSeasoningTypeRepository } from "@/infrastructure/database/repositories/mysql/my-sql-seasoning-type-repository";
 
 const createMockConnection = (
   queryImpl: (sql: string, params?: unknown[]) => Promise<{ cnt: number }>

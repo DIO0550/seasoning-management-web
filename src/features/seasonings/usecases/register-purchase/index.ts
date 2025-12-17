@@ -29,11 +29,11 @@ export class RegisterPurchaseUseCase {
     ]);
 
     if (!seasoningType) {
-      throw new NotFoundError("SeasoningType", input.typeId);
+      throw new NotFoundError("seasoning-type", input.typeId);
     }
 
     if (imageId !== null && !image) {
-      throw new NotFoundError("SeasoningImage", imageId);
+      throw new NotFoundError("seasoning-image", imageId);
     }
 
     const created = await this.seasoningRepository.create({

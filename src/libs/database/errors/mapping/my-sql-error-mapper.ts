@@ -1,11 +1,11 @@
-import { DatabaseError } from "../base/DatabaseError";
-import { ErrorCode } from "../base/ErrorCode";
-import { ErrorSeverity } from "../base/ErrorSeverity";
-import { ValidationError } from "../domain/ValidationError";
-import { ConflictError } from "../domain/ConflictError";
-import { ConnectionError } from "../domain/ConnectionError";
-import { NotFoundError } from "../domain/NotFoundError";
-import { MySQLError, ErrorContext } from "./ErrorContext";
+import { DatabaseError } from "../base/database-error";
+import { ErrorCode } from "../base/error-code";
+import { ErrorSeverity } from "../base/error-severity";
+import { ValidationError } from "../domain/validation-error";
+import { ConflictError } from "../domain/conflict-error";
+import { ConnectionError } from "../domain/connection-error";
+import { NotFoundError } from "../domain/not-found-error";
+import { MySQLError, ErrorContext } from "./error-context";
 
 /**
  * MySQLエラーをドメイン固有エラーにマッピングするクラス

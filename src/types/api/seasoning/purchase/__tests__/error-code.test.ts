@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { ZodError } from "zod";
-import { SeasoningPurchaseErrorCode } from "@/types/api/seasoning/purchase/errorCode";
+import { SeasoningPurchaseErrorCode } from "@/types/api/seasoning/purchase/error-code";
 
 test(
   "SeasoningPurchaseErrorCode.fromValidationError: nameフィールドのtoo_smallエラーの場合、VALIDATION_ERROR_NAME_REQUIREDを返す",

@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { seasoningAddRequestSchema } from "@/types/api/seasoning/add/schemas";
-import { SeasoningAddErrorCode } from "@/types/api/seasoning/add/errorCode";
+import { SeasoningAddErrorCode } from "@/types/api/seasoning/add/error-code";
 import {
   seasoningListQuerySchema,
   type SeasoningListResponse,
   type ErrorResponse as ApiErrorResponse,
 } from "@/types/api/seasoning/list/types";
-import { SeasoningListErrorCode } from "@/types/api/seasoning/list/errorCode";
-import { ConnectionManager } from "@/infrastructure/database/ConnectionManager";
-import { RepositoryFactory } from "@/infrastructure/di/RepositoryFactory";
+import { SeasoningListErrorCode } from "@/types/api/seasoning/list/error-code";
+import { ConnectionManager } from "@/infrastructure/database/connection-manager";
+import { RepositoryFactory } from "@/infrastructure/di/repository-factory";
 import { ListSeasoningsUseCase } from "@/features/seasonings/usecases/list-seasonings";
 import { CreateSeasoningUseCase } from "@/features/seasonings/usecases/create-seasoning";
 import { errorMapper } from "@/utils/api/error-mapper";
@@ -144,7 +144,7 @@ const handleCreateSeasoningError = (error: unknown) => {
   }
 
   if (error instanceof NotFoundError) {
-    if (error.resource === "SeasoningType") {
+    if (error.resource === "seasoning-type") {
       return NextResponse.json(
         {
           code: SeasoningAddErrorCode.SEASONING_TYPE_NOT_FOUND,
@@ -154,7 +154,7 @@ const handleCreateSeasoningError = (error: unknown) => {
       );
     }
 
-    if (error.resource === "SeasoningImage") {
+    if (error.resource === "seasoning-image") {
       return NextResponse.json(
         {
           code: SeasoningAddErrorCode.SEASONING_IMAGE_NOT_FOUND,

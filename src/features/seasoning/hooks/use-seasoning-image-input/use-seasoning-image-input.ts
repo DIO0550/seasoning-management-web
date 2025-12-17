@@ -4,8 +4,8 @@ import {
   type ImageValidationError,
 } from "@/utils/image-validation/image-validation";
 import { imageValidationErrorMessage } from "@/features/seasoning/utils";
-import type { ValidationErrorState } from "@/types/validationErrorState";
-import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
+import type { ValidationErrorState } from "@/types/validation-error-state";
+import { VALIDATION_ERROR_STATES } from "@/types/validation-error-state";
 
 export interface UseSeasoningImageInputReturn {
   value: File | null;

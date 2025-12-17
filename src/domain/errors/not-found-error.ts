@@ -2,7 +2,7 @@
  * @fileoverview リソース未発見エラー
  */
 
-import { DomainError } from "./DomainError";
+import { DomainError } from "./domain-error";
 
 /**
  * リソース未発見エラー

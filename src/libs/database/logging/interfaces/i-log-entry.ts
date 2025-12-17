@@ -1,4 +1,4 @@
-import { LogLevel } from "../formatters/LogLevel";
+import { LogLevel } from "../formatters/log-level";
 
 /**
  * ログエントリのインターフェース

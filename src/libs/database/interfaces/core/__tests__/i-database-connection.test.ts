@@ -4,8 +4,8 @@ import type {
   QueryResult,
   ConnectionConfig,
   TransactionStatus,
-} from "../IDatabaseConnection";
-import type { ITransaction } from "../ITransaction";
+} from "../i-database-connection";
+import type { ITransaction } from "../i-transaction";
 
 // テスト用のモック実装
 class MockDatabaseConnection implements IDatabaseConnection {
@@ -99,7 +99,7 @@ class MockDatabaseConnection implements IDatabaseConnection {
   }
 }
 
-describe("IDatabaseConnection", () => {
+describe("i-database-connection", () => {
   const mockConfig: ConnectionConfig = {
     host: "localhost",
     port: 3306,

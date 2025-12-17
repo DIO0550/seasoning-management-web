@@ -1,4 +1,4 @@
-import type { IDatabaseConnection } from "./IDatabaseConnection";
+import type { IDatabaseConnection } from "./i-database-connection";
 import type {
   PoolConfig,
   ConnectionConfig,

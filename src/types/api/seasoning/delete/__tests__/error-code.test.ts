@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import { ZodError } from "zod";
-import { SeasoningDeleteErrorCode } from "../errorCode";
+import { SeasoningDeleteErrorCode } from "../error-code";
 
 test("SeasoningDeleteErrorCode: idフィールドのinvalid_typeエラーの場合、VALIDATION_ERROR_ID_REQUIREDを返す", () => {
   const zodError = new ZodError([

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SeasoningAddForm } from "@/components/forms/seasoning/SeasoningAddForm";
+import { SeasoningAddForm } from "@/components/forms/seasoning/seasoning-add-form";
 import { FormData } from "@/features/seasoning/hooks";
 import { useSeasoningNavigation } from "@/features/seasoning/hooks";
 import { Button } from "@/components/elements/buttons/button";

@@ -1,16 +1,16 @@
 import { describe, test, expect } from "vitest";
-import { ValidationError } from "../../../errors/domain/ValidationError";
-import { ErrorCode } from "../../../errors/base/ErrorCode";
-import { ErrorSeverity } from "../../../errors/base/ErrorSeverity";
+import { ValidationError } from "../../../errors/domain/validation-error";
+import { ErrorCode } from "../../../errors/base/error-code";
+import { ErrorSeverity } from "../../../errors/base/error-severity";
 
-describe("ValidationError", () => {
+describe("validation-error", () => {
   test("バリデーションエラーを作成できる", () => {
     const error = new ValidationError("名前は必須です");
 
     expect(error.message).toBe("名前は必須です");
     expect(error.code).toBe(ErrorCode.VALIDATION_ERROR);
     expect(error.severity).toBe(ErrorSeverity.MEDIUM);
-    expect(error.name).toBe("ValidationError");
+    expect(error.name).toBe("validation-error");
     expect(error instanceof Error).toBe(true);
   });
 

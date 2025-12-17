@@ -1,16 +1,16 @@
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { ErrorMessage } from "@/components/elements/errors/ErrorMessage";
-import { TextInput } from "@/components/elements/inputs/TextInput";
-import { SelectInput } from "@/components/elements/inputs/SelectInput";
-import { FileInput } from "@/components/elements/inputs/FileInput";
-import { SubmitButton } from "@/components/elements/buttons/SubmitButton";
+import { ErrorMessage } from "@/components/elements/errors/error-message";
+import { TextInput } from "@/components/elements/inputs/text-input";
+import { SelectInput } from "@/components/elements/inputs/select-input";
+import { FileInput } from "@/components/elements/inputs/file-input";
+import { SubmitButton } from "@/components/elements/buttons/submit-button";
 import { Button } from "@/components/elements/buttons/button";
 import { useSeasoningNameInput } from "@/features/seasoning/hooks";
 import { useSeasoningTypeInput } from "@/features/seasoning/hooks";
 import { useSeasoningImageInput } from "@/features/seasoning/hooks";
 import { useSeasoningSubmit, FormData } from "@/features/seasoning/hooks";
 import { VALIDATION_CONSTANTS } from "@/constants/validation";
-import { SeasoningTypeAddModal } from "@/components/forms/seasoning/SeasoningTypeAddModal";
+import { SeasoningTypeAddModal } from "@/components/forms/seasoning/seasoning-type-add-modal";
 import type { SeasoningType } from "@/types/seasoning";
 import { seasoningTypeListResponseSchema } from "@/types/api/seasoningType/list/schemas";
 

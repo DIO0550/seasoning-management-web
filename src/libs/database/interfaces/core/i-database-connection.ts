@@ -1,4 +1,4 @@
-import type { ITransaction } from "./ITransaction";
+import type { ITransaction } from "./i-transaction";
 
 /**
  * データベース接続のインターフェース

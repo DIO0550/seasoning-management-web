@@ -3,14 +3,14 @@
  * データベース接続とコネクションプールを一元管理
  */
 
-import type { IDatabaseFactory } from "./interfaces/IDatabaseFactory";
-import type { IConnectionPool } from "./interfaces/IConnectionPool";
-import type { IDatabaseConnection } from "./interfaces/IDatabaseConnection";
+import type { IDatabaseFactory } from "./interfaces/i-database-factory";
+import type { IConnectionPool } from "./interfaces/i-connection-pool";
+import type { IDatabaseConnection } from "./interfaces/i-database-connection";
 import type {
   ConnectionConfig,
   IDatabaseConnectionProvider,
 } from "@/infrastructure/database/interfaces";
-import { DatabaseFactory } from "./DatabaseFactory";
+import { DatabaseFactory } from "./database-factory";
 import { ConfigurationError, ConnectionError } from "./errors";
 
 /**

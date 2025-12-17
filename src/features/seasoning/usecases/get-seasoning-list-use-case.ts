@@ -3,7 +3,7 @@ import type {
   ISeasoningTypeRepository,
 } from "@/infrastructure/database/interfaces";
 import type { SeasoningListItem } from "@/types/seasoning";
-import { SeasoningService } from "@/features/seasoning/services/SeasoningService";
+import { SeasoningService } from "@/features/seasoning/services/seasoning-service";
 import { sortSeasoningsByExpiry } from "@/utils/seasoning-sort/seasoning-sort";
 import { calculateExpiryStatus } from "@/utils/expiry-calculation/expiry-calculation";
 

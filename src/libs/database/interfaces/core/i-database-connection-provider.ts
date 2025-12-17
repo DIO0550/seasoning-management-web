@@ -1,5 +1,5 @@
-import type { IDatabaseConnection } from "./IDatabaseConnection";
-import type { ConnectionConfig } from "./IDatabaseConnection";
+import type { IDatabaseConnection } from "./i-database-connection";
+import type { ConnectionConfig } from "./i-database-connection";
 
 /**
  * データベース接続プロバイダのインターフェース

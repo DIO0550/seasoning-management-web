@@ -7,7 +7,7 @@ import { describe, test, expect } from "vitest";
 import {
   SeasoningTemplate,
   SeasoningTemplateSchema,
-} from "../SeasoningTemplate";
+} from "../seasoning-template";
 
 describe("SeasoningTemplate Entity", () => {
   describe("エンティティの作成", () => {

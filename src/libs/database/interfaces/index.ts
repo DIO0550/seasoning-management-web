@@ -14,10 +14,10 @@ export {
   isConnectionError,
   isTransactionError,
   isQueryError,
-} from "./types/DatabaseErrors";
+} from "./types/database-errors";
 
 // エラー型の型定義も再エクスポート
-export type { DatabaseErrorCode } from "./types/DatabaseErrors";
+export type { DatabaseErrorCode } from "./types/database-errors";
 
 // 共通型定義
 export type * from "./common/types";

@@ -1,16 +1,16 @@
 import { describe, test, expect } from "vitest";
-import { NotFoundError } from "../../../errors/domain/NotFoundError";
-import { ErrorCode } from "../../../errors/base/ErrorCode";
-import { ErrorSeverity } from "../../../errors/base/ErrorSeverity";
+import { NotFoundError } from "../../../errors/domain/not-found-error";
+import { ErrorCode } from "../../../errors/base/error-code";
+import { ErrorSeverity } from "../../../errors/base/error-severity";
 
-describe("NotFoundError", () => {
+describe("not-found-error", () => {
   test("NotFoundエラーを作成できる", () => {
     const error = new NotFoundError("ユーザーが見つかりません");
 
     expect(error.message).toBe("ユーザーが見つかりません");
     expect(error.code).toBe(ErrorCode.NOT_FOUND);
     expect(error.severity).toBe(ErrorSeverity.LOW);
-    expect(error.name).toBe("NotFoundError");
+    expect(error.name).toBe("not-found-error");
   });
 
   test("リソース情報を保持できる", () => {

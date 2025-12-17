@@ -2,7 +2,7 @@ import type {
   QueryResult,
   ConnectionConfig,
   PoolStats,
-} from "./IDatabaseConnection";
+} from "./i-database-connection";
 
 /**
  * データベース接続アダプターの基本インターフェース

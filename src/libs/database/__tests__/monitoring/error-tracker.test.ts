@@ -1,10 +1,10 @@
 import { describe, test, expect, beforeEach } from "vitest";
-import { ErrorTracker } from "../../monitoring/ErrorTracker";
-import { DatabaseError } from "../../errors/base/DatabaseError";
-import { ErrorCode } from "../../errors/base/ErrorCode";
-import { ErrorSeverity } from "../../errors/base/ErrorSeverity";
+import { ErrorTracker } from "../../monitoring/error-tracker";
+import { DatabaseError } from "../../errors/base/database-error";
+import { ErrorCode } from "../../errors/base/error-code";
+import { ErrorSeverity } from "../../errors/base/error-severity";
 
-describe("ErrorTracker", () => {
+describe("error-tracker", () => {
   let tracker: ErrorTracker;
 
   beforeEach(() => {

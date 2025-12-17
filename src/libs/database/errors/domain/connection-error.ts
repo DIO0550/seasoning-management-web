@@ -1,6 +1,6 @@
-import { DatabaseError } from "../base/DatabaseError";
-import { ErrorCode } from "../base/ErrorCode";
-import { ErrorSeverity } from "../base/ErrorSeverity";
+import { DatabaseError } from "../base/database-error";
+import { ErrorCode } from "../base/error-code";
+import { ErrorSeverity } from "../base/error-severity";
 
 /**
  * 接続エラークラス
@@ -14,6 +14,6 @@ export class ConnectionError extends DatabaseError {
     code: ErrorCode = ErrorCode.CONNECTION_ERROR
   ) {
     super(message, code, severity, context);
-    this.name = "ConnectionError";
+    this.name = "connection-error";
   }
 }

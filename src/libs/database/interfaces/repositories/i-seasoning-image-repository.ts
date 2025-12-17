@@ -3,8 +3,8 @@
  * クリーンアーキテクチャに基づき、調味料画像データの永続化操作を定義
  */
 
-import type { SeasoningImage } from "../../entities/SeasoningImage";
-import type { IDatabaseConnection } from "../core/IDatabaseConnection";
+import type { SeasoningImage } from "../../entities/seasoning-image";
+import type { IDatabaseConnection } from "../core/i-database-connection";
 import type {
   PaginatedResult,
   CreateResult,

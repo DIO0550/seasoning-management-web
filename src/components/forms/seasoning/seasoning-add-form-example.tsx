@@ -1,5 +1,5 @@
 import React from "react";
-import { SeasoningAddForm } from "@/components/forms/seasoning/SeasoningAddForm";
+import { SeasoningAddForm } from "@/components/forms/seasoning/seasoning-add-form";
 import { STORYBOOK_DELAY_MEDIUM } from "@/constants/ui";
 
 interface FormData {

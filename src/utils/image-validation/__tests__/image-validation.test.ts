@@ -3,7 +3,7 @@ import { expect, test } from "vitest";
 import {
   BYTES_PER_KB,
   IMAGE_MAX_SIZE_MB,
-} from "@/constants/validation/imageValidation";
+} from "@/constants/validation/image-validation";
 import {
   isValidImageSize,
   isValidImageType,

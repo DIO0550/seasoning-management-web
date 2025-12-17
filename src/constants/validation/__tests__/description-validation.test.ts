@@ -2,7 +2,7 @@ import { describe, test, expect } from "vitest";
 import {
   TEMPLATE_DESCRIPTION_MAX_LENGTH,
   DESCRIPTION_VALIDATION_CONSTANTS,
-} from "../descriptionValidation";
+} from "../description-validation";
 
 describe("descriptionValidation constants", () => {
   test("説明バリデーション定数が正しく定義されている", () => {

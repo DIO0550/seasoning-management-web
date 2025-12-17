@@ -6,14 +6,14 @@
 import type {
   IDatabaseFactory,
   DatabaseType,
-} from "./interfaces/IDatabaseFactory";
+} from "./interfaces/i-database-factory";
 import type {
   ConnectionConfig,
   IDatabaseConnection,
 } from "@/infrastructure/database/interfaces";
-import type { IConnectionPool } from "./interfaces/IConnectionPool";
-import { MySQLConnection } from "./mysql/connection/MySQLConnection";
-import { MySQLConnectionPool } from "./mysql/connection/MySQLConnectionPool";
+import type { IConnectionPool } from "./interfaces/i-connection-pool";
+import { MySQLConnection } from "./mysql/connection/my-sql-connection";
+import { MySQLConnectionPool } from "./mysql/connection/my-sql-connection-pool";
 import { ConfigurationError } from "./errors";
 
 /**

@@ -6,4 +6,4 @@ export {
   MockDatabaseConnection,
   MockDatabaseConnectionProvider,
   SpyDatabaseConnectionProvider,
-} from "./MockDatabaseConnectionProvider";
+} from "./mock-database-connection-provider";

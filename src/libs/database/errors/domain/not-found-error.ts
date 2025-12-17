@@ -1,6 +1,6 @@
-import { DatabaseError } from "../base/DatabaseError";
-import { ErrorCode } from "../base/ErrorCode";
-import { ErrorSeverity } from "../base/ErrorSeverity";
+import { DatabaseError } from "../base/database-error";
+import { ErrorCode } from "../base/error-code";
+import { ErrorSeverity } from "../base/error-severity";
 
 /**
  * 未発見エラークラス
@@ -13,6 +13,6 @@ export class NotFoundError extends DatabaseError {
     severity: ErrorSeverity = ErrorSeverity.LOW
   ) {
     super(message, ErrorCode.NOT_FOUND, severity, context);
-    this.name = "NotFoundError";
+    this.name = "not-found-error";
   }
 }

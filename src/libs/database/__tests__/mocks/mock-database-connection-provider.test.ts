@@ -2,10 +2,10 @@ import { describe, it, expect, beforeEach } from "vitest";
 import {
   MockDatabaseConnectionProvider,
   SpyDatabaseConnectionProvider,
-} from "./MockDatabaseConnectionProvider";
+} from "./mock-database-connection-provider";
 import type { ConnectionConfig } from "@/libs/database/interfaces/core";
 
-describe("MockDatabaseConnectionProvider", () => {
+describe("mock-database-connection-provider", () => {
   let config: ConnectionConfig;
 
   beforeEach(() => {

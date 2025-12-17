@@ -3,9 +3,9 @@ import type {
   IConnectionPool,
   PoolStats,
   PoolEventHandlers,
-} from "../../interfaces/IConnectionPool";
-import type { IDatabaseConnection } from "../../interfaces/IDatabaseConnection";
-import type { ITransaction } from "../../interfaces/ITransaction";
+} from "../../interfaces/i-connection-pool";
+import type { IDatabaseConnection } from "../../interfaces/i-database-connection";
+import type { ITransaction } from "../../interfaces/i-transaction";
 import type {
   ConnectionConfig,
   PoolConfig,

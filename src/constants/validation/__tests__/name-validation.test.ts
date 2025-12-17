@@ -4,7 +4,7 @@ import {
   TEMPLATE_NAME_MAX_LENGTH,
   SEASONING_TYPE_NAME_MAX_LENGTH,
   NAME_VALIDATION_CONSTANTS,
-} from "../nameValidation";
+} from "../name-validation";
 
 describe("nameValidation constants", () => {
   test("名前バリデーション定数が正しく定義されている", () => {

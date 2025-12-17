@@ -2,7 +2,7 @@
  * @fileoverview 重複エラー
  */
 
-import { DomainError } from "./DomainError";
+import { DomainError } from "./domain-error";
 
 /**
  * 重複エラー

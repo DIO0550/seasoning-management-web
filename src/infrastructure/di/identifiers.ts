@@ -5,7 +5,7 @@
 
 import type { ServiceIdentifier } from "./types";
 import type { IDatabaseConnectionProvider } from "@/infrastructure/database/interfaces";
-import type { RepositoryFactory } from "./RepositoryFactory";
+import type { RepositoryFactory } from "./repository-factory";
 
 /**
  * Infrastructure層のサービス識別子
@@ -19,6 +19,6 @@ export const INFRASTRUCTURE_IDENTIFIERS = {
   // リポジトリファクトリー
   // Note: 個別のリポジトリではなく、ファクトリーを登録
   REPOSITORY_FACTORY: Symbol(
-    "RepositoryFactory"
+    "repository-factory"
   ) as ServiceIdentifier<RepositoryFactory>,
 } as const;

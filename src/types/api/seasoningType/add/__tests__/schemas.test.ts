@@ -1,5 +1,5 @@
 import { seasoningTypeAddRequestSchema } from "@/types/api/seasoningType/add/schemas";
-import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 
 test("有効な名前でバリデーションが通る", () => {
   const result = seasoningTypeAddRequestSchema.safeParse({

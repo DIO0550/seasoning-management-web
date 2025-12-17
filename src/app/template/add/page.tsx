@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { TemplateAddForm } from "@/components/forms/template/TemplateAddForm";
+import { TemplateAddForm } from "@/components/forms/template/template-add-form";
 import { TemplateFormData } from "@/features/template/hooks";
 
 /**

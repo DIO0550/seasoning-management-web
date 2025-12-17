@@ -1,5 +1,5 @@
-import { LogLevel } from "../formatters/LogLevel";
-import { ILogEntry } from "./ILogEntry";
+import { LogLevel } from "../formatters/log-level";
+import { ILogEntry } from "./i-log-entry";
 
 /**
  * ロガーのインターフェース

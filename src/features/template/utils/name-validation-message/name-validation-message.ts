@@ -1,4 +1,4 @@
-import { TEMPLATE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+import { TEMPLATE_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 
 /**
  * テンプレート名のバリデーションメッセージを取得する

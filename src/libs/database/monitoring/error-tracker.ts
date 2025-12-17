@@ -1,6 +1,6 @@
-import { DatabaseError } from "../errors/base/DatabaseError";
-import { ErrorCode } from "../errors/base/ErrorCode";
-import { ErrorSeverity } from "../errors/base/ErrorSeverity";
+import { DatabaseError } from "../errors/base/database-error";
+import { ErrorCode } from "../errors/base/error-code";
+import { ErrorSeverity } from "../errors/base/error-severity";
 
 /**
  * エラー統計情報

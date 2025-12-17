@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { SeasoningAddForm } from "@/components/forms/seasoning/SeasoningAddForm";
+import { SeasoningAddForm } from "@/components/forms/seasoning/seasoning-add-form";
 import { FormData } from "@/features/seasoning/hooks";
 import {
   STORYBOOK_DELAY_SHORT,

@@ -2,7 +2,7 @@ import { test, expect } from "vitest";
 import {
   SEASONING_PAGE_PATHS,
   type SeasoningPagePath,
-} from "@/constants/pagePaths";
+} from "@/constants/page-paths";
 
 // ページパス定数値の確認
 test("SEASONING_PAGE_PATHS - 調味料一覧ページのパスが正しく定義されている", () => {

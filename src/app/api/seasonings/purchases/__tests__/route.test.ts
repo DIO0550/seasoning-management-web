@@ -17,7 +17,7 @@ vi.mock("@/features/seasonings/usecases/register-purchase", () => ({
   })),
 }));
 
-vi.mock("@/infrastructure/database/ConnectionManager", () => ({
+vi.mock("@/infrastructure/database/connection-manager", () => ({
   ConnectionManager: {
     getInstance: vi.fn(() => ({
       getConnection: vi.fn(),
@@ -29,7 +29,7 @@ const mockSeasoningRepository = {} as unknown as ISeasoningRepository;
 const mockSeasoningTypeRepository = {} as unknown as ISeasoningTypeRepository;
 const mockSeasoningImageRepository = {} as unknown as ISeasoningImageRepository;
 
-vi.mock("@/infrastructure/di/RepositoryFactory", () => ({
+vi.mock("@/infrastructure/di/repository-factory", () => ({
   RepositoryFactory: vi.fn().mockImplementation(() => ({
     createSeasoningRepository: vi.fn(async () => mockSeasoningRepository),
     createSeasoningTypeRepository: vi.fn(
@@ -140,7 +140,7 @@ test("POST /api/seasonings/purchases - purchasedAt が未来日は400", async ()
 
 test("POST /api/seasonings/purchases - SeasoningType が存在しない場合は404", async () => {
   registerPurchaseExecuteMock.mockRejectedValue(
-    new NotFoundError("SeasoningType", 999)
+    new NotFoundError("seasoning-type", 999)
   );
 
   const response = await POST(
@@ -161,7 +161,7 @@ test("POST /api/seasonings/purchases - SeasoningType が存在しない場合は
 
 test("POST /api/seasonings/purchases - SeasoningImage が存在しない場合は404", async () => {
   registerPurchaseExecuteMock.mockRejectedValue(
-    new NotFoundError("SeasoningImage", 55)
+    new NotFoundError("seasoning-image", 55)
   );
 
   const response = await POST(

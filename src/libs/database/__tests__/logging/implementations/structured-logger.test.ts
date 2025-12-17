@@ -1,9 +1,9 @@
 import { describe, test, expect, vi, beforeEach } from "vitest";
-import { StructuredLogger } from "../../../logging/implementations/StructuredLogger";
-import { LogLevel } from "../../../logging/formatters/LogLevel";
-import { ILogEntry } from "../../../logging/interfaces/ILogEntry";
+import { StructuredLogger } from "../../../logging/implementations/structured-logger";
+import { LogLevel } from "../../../logging/formatters/log-level";
+import { ILogEntry } from "../../../logging/interfaces/i-log-entry";
 
-describe("StructuredLogger", () => {
+describe("structured-logger", () => {
   let logger: StructuredLogger;
   let consoleSpy: ReturnType<typeof vi.spyOn>;
 

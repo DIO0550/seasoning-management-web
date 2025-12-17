@@ -1,13 +1,13 @@
 import * as mysql from "mysql2/promise";
-import type { IDatabaseConnection } from "../../interfaces/IDatabaseConnection";
-import type { ITransaction } from "../../interfaces/ITransaction";
+import type { IDatabaseConnection } from "../../interfaces/i-database-connection";
+import type { ITransaction } from "../../interfaces/i-transaction";
 import type {
   ConnectionConfig,
   QueryResult,
   TransactionOptions,
 } from "@/infrastructure/database/interfaces";
 import { ConnectionError, QueryError, TransactionError } from "../../errors";
-import { MySQLTransaction } from "./MySQLTransaction";
+import { MySQLTransaction } from "./my-sql-transaction";
 
 /**
  * MySQL データベース接続の実装

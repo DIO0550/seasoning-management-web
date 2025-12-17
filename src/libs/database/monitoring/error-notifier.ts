@@ -1,6 +1,6 @@
-import { DatabaseError } from "../errors/base/DatabaseError";
-import { ErrorSeverity } from "../errors/base/ErrorSeverity";
-import { ILogger } from "../logging/interfaces/ILogger";
+import { DatabaseError } from "../errors/base/database-error";
+import { ErrorSeverity } from "../errors/base/error-severity";
+import { ILogger } from "../logging/interfaces/i-logger";
 
 /**
  * エラー通知の設定オプション
@@ -63,23 +63,23 @@ export class ErrorNotifier {
 
     switch (error.severity) {
       case ErrorSeverity.CRITICAL:
-        this.logger.fatal(message, error, metadata, "ErrorNotifier");
+        this.logger.fatal(message, error, metadata, "error-notifier");
         break;
 
       case ErrorSeverity.HIGH:
-        this.logger.error(message, error, metadata, "ErrorNotifier");
+        this.logger.error(message, error, metadata, "error-notifier");
         break;
 
       case ErrorSeverity.MEDIUM:
-        this.logger.warn(message, metadata, "ErrorNotifier");
+        this.logger.warn(message, metadata, "error-notifier");
         break;
 
       case ErrorSeverity.LOW:
-        this.logger.info(message, metadata, "ErrorNotifier");
+        this.logger.info(message, metadata, "error-notifier");
         break;
 
       case ErrorSeverity.INFO:
-        this.logger.debug(message, metadata, "ErrorNotifier");
+        this.logger.debug(message, metadata, "error-notifier");
         break;
     }
   }

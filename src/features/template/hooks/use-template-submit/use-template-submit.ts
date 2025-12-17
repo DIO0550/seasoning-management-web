@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { SubmitErrorState } from "@/types/submitErrorState";
-import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
+import type { SubmitErrorState } from "@/types/submit-error-state";
+import { SUBMIT_ERROR_STATES } from "@/types/submit-error-state";
 
 /**
  * テンプレート送信フォームデータの型定義
@@ -34,7 +34,7 @@ export const useTemplateSubmit = (
       if (err instanceof Error) {
         if (err.name === "NetworkError") {
           setError(SUBMIT_ERROR_STATES.NETWORK_ERROR);
-        } else if (err.name === "ValidationError") {
+        } else if (err.name === "validation-error") {
           setError(SUBMIT_ERROR_STATES.VALIDATION_ERROR);
         } else if (err.message?.includes("Server Error")) {
           setError(SUBMIT_ERROR_STATES.SERVER_ERROR);
