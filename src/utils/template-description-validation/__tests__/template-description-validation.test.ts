@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 
-import { TEMPLATE_DESCRIPTION_MAX_LENGTH } from "@/constants/validation/descriptionValidation";
+import { TEMPLATE_DESCRIPTION_MAX_LENGTH } from "@/constants/validation/description-validation";
 import { validateTemplateDescription } from "@/utils/template-description-validation/template-description-validation";
 
 const chars = (count: number): string => "あ".repeat(count);

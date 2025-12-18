@@ -14,16 +14,16 @@ export type {
   TransactionOptions,
   IsolationLevel,
   TransactionStatus,
-} from "./IDatabaseConnection";
+} from "./i-database-connection";
 
 // 接続プロバイダ
-export type { IDatabaseConnectionProvider } from "./IDatabaseConnectionProvider";
+export type { IDatabaseConnectionProvider } from "./i-database-connection-provider";
 
 // データベースプール
-export type { IDatabasePool } from "./IDatabasePool";
+export type { IDatabasePool } from "./i-database-pool";
 
 // 接続アダプター
-export type { IConnectionAdapter } from "./IConnectionAdapter";
+export type { IConnectionAdapter } from "./i-connection-adapter";
 
 // トランザクション
-export type { ITransaction } from "./ITransaction";
+export type { ITransaction } from "./i-transaction";

@@ -1,6 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { SeasoningAddForm } from "@/components/forms/seasoning/SeasoningAddForm";
+import { SeasoningAddForm } from "@/components/forms/seasoning/seasoning-add-form";
 import { vi, beforeEach, afterEach } from "vitest";
 
 const mockSeasoningTypes = [

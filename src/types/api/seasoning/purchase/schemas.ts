@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SEASONING_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+import { SEASONING_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 import {
   getTodayJstDateString,
   isValidDateString,

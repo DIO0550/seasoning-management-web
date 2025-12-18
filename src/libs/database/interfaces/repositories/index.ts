@@ -4,13 +4,13 @@
  */
 
 // 調味料リポジトリ
-export type * from "./ISeasoningRepository";
+export type * from "./i-seasoning-repository";
 
 // 調味料種類リポジトリ
-export type * from "./ISeasoningTypeRepository";
+export type * from "./i-seasoning-type-repository";
 
 // 調味料画像リポジトリ
-export type * from "./ISeasoningImageRepository";
+export type * from "./i-seasoning-image-repository";
 
 // 調味料テンプレートリポジトリ
-export type * from "./ISeasoningTemplateRepository";
+export type * from "./i-seasoning-template-repository";

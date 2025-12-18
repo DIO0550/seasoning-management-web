@@ -3,7 +3,7 @@
  * @description データベース接続とリポジトリインスタンスを生成
  */
 
-import { ConnectionManager } from "@/infrastructure/database/ConnectionManager";
+import { ConnectionManager } from "@/infrastructure/database/connection-manager";
 import type {
   ConnectionConfig,
   IDatabaseConnectionProvider,

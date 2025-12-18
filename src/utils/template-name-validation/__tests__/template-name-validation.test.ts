@@ -1,5 +1,5 @@
 import { validateTemplateName } from "@/utils/template-name-validation/template-name-validation";
-import { TEMPLATE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+import { TEMPLATE_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 
 describe("validateTemplateName", () => {
   test("有効な名前の場合はtrueを返す", () => {

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ConnectionManager } from "@/infrastructure/database/ConnectionManager";
-import { RepositoryFactory } from "@/infrastructure/di/RepositoryFactory";
+import { ConnectionManager } from "@/infrastructure/database/connection-manager";
+import { RepositoryFactory } from "@/infrastructure/di/repository-factory";
 import { RegisterPurchaseUseCase } from "@/features/seasonings/usecases/register-purchase";
-import { SeasoningPurchaseErrorCode } from "@/types/api/seasoning/purchase/errorCode";
+import { SeasoningPurchaseErrorCode } from "@/types/api/seasoning/purchase/error-code";
 import {
   seasoningPurchaseRequestSchema,
   seasoningPurchaseResponseSchema,
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
 
 const handleRegisterPurchaseError = (error: unknown) => {
   if (error instanceof NotFoundError) {
-    if (error.resource === "SeasoningType") {
+    if (error.resource === "seasoning-type") {
       return NextResponse.json(
         {
           code: SeasoningPurchaseErrorCode.SEASONING_TYPE_NOT_FOUND,
@@ -78,7 +78,7 @@ const handleRegisterPurchaseError = (error: unknown) => {
       );
     }
 
-    if (error.resource === "SeasoningImage") {
+    if (error.resource === "seasoning-image") {
       return NextResponse.json(
         {
           code: SeasoningPurchaseErrorCode.SEASONING_IMAGE_NOT_FOUND,

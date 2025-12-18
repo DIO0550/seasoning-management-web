@@ -1,6 +1,6 @@
-import type { ValidationErrorState } from "@/types/validationErrorState";
-import type { SubmitErrorState } from "@/types/submitErrorState";
-import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+import type { ValidationErrorState } from "@/types/validation-error-state";
+import type { SubmitErrorState } from "@/types/submit-error-state";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 
 /**
  * 調味料の種類追加時のバリデーションエラーメッセージを取得

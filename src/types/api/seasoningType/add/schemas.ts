@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 
 /**
  * 調味料種類追加リクエストのスキーマ

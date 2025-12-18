@@ -1,4 +1,4 @@
-import { TEMPLATE_DESCRIPTION_MAX_LENGTH } from "@/constants/validation/descriptionValidation";
+import { TEMPLATE_DESCRIPTION_MAX_LENGTH } from "@/constants/validation/description-validation";
 
 /**
  * テンプレート説明のバリデーションメッセージを取得する

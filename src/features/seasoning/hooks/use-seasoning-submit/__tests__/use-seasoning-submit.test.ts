@@ -3,8 +3,8 @@ import { useSeasoningSubmit } from "@/features/seasoning/hooks/use-seasoning-sub
 import { UseSeasoningNameInputReturn } from "@/features/seasoning/hooks/use-seasoning-name-input/use-seasoning-name-input";
 import { UseSeasoningTypeInputReturn } from "@/features/seasoning/hooks/use-seasoning-type-input/use-seasoning-type-input";
 import { beforeEach, vi } from "vitest";
-import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
-import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
+import { VALIDATION_ERROR_STATES } from "@/types/validation-error-state";
+import { SUBMIT_ERROR_STATES } from "@/types/submit-error-state";
 
 // モックの作成
 const createMockSeasoningNameInput = (

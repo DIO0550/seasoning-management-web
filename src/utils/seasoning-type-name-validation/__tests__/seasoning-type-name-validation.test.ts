@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 
-import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 import { validateSeasoningTypeName } from "@/utils/seasoning-type-name-validation/seasoning-type-name-validation";
 
 const repeatChar = (length: number): string => "あ".repeat(length);

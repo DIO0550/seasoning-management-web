@@ -1,14 +1,14 @@
 import {
   NAME_VALIDATION_CONSTANTS,
   SEASONING_NAME_MAX_LENGTH,
-} from "./validation/nameValidation";
-import { DESCRIPTION_VALIDATION_CONSTANTS } from "./validation/descriptionValidation";
+} from "./validation/name-validation";
+import { DESCRIPTION_VALIDATION_CONSTANTS } from "./validation/description-validation";
 import {
   IMAGE_VALIDATION_CONSTANTS,
   IMAGE_MAX_SIZE_MB,
   IMAGE_MAX_SIZE_BYTES,
-} from "./validation/imageValidation";
-import { EXPIRY_VALIDATION_CONSTANTS } from "./validation/expiryValidation";
+} from "./validation/image-validation";
+import { EXPIRY_VALIDATION_CONSTANTS } from "./validation/expiry-validation";
 
 /**
  * 統合されたバリデーション定数

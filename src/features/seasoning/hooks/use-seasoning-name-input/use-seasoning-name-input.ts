@@ -4,8 +4,8 @@ import {
   type NameValidationError,
 } from "@/utils/name-validation/name-validation";
 import { nameValidationErrorMessage } from "@/features/seasoning/utils";
-import type { ValidationErrorState } from "@/types/validationErrorState";
-import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
+import type { ValidationErrorState } from "@/types/validation-error-state";
+import { VALIDATION_ERROR_STATES } from "@/types/validation-error-state";
 
 export interface UseSeasoningNameInputReturn {
   value: string;

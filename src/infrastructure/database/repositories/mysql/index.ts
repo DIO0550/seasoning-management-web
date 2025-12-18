@@ -6,6 +6,6 @@
  */
 
 export { MySQLSeasoningRepository } from "./MySQLSeasoningRepository/index";
-export { MySQLSeasoningTypeRepository } from "./MySQLSeasoningTypeRepository";
-export { MySQLSeasoningImageRepository } from "./MySQLSeasoningImageRepository";
-export { MySQLSeasoningTemplateRepository } from "./MySQLSeasoningTemplateRepository";
+export { MySQLSeasoningTypeRepository } from "./my-sql-seasoning-type-repository";
+export { MySQLSeasoningImageRepository } from "./my-sql-seasoning-image-repository";
+export { MySQLSeasoningTemplateRepository } from "./my-sql-seasoning-template-repository";

@@ -8,7 +8,7 @@ import {
   PRODUCTION_CONNECTION_LIMIT,
   DEVELOPMENT_CONNECTION_LIMIT,
   TEST_CONNECTION_LIMIT,
-} from "@/constants/database/connectionLimits";
+} from "@/constants/database/connection-limits";
 import {
   PRODUCTION_ACQUIRE_TIMEOUT,
   PRODUCTION_QUERY_TIMEOUT,

@@ -15,11 +15,11 @@ export type {
   IConnectionPool,
   PoolStats,
   PoolEventHandlers,
-} from "./interfaces/IConnectionPool";
+} from "./interfaces/i-connection-pool";
 export type {
   IDatabaseFactory,
   DatabaseType,
-} from "./interfaces/IDatabaseFactory";
+} from "./interfaces/i-database-factory";
 
 // エラー型定義（値とタイプの両方をエクスポート）
 export {
@@ -51,8 +51,8 @@ export {
   DatabaseFactory,
   databaseFactory,
   SUPPORTED_DATABASE_TYPES,
-} from "./DatabaseFactory";
+} from "./database-factory";
 
 // コネクションマネージャー
-export { ConnectionManager } from "./ConnectionManager";
-export type { ConnectionManagerOptions } from "./ConnectionManager";
+export { ConnectionManager } from "./connection-manager";
+export type { ConnectionManagerOptions } from "./connection-manager";

@@ -1,10 +1,10 @@
 import { renderHook, act } from "@testing-library/react";
 import { vi } from "vitest";
 import { useSeasoningTypeAdd } from "@/features/seasoning/hooks/use-seasoning-type-add/use-seasoning-type-add";
-import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
-import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
+import { VALIDATION_ERROR_STATES } from "@/types/validation-error-state";
+import { SUBMIT_ERROR_STATES } from "@/types/submit-error-state";
 import { TEST_ASYNC_DELAY } from "@/constants/ui";
-import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 
 describe("useSeasoningTypeAdd", () => {
   describe("初期状態", () => {

@@ -16,7 +16,7 @@ import type {
   SeasoningUpdateInput,
   UpdateResult,
 } from "@/infrastructure/database/interfaces";
-import { Seasoning } from "@/libs/database/entities/Seasoning";
+import { Seasoning } from "@/libs/database/entities/seasoning";
 
 const SELECT_COLUMNS = `id, name, type_id, image_id, best_before_at, expires_at, purchased_at, created_at, updated_at`;
 

@@ -3,16 +3,16 @@ import {
   validateSeasoningTypeName,
   type SeasoningTypeNameValidationError,
 } from "@/utils/seasoning-type-name-validation/seasoning-type-name-validation";
-import type { SeasoningTypeFormData } from "@/types/seasoningType";
-import type { ValidationErrorState } from "@/types/validationErrorState";
-import { VALIDATION_ERROR_STATES } from "@/types/validationErrorState";
-import type { SubmitErrorState } from "@/types/submitErrorState";
-import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
+import type { SeasoningTypeFormData } from "@/types/seasoning-type";
+import type { ValidationErrorState } from "@/types/validation-error-state";
+import { VALIDATION_ERROR_STATES } from "@/types/validation-error-state";
+import type { SubmitErrorState } from "@/types/submit-error-state";
+import { SUBMIT_ERROR_STATES } from "@/types/submit-error-state";
 
 // エラーハンドリング用の定数
 const ERROR_NAMES = {
   NETWORK: "NetworkError",
-  VALIDATION: "ValidationError",
+  VALIDATION: "validation-error",
 } as const;
 
 const ERROR_MESSAGES = {

@@ -11,7 +11,7 @@ import type {
   ISeasoningTypeRepository,
   ISeasoningImageRepository,
 } from "@/infrastructure/database/interfaces";
-import type { IDatabaseConnection } from "@/libs/database/interfaces/core/IDatabaseConnection";
+import type { IDatabaseConnection } from "@/libs/database/interfaces/core/i-database-connection";
 
 const createUseCaseExecuteMock = vi.fn();
 
@@ -21,7 +21,7 @@ vi.mock("@/features/seasonings/usecases/create-seasoning", () => ({
   })),
 }));
 
-vi.mock("@/infrastructure/database/ConnectionManager", () => ({
+vi.mock("@/infrastructure/database/connection-manager", () => ({
   ConnectionManager: {
     getInstance: vi.fn(() => ({
       getConnection: vi.fn(),
@@ -51,7 +51,7 @@ const mockSeasoningTypeRepository =
 const mockSeasoningImageRepository =
   {} as unknown as ISeasoningImageRepository;
 
-vi.mock("@/infrastructure/di/RepositoryFactory", () => ({
+vi.mock("@/infrastructure/di/repository-factory", () => ({
   RepositoryFactory: vi.fn().mockImplementation(() => ({
     createSeasoningRepository: vi.fn(async () => mockSeasoningRepository),
     createSeasoningTypeRepository: vi.fn(
@@ -230,7 +230,7 @@ test("POST /api/seasonings - DuplicateError は409とDUPLICATE_NAMEを返す", a
 
 test("POST /api/seasonings - SeasoningTypeが存在しない場合は404", async () => {
   createUseCaseExecuteMock.mockRejectedValue(
-    new NotFoundError("SeasoningType", 999)
+    new NotFoundError("seasoning-type", 999)
   );
 
   const response = await POST(
@@ -250,7 +250,7 @@ test("POST /api/seasonings - SeasoningTypeが存在しない場合は404", async
 
 test("POST /api/seasonings - SeasoningImageが存在しない場合は404", async () => {
   createUseCaseExecuteMock.mockRejectedValue(
-    new NotFoundError("SeasoningImage", 55)
+    new NotFoundError("seasoning-image", 55)
   );
 
   const response = await POST(

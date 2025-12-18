@@ -1,6 +1,6 @@
 import { renderHook, act } from "@testing-library/react";
 import { useTemplateSubmit } from "@/features/template/hooks/use-template-submit/use-template-submit";
-import { SUBMIT_ERROR_STATES } from "@/types/submitErrorState";
+import { SUBMIT_ERROR_STATES } from "@/types/submit-error-state";
 
 const renderUseTemplateSubmit = (
   onSubmit?: Parameters<typeof useTemplateSubmit>[0]
@@ -72,7 +72,7 @@ test("ネットワークエラー時はNETWORK_ERRORを返す", async () => {
 
 test("バリデーションエラー時はVALIDATION_ERRORを返す", async () => {
   const validationError = new Error("Validation failed");
-  validationError.name = "ValidationError";
+  validationError.name = "validation-error";
   const mockOnSubmit = vi.fn().mockRejectedValue(validationError);
   const { result } = renderUseTemplateSubmit(mockOnSubmit);
   const formData = { ...createFormData(), seasoningIds: ["seasoning1"] };

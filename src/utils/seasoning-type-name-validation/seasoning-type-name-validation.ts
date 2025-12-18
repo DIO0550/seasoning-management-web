@@ -1,4 +1,4 @@
-import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/nameValidation";
+import { SEASONING_TYPE_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 
 /**
  * 調味料の種類名バリデーションエラーの種類
