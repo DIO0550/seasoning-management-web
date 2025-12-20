@@ -78,6 +78,16 @@ test("seasoningPurchaseRequestSchema: purchasedAt が未来日付だとバリデ
   expect(result.success).toBe(false);
 });
 
+test("seasoningPurchaseRequestSchema: name が101文字以上だとバリデーションエラーになる", () => {
+  const result = seasoningPurchaseRequestSchema.safeParse({
+    name: "あ".repeat(101),
+    typeId: 1,
+    purchasedAt: "2025-12-13",
+  });
+
+  expect(result.success).toBe(false);
+});
+
 test("seasoningPurchaseResponseSchema: 有効なレスポンスを受け入れる", () => {
   const result = seasoningPurchaseResponseSchema.safeParse({
     data: {
