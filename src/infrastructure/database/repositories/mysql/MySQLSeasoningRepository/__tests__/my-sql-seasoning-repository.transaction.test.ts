@@ -1,5 +1,5 @@
 import { expect, test, vi } from "vitest";
-import { MySQLSeasoningRepository } from "..";
+import { MySQLSeasoningRepository } from "@/infrastructure/database/repositories/mysql/MySQLSeasoningRepository";
 import type {
   ConnectionConfig,
   IDatabaseConnection,
@@ -121,6 +121,46 @@ test("MySQLSeasoningRepository.create: INSERT後の失敗時はrollbackされる
 
   expect(vi.mocked(connection.beginTransaction)).toHaveBeenCalledTimes(1);
   expect(vi.mocked(transaction.query)).toHaveBeenCalled();
+  expect(vi.mocked(transaction.commit)).not.toHaveBeenCalled();
+  expect(vi.mocked(transaction.rollback)).toHaveBeenCalledTimes(1);
+});
+
+test("MySQLSeasoningRepository.create: INSERT失敗時はrollbackされる", async () => {
+  const transaction: ITransaction = {
+    query: vi.fn(),
+    commit: vi.fn(async () => undefined),
+    rollback: vi.fn(async () => undefined),
+    getStatus: vi.fn((): TransactionStatus => "ACTIVE"),
+    isActive: vi.fn(() => true),
+  };
+
+  vi.mocked(transaction.query).mockRejectedValueOnce(new Error("insert failed"));
+
+  const connection: IDatabaseConnection = {
+    connect: vi.fn(async () => undefined),
+    disconnect: vi.fn(async () => undefined),
+    isConnected: vi.fn(() => true),
+    query: vi.fn(async () => createQueryResult({ rows: [] })),
+    beginTransaction: vi.fn(async () => transaction),
+    ping: vi.fn(async () => true),
+    getConfig: vi.fn(() => dummyConfig),
+  };
+
+  const repository = new MySQLSeasoningRepository(connection);
+
+  await expect(
+    repository.create({
+      name: "醤油",
+      typeId: 1,
+      imageId: null,
+      bestBeforeAt: null,
+      expiresAt: null,
+      purchasedAt: new Date(Date.UTC(2025, 10, 1)),
+    })
+  ).rejects.toThrow();
+
+  expect(vi.mocked(connection.beginTransaction)).toHaveBeenCalledTimes(1);
+  expect(vi.mocked(transaction.query)).toHaveBeenCalledTimes(1);
   expect(vi.mocked(transaction.commit)).not.toHaveBeenCalled();
   expect(vi.mocked(transaction.rollback)).toHaveBeenCalledTimes(1);
 });
