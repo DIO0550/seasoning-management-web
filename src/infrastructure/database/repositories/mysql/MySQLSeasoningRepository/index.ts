@@ -16,6 +16,7 @@ import type {
   SeasoningUpdateInput,
   UpdateResult,
 } from "@/infrastructure/database/interfaces";
+import type { ITransaction } from "@/infrastructure/database/shared/transaction";
 import { Seasoning } from "@/libs/database/entities/seasoning";
 
 const SELECT_COLUMNS = `id, name, type_id, image_id, best_before_at, expires_at, purchased_at, created_at, updated_at`;
@@ -66,31 +67,58 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
       throw new Error("調味料名は必須です");
     }
 
-    const sql = `
-      INSERT INTO seasoning (
-        name, type_id, image_id, best_before_at, expires_at, purchased_at, created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
-    `;
+    const transaction = await this.connection.beginTransaction();
 
-    const params = [
-      input.name,
-      input.typeId,
-      input.imageId,
-      input.bestBeforeAt,
-      input.expiresAt,
-      input.purchasedAt,
-    ];
+    try {
+      const insertSql = `
+        INSERT INTO seasoning (
+          name, type_id, image_id, best_before_at, expires_at, purchased_at, created_at, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, NOW(), NOW())
+      `;
 
-    const result = await this.connection.query(sql, params);
-    const insertId = result.insertId!;
+      const insertParams = [
+        input.name,
+        input.typeId,
+        input.imageId,
+        input.bestBeforeAt,
+        input.expiresAt,
+        input.purchasedAt,
+      ];
 
-    // 作成したレコードを取得して返す
-    const created = await this.findById(insertId);
-    if (!created) {
+      const insertResult = await transaction.query(insertSql, insertParams);
+      const insertId = insertResult.insertId;
+
+      if (typeof insertId !== "number") {
+        throw new Error("調味料の作成に失敗しました");
+      }
+
+      const created = await this.findByIdWithExecutor(transaction, insertId);
+
+      await transaction.commit();
+      return created;
+    } catch (error) {
+      try {
+        await transaction.rollback();
+      } catch {
+        // ロールバックに失敗した場合は接続/トランザクション状態が不整合の可能性が高く、
+        // アプリケーション側で安全に復旧できないため、元のエラーのみを上位に伝播させる
+      }
+      throw error;
+    }
+  }
+
+  private async findByIdWithExecutor(
+    executor: Pick<ITransaction, "query">,
+    id: number
+  ): Promise<Seasoning> {
+    const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning WHERE id = ?`;
+    const result = await executor.query<SeasoningRow>(sql, [id]);
+
+    if (result.rows.length === 0) {
       throw new Error("作成した調味料の取得に失敗しました");
     }
 
-    return created;
+    return this.rowToEntity(result.rows[0]);
   }
 
   /**

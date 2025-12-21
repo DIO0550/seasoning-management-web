@@ -10,19 +10,27 @@ import {
   validateImage,
 } from "@/utils/image-validation/image-validation";
 
-const createFile = (sizeBytes: number, type: string) =>
-  new File(["x".repeat(sizeBytes)], "file", { type });
+const createMockFile = (sizeBytes: number, type: string) =>
+  ({ size: sizeBytes, type } as unknown as File);
 
 test("isValidImageType - JPEG/PNG のみ許可", () => {
-  expect(isValidImageType(createFile(BYTES_PER_KB, "image/jpeg"))).toBe(true);
-  expect(isValidImageType(createFile(BYTES_PER_KB, "image/png"))).toBe(true);
-  expect(isValidImageType(createFile(BYTES_PER_KB, "text/plain"))).toBe(false);
+  expect(isValidImageType(createMockFile(BYTES_PER_KB, "image/jpeg"))).toBe(
+    true
+  );
+  expect(isValidImageType(createMockFile(BYTES_PER_KB, "image/png"))).toBe(
+    true
+  );
+  expect(isValidImageType(createMockFile(BYTES_PER_KB, "text/plain"))).toBe(
+    false
+  );
 });
 
 test(`${IMAGE_MAX_SIZE_MB}MB を境界に isValidImageSize が判定する`, () => {
   const limitBytes = IMAGE_MAX_SIZE_MB * BYTES_PER_KB * BYTES_PER_KB;
-  expect(isValidImageSize(createFile(limitBytes, "image/jpeg"))).toBe(true);
-  expect(isValidImageSize(createFile(limitBytes + 1, "image/jpeg"))).toBe(false);
+  expect(isValidImageSize(createMockFile(limitBytes, "image/jpeg"))).toBe(true);
+  expect(isValidImageSize(createMockFile(limitBytes + 1, "image/jpeg"))).toBe(
+    false
+  );
 });
 
 const validateCases: Array<{
@@ -33,17 +41,17 @@ const validateCases: Array<{
   { name: "null ファイルは NONE", file: null, expected: "NONE" },
   {
     name: "有効な JPEG は NONE",
-    file: createFile(BYTES_PER_KB, "image/jpeg"),
+    file: createMockFile(BYTES_PER_KB, "image/jpeg"),
     expected: "NONE",
   },
   {
     name: "無効な拡張子は INVALID_TYPE",
-    file: createFile(BYTES_PER_KB, "text/plain"),
+    file: createMockFile(BYTES_PER_KB, "text/plain"),
     expected: "INVALID_TYPE",
   },
   {
     name: "サイズ超過は SIZE_EXCEEDED",
-    file: createFile(
+    file: createMockFile(
       (IMAGE_MAX_SIZE_MB + 1) * BYTES_PER_KB * BYTES_PER_KB,
       "image/jpeg"
     ),

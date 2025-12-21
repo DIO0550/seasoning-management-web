@@ -138,6 +138,60 @@ test("POST /api/seasonings/purchases - purchasedAt が未来日は400", async ()
   expect(payload.code).toBe("VALIDATION_ERROR_PURCHASED_AT_FUTURE");
 });
 
+test("POST /api/seasonings/purchases - name が100文字ちょうどなら201", async () => {
+  const name = "あ".repeat(100);
+  const detail = {
+    id: 10,
+    name,
+    typeId: 2,
+    typeName: "液体調味料",
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: null,
+    purchasedAt: "2025-11-01",
+    createdAt: "2025-11-15T00:00:00.000Z",
+    updatedAt: "2025-11-15T00:00:00.000Z",
+  };
+
+  registerPurchaseExecuteMock.mockResolvedValue(detail);
+
+  const response = await POST(
+    createRequest({
+      method: "POST",
+      body: {
+        name,
+        typeId: 2,
+        purchasedAt: "2025-11-01",
+      },
+    })
+  );
+
+  expect(response.status).toBe(201);
+  await expect(response.json()).resolves.toEqual({ data: detail });
+  expect(registerPurchaseExecuteMock).toHaveBeenCalledWith({
+    name,
+    typeId: 2,
+    purchasedAt: "2025-11-01",
+  });
+});
+
+test("POST /api/seasonings/purchases - name が101文字以上は400", async () => {
+  const response = await POST(
+    createRequest({
+      method: "POST",
+      body: {
+        name: "あ".repeat(101),
+        typeId: 2,
+        purchasedAt: "2025-11-01",
+      },
+    })
+  );
+
+  expect(response.status).toBe(400);
+  const payload = await response.json();
+  expect(payload.code).toBe("VALIDATION_ERROR_NAME_TOO_LONG");
+});
+
 test("POST /api/seasonings/purchases - SeasoningType が存在しない場合は404", async () => {
   registerPurchaseExecuteMock.mockRejectedValue(
     new NotFoundError("seasoning-type", 999)
