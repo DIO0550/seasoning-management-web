@@ -100,7 +100,8 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
       try {
         await transaction.rollback();
       } catch {
-        // rollbackに失敗しても元のエラーを優先
+        // ロールバックに失敗した場合は接続/トランザクション状態が不整合の可能性が高く、
+        // アプリケーション側で安全に復旧できないため、元のエラーのみを上位に伝播させる
       }
       throw error;
     }
