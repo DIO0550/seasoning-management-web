@@ -1,5 +1,5 @@
 import { test, expect, beforeEach, vi } from "vitest";
-import type { ISeasoningRepository } from "@/libs/database/interfaces/repositories/i-seasoning-repository";
+import type { ISeasoningRepository } from "@/infrastructure/database/interfaces";
 import type { IDatabaseConnection } from "@/libs/database/interfaces/core/i-database-connection";
 import { Seasoning } from "@/domain/entities/seasoning/seasoning";
 import { NotFoundError } from "@/domain/errors/not-found-error";

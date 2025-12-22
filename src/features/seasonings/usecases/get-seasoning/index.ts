@@ -1,4 +1,4 @@
-import type { ISeasoningRepository } from "@/libs/database/interfaces/repositories/i-seasoning-repository";
+import type { ISeasoningRepository } from "@/infrastructure/database/interfaces";
 import { NotFoundError } from "@/domain/errors/not-found-error";
 import type { GetSeasoningInput, GetSeasoningOutput } from "@/features/seasonings/usecases/get-seasoning/dto";
 import { GetSeasoningMapper } from "@/features/seasonings/usecases/get-seasoning/mapper";
