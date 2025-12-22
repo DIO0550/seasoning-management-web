@@ -6,9 +6,6 @@ import { GetSeasoningMapper } from "@/features/seasonings/usecases/get-seasoning
 export class GetSeasoningUseCase {
   constructor(private readonly seasoningRepository: ISeasoningRepository) {}
 
-  /**
-   * @throws {NotFoundError} 調味料が存在しない場合
-   */
   async execute(input: GetSeasoningInput): Promise<GetSeasoningOutput> {
     const seasoning = await this.seasoningRepository.findById(
       input.seasoningId
