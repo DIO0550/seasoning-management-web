@@ -9,9 +9,6 @@ const paramsSchema = z.object({
   seasoningId: z.coerce.number().int().positive(),
 });
 
-/**
- * GET /api/seasonings/[seasoningId] - 調味料詳細を取得
- */
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ seasoningId: string }> }

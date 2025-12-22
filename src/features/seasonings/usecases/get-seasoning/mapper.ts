@@ -1,15 +1,7 @@
 import type { Seasoning } from "@/domain/entities/seasoning/seasoning";
-import type { GetSeasoningOutput } from "./dto";
+import type { GetSeasoningOutput } from "@/features/seasonings/usecases/get-seasoning/dto";
 
-/**
- * GetSeasoningUseCaseのMapper
- */
 export class GetSeasoningMapper {
-  /**
-   * Seasoning EntityをGetSeasoningOutputに変換
-   * @param entity Seasoning Entity
-   * @returns GetSeasoningOutput
-   */
   static toOutput(entity: Seasoning): GetSeasoningOutput {
     return {
       id: entity.id,

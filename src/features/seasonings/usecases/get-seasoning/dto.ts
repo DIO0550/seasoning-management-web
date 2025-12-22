@@ -1,15 +1,9 @@
 import type { ExpiryStatus } from "@/domain/entities/seasoning/seasoning";
 
-/**
- * 調味料詳細取得ユースケースの入力
- */
 export interface GetSeasoningInput {
   readonly seasoningId: number;
 }
 
-/**
- * 調味料詳細取得ユースケースの出力
- */
 export interface GetSeasoningOutput {
   readonly id: number;
   readonly name: string;
