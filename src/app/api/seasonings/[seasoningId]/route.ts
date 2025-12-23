@@ -43,6 +43,15 @@ export async function GET(
 
     return NextResponse.json({ data: output });
   } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("調味料詳細取得エラー:", error);
+    } else {
+      console.error("調味料詳細取得エラー:", {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        name: error instanceof Error ? error.name : undefined,
+      });
+    }
     const { status, body } = errorMapper.toHttpResponse(error);
     return NextResponse.json(body, { status });
   }
