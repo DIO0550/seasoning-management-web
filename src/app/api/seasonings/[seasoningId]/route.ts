@@ -1,0 +1,58 @@
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import { ConnectionManager } from "@/infrastructure/database/connection-manager";
+import { RepositoryFactory } from "@/infrastructure/di/repository-factory";
+import { GetSeasoningUseCase } from "@/features/seasonings/usecases/get-seasoning";
+import { errorMapper } from "@/utils/api/error-mapper";
+
+const paramsSchema = z.object({
+  seasoningId: z.coerce.number().int().positive(),
+});
+
+export async function GET(
+  _request: NextRequest,
+  { params }: { params: Promise<{ seasoningId: string }> }
+) {
+  try {
+    const resolvedParams = await params;
+    const validationResult = paramsSchema.safeParse(resolvedParams);
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        {
+          code: "INVALID_PARAMETER",
+          message: "無効なパラメータです",
+          details: validationResult.error.errors.map((err) => ({
+            field: err.path.join("."),
+            message: err.message,
+          })),
+        },
+        { status: 400 }
+      );
+    }
+
+    const { seasoningId } = validationResult.data;
+
+    const connectionManager = ConnectionManager.getInstance();
+    const repositoryFactory = new RepositoryFactory(connectionManager);
+    const seasoningRepository =
+      await repositoryFactory.createSeasoningRepository();
+
+    const useCase = new GetSeasoningUseCase(seasoningRepository);
+    const output = await useCase.execute({ seasoningId });
+
+    return NextResponse.json({ data: output });
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("調味料詳細取得エラー:", error);
+    } else {
+      console.error("調味料詳細取得エラー:", {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        name: error instanceof Error ? error.name : undefined,
+      });
+    }
+    const { status, body } = errorMapper.toHttpResponse(error);
+    return NextResponse.json(body, { status });
+  }
+}
