@@ -1,5 +1,6 @@
 import type { Seasoning } from "@/domain/entities/seasoning/seasoning";
 import type { GetSeasoningOutput } from "@/features/seasonings/usecases/get-seasoning/dto";
+import { utcDateToString } from "@/utils/date-conversion";
 
 export class GetSeasoningMapper {
   static toOutput(entity: Seasoning): GetSeasoningOutput {
@@ -8,9 +9,9 @@ export class GetSeasoningMapper {
       name: entity.name,
       typeId: entity.typeId,
       imageId: entity.imageId,
-      bestBeforeAt: entity.bestBeforeAt?.toISOString() ?? null,
-      expiresAt: entity.expiresAt?.toISOString() ?? null,
-      purchasedAt: entity.purchasedAt?.toISOString() ?? null,
+      bestBeforeAt: utcDateToString(entity.bestBeforeAt),
+      expiresAt: utcDateToString(entity.expiresAt),
+      purchasedAt: utcDateToString(entity.purchasedAt),
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
       expiryStatus: entity.getExpiryStatus(),
