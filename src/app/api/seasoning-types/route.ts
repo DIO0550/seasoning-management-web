@@ -5,8 +5,10 @@ import { SeasoningTypeAddErrorCode } from "@/types/api/seasoningType/add/error-c
 import { ConnectionManager } from "@/infrastructure/database/connection-manager";
 import { RepositoryFactory } from "@/infrastructure/di/repository-factory";
 import { errorMapper } from "@/utils/api/error-mapper";
-import { DuplicateError } from "@/domain/errors";
+import { DuplicateError, ValidationError } from "@/domain/errors";
 import { ConflictError } from "@/libs/database/errors";
+import { MySQLUnitOfWork } from "@/infrastructure/database/unit-of-work/my-sql-unit-of-work";
+import { CreateSeasoningTypeUseCase } from "@/features/seasoning-types/usecases/create-seasoning-type";
 
 /**
  * GET /api/seasoning-types
@@ -43,7 +45,6 @@ export async function GET() {
  * 調味料種類を追加する
  */
 export async function POST(request: NextRequest) {
-  let requestedName: string | undefined;
   try {
     const body = await request.json();
     const validationResult = seasoningTypeAddRequestSchema.safeParse(body);
@@ -66,66 +67,50 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    requestedName = validationResult.data.name;
-
     const connectionManager = ConnectionManager.getInstance();
-    const repositoryFactory = new RepositoryFactory(connectionManager);
-    const seasoningTypeRepository =
-      await repositoryFactory.createSeasoningTypeRepository();
+    const unitOfWork = new MySQLUnitOfWork(connectionManager);
+    const useCase = new CreateSeasoningTypeUseCase(unitOfWork);
+    const result = await useCase.execute(validationResult.data);
 
-    // UX向上のための事前重複チェック。UNIQUE制約で最終的な整合性は保証される。
-    const isDuplicate = await seasoningTypeRepository.existsByName(
-      validationResult.data.name
-    );
-    if (isDuplicate) {
-      throw new DuplicateError("name", validationResult.data.name);
-    }
-
-    const createResult = await seasoningTypeRepository.create({
-      name: validationResult.data.name,
-    });
-
-    const created = await seasoningTypeRepository.findById(createResult.id);
-
-    if (!created) {
-      return NextResponse.json(
-        {
-          code: SeasoningTypeAddErrorCode.INTERNAL_ERROR,
-          message: "作成した調味料の種類が取得できませんでした",
-        },
-        { status: 500 }
-      );
-    }
-
-    const response = {
-      data: {
-        id: created.id,
-        name: created.name,
-        createdAt: created.createdAt.toISOString(),
-        updatedAt: created.updatedAt.toISOString(),
-      },
-    };
-
-    return NextResponse.json(response, { status: 201 });
+    return NextResponse.json({ data: result }, { status: 201 });
   } catch (error) {
-    if (error instanceof ConflictError) {
-      const contextValue =
-        (error.context as { value?: unknown } | undefined)?.value;
-      const duplicateValue =
-        typeof contextValue === "string"
-          ? contextValue
-          : requestedName ?? "unknown";
-      const duplicateError = new DuplicateError(
-        "name",
-        duplicateValue
-      );
-      const { status, body } = errorMapper.toHttpResponse(duplicateError);
-      return NextResponse.json(body, { status });
+    if (isDuplicateNameError(error)) {
+      return buildDuplicateNameResponse();
     }
 
-    // ConflictError以外のドメインエラーは共通マッパーに委譲
+    if (error instanceof ValidationError) {
+      return buildValidationErrorResponse(error);
+    }
+
     const { status, body } = errorMapper.toHttpResponse(error);
 
     return NextResponse.json(body, { status });
   }
 }
+
+const isDuplicateNameError = (error: unknown): boolean =>
+  error instanceof DuplicateError || error instanceof ConflictError;
+
+const buildDuplicateNameResponse = () =>
+  NextResponse.json(
+    {
+      code: SeasoningTypeAddErrorCode.DUPLICATE_NAME,
+      message: "入力内容を確認してください",
+    },
+    { status: 400 }
+  );
+
+const buildValidationErrorResponse = (error: ValidationError) =>
+  NextResponse.json(
+    {
+      code: SeasoningTypeAddErrorCode.DEFAULT,
+      message: "入力内容を確認してください",
+      details: [
+        {
+          field: error.field,
+          message: error.message,
+        },
+      ],
+    },
+    { status: 400 }
+  );
