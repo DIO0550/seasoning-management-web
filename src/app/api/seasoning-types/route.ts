@@ -97,7 +97,7 @@ const buildDuplicateNameResponse = () =>
       code: SeasoningTypeAddErrorCode.DUPLICATE_NAME,
       message: "入力内容を確認してください",
     },
-    { status: 400 }
+    { status: 409 }
   );
 
 const buildValidationErrorResponse = (error: ValidationError) =>

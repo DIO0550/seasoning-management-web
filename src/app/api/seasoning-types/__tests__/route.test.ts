@@ -125,7 +125,7 @@ it("POST: 異常系: DBエラーが発生した場合、500エラーを返すこ
   expect(response.status).toBe(500);
 });
 
-it("POST: 異常系: 重複した名前の場合、400エラーを返すこと", async () => {
+it("POST: 異常系: 重複した名前の場合、409エラーを返すこと", async () => {
   const requestBody = { name: "既存の種類" };
   const request = new NextRequest("http://localhost/api/seasoning-types", {
     method: "POST",
@@ -137,6 +137,6 @@ it("POST: 異常系: 重複した名前の場合、400エラーを返すこと",
   const response = await POST(request);
   const body = await response.json();
 
-  expect(response.status).toBe(400);
+  expect(response.status).toBe(409);
   expect(body.code).toBe("DUPLICATE_NAME");
 });
