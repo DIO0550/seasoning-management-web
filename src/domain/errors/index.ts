@@ -7,3 +7,4 @@ export { ValidationError } from "./validation-error";
 export { NotFoundError } from "./not-found-error";
 export { DuplicateError } from "./duplicate-error";
 export { ForeignKeyViolationError } from "./foreign-key-violation-error";
+export { SeasoningTypeCreateError } from "./seasoning-type-create-error";
