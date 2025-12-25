@@ -6,13 +6,13 @@ export const SeasoningTypeFactory = {
     const trimmed = name.trim();
 
     if (trimmed.length === 0) {
-      throw new ValidationError("name", "調味料の種類名は必須です");
+      throw new ValidationError("name", "調味料種類名は必須です");
     }
 
     if (trimmed.length > SEASONING_TYPE_NAME_MAX_LENGTH) {
       throw new ValidationError(
         "name",
-        `調味料の種類名は${SEASONING_TYPE_NAME_MAX_LENGTH}文字以内で入力してください`
+        `調味料種類名は${SEASONING_TYPE_NAME_MAX_LENGTH}文字以内で入力してください`
       );
     }
 

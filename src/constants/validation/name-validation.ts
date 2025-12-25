@@ -25,7 +25,10 @@ export const TEMPLATE_NAME_MAX_LENGTH = 256;
 
 /**
  * 調味料種類名の最大文字数制限
- * @description 調味料種類名のアプリケーション制約として 50 文字に制限する
+ * @description 調味料種類名のアプリケーション制約として 50 文字に制限する。
+ * データベース定義（seasoning_type.name: VARCHAR(256), CodingGuidelineID: 1000002）より厳しいが、
+ * 種類選択用のプルダウン・一覧表示などの UI で折り返しやレイアウト崩れを防ぎ、
+ * モバイル画面でも名称を視認しやすくする UX を優先した設計方針による制約とする。
  */
 export const SEASONING_TYPE_NAME_MAX_LENGTH = 50;
 
