@@ -1,8 +1,14 @@
-import type { SeasoningType } from "@/libs/database/entities/seasoning-type";
 import type { SeasoningTypeDetailDto } from "@/features/seasoning-types/usecases/create-seasoning-type/dto";
 
+type SeasoningTypeSource = {
+  id: number;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export const CreateSeasoningTypeMapper = {
-  toDetailDto: (entity: SeasoningType): SeasoningTypeDetailDto => ({
+  toDetailDto: (entity: SeasoningTypeSource): SeasoningTypeDetailDto => ({
     id: entity.id,
     name: entity.name,
     createdAt: entity.createdAt.toISOString(),

@@ -1,5 +1,5 @@
 import type { IUnitOfWork } from "@/domain/repositories/i-unit-of-work";
-import { DuplicateError, SeasoningTypeCreateError } from "@/domain/errors";
+import { DuplicateError } from "@/domain/errors";
 import { SeasoningTypeFactory } from "@/domain/entities/seasoning-type/seasoning-type-factory";
 import type { CreateSeasoningTypeInput, SeasoningTypeDetailDto } from "@/features/seasoning-types/usecases/create-seasoning-type/dto";
 import { CreateSeasoningTypeMapper } from "@/features/seasoning-types/usecases/create-seasoning-type/mapper";
@@ -22,15 +22,12 @@ export class CreateSeasoningTypeUseCase {
       const created = await seasoningTypeRepository.create({
         name: normalizedName,
       });
-      const seasoningType = await seasoningTypeRepository.findById(created.id);
-
-      if (!seasoningType) {
-        throw new SeasoningTypeCreateError(
-          "作成した調味料の種類が取得できませんでした"
-        );
-      }
-
-      return CreateSeasoningTypeMapper.toDetailDto(seasoningType);
+      return CreateSeasoningTypeMapper.toDetailDto({
+        id: created.id,
+        name: normalizedName,
+        createdAt: created.createdAt,
+        updatedAt: created.createdAt,
+      });
     });
   }
 }
