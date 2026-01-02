@@ -9,32 +9,20 @@ import { stringToUtcDate, utcDateToString } from "@/utils/date-conversion";
 
 export class UpdateSeasoningMapper {
   static toRepositoryInput(input: UpdateSeasoningInput): SeasoningUpdateInput {
-    const result: SeasoningUpdateInput = {};
-
-    if (input.name !== undefined) {
-      Object.assign(result, { name: input.name });
-    }
-    if (input.typeId !== undefined) {
-      Object.assign(result, { typeId: input.typeId });
-    }
-    if (input.imageId !== undefined) {
-      Object.assign(result, { imageId: input.imageId });
-    }
-    if (input.bestBeforeAt !== undefined) {
-      Object.assign(result, {
-        bestBeforeAt: stringToUtcDate(input.bestBeforeAt),
-      });
-    }
-    if (input.expiresAt !== undefined) {
-      Object.assign(result, { expiresAt: stringToUtcDate(input.expiresAt) });
-    }
-    if (input.purchasedAt !== undefined) {
-      Object.assign(result, {
-        purchasedAt: stringToUtcDate(input.purchasedAt),
-      });
-    }
-
-    return result;
+    return {
+      ...(input.name !== undefined ? { name: input.name } : {}),
+      ...(input.typeId !== undefined ? { typeId: input.typeId } : {}),
+      ...(input.imageId !== undefined ? { imageId: input.imageId } : {}),
+      ...(input.bestBeforeAt !== undefined
+        ? { bestBeforeAt: stringToUtcDate(input.bestBeforeAt) }
+        : {}),
+      ...(input.expiresAt !== undefined
+        ? { expiresAt: stringToUtcDate(input.expiresAt) }
+        : {}),
+      ...(input.purchasedAt !== undefined
+        ? { purchasedAt: stringToUtcDate(input.purchasedAt) }
+        : {}),
+    };
   }
 
   static toOutput(entity: Seasoning): UpdateSeasoningOutput {
