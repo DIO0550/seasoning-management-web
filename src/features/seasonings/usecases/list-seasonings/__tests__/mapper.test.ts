@@ -4,7 +4,7 @@
 
 import { test, expect } from "vitest";
 import { Seasoning } from "@/domain/entities/seasoning/seasoning";
-import { ListSeasoningsMapper } from "../mapper";
+import { ListSeasoningsMapper } from "@/features/seasonings/usecases/list-seasonings/mapper";
 
 test("ListSeasoningsMapper.toSeasoningListItemDto: Seasoning EntityをSeasoningListItemDtoに変換する", () => {
   const futureDate = new Date();
@@ -15,7 +15,7 @@ test("ListSeasoningsMapper.toSeasoningListItemDto: Seasoning EntityをSeasoningL
     name: "醤油",
     typeId: 2,
     imageId: 3,
-    bestBeforeAt: new Date("2025-12-31"),
+    bestBeforeAt: null,
     expiresAt: futureDate,
     purchasedAt: new Date("2025-01-01"),
     createdAt: new Date("2025-01-01T00:00:00Z"),
@@ -28,7 +28,7 @@ test("ListSeasoningsMapper.toSeasoningListItemDto: Seasoning EntityをSeasoningL
   expect(dto.name).toBe("醤油");
   expect(dto.typeId).toBe(2);
   expect(dto.imageId).toBe(3);
-  expect(dto.bestBeforeAt).toBe("2025-12-31T00:00:00.000Z");
+  expect(dto.bestBeforeAt).toBeNull();
   expect(dto.expiresAt).toBe(futureDate.toISOString());
   expect(dto.purchasedAt).toBe("2025-01-01T00:00:00.000Z");
   expect(dto.daysUntilExpiry).toBeTypeOf("number");
