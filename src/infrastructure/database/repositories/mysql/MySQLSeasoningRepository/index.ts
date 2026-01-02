@@ -201,12 +201,46 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
   /**
    * 調味料を更新
    */
-  async update(
-    _id: number,
-    _input: SeasoningUpdateInput
-  ): Promise<UpdateResult> {
-    // 最小限の実装
-    throw new Error("Method not implemented.");
+  async update(id: number, input: SeasoningUpdateInput): Promise<UpdateResult> {
+    const setClauses: string[] = [];
+    const params: unknown[] = [];
+
+    if (input.name !== undefined) {
+      setClauses.push("name = ?");
+      params.push(input.name);
+    }
+    if (input.typeId !== undefined) {
+      setClauses.push("type_id = ?");
+      params.push(input.typeId);
+    }
+    if (input.imageId !== undefined) {
+      setClauses.push("image_id = ?");
+      params.push(input.imageId);
+    }
+    if (input.bestBeforeAt !== undefined) {
+      setClauses.push("best_before_at = ?");
+      params.push(input.bestBeforeAt);
+    }
+    if (input.expiresAt !== undefined) {
+      setClauses.push("expires_at = ?");
+      params.push(input.expiresAt);
+    }
+    if (input.purchasedAt !== undefined) {
+      setClauses.push("purchased_at = ?");
+      params.push(input.purchasedAt);
+    }
+
+    if (setClauses.length === 0) {
+      return { affectedRows: 0, updatedAt: new Date() };
+    }
+
+    setClauses.push("updated_at = NOW()");
+    params.push(id);
+
+    const sql = `UPDATE seasoning SET ${setClauses.join(", ")} WHERE id = ?`;
+    const result = await this.connection.query(sql, params);
+
+    return { affectedRows: result.rowsAffected, updatedAt: new Date() };
   }
 
   /**
