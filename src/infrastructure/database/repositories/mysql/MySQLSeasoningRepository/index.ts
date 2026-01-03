@@ -240,7 +240,18 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
     const sql = `UPDATE seasoning SET ${setClauses.join(", ")} WHERE id = ?`;
     const result = await this.connection.query(sql, params);
 
-    return { affectedRows: result.rowsAffected, updatedAt: new Date() };
+    let updatedAt: Date | null = null;
+    if (result.rowsAffected > 0) {
+      const updatedSeasoning = await this.findById(id);
+      if (updatedSeasoning) {
+        updatedAt = updatedSeasoning.updatedAt;
+      }
+    }
+
+    return {
+      affectedRows: result.rowsAffected,
+      updatedAt: updatedAt ?? new Date(),
+    };
   }
 
   /**
