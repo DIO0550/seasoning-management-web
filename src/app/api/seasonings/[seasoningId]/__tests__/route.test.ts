@@ -33,6 +33,8 @@ vi.mock("@/infrastructure/di/repository-factory", () => ({
 }));
 
 beforeEach(() => {
+  getExecuteMock.mockReset();
+  updateExecuteMock.mockReset();
   vi.clearAllMocks();
 });
 
@@ -231,6 +233,34 @@ test("PATCH異常系: 無効な日付フォーマットの場合、400を返す"
   const req = new NextRequest("http://localhost/api/seasonings/1", {
     method: "PATCH",
     body: JSON.stringify({ bestBeforeAt: "2025/12/31" }),
+    headers: { "Content-Type": "application/json" },
+  });
+  const params = Promise.resolve({ seasoningId: "1" });
+  const res = await PATCH(req, { params });
+
+  expect(res.status).toBe(400);
+  const json = await res.json();
+  expect(json.code).toBe("VALIDATION_ERROR");
+});
+
+test("PATCH異常系: 無効な日付値の場合、400を返す", async () => {
+  const req = new NextRequest("http://localhost/api/seasonings/1", {
+    method: "PATCH",
+    body: JSON.stringify({ bestBeforeAt: "2025-02-30" }),
+    headers: { "Content-Type": "application/json" },
+  });
+  const params = Promise.resolve({ seasoningId: "1" });
+  const res = await PATCH(req, { params });
+
+  expect(res.status).toBe(400);
+  const json = await res.json();
+  expect(json.code).toBe("VALIDATION_ERROR");
+});
+
+test("PATCH異常系: 存在しない月日の場合、400を返す", async () => {
+  const req = new NextRequest("http://localhost/api/seasonings/1", {
+    method: "PATCH",
+    body: JSON.stringify({ bestBeforeAt: "2025-13-32" }),
     headers: { "Content-Type": "application/json" },
   });
   const params = Promise.resolve({ seasoningId: "1" });

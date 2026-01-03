@@ -6,31 +6,27 @@ import { GetSeasoningUseCase } from "@/features/seasonings/usecases/get-seasonin
 import { UpdateSeasoningUseCase } from "@/features/seasonings/usecases/update-seasoning";
 import { errorMapper } from "@/utils/api/error-mapper";
 import { SEASONING_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
+import { isValidDateString } from "@/utils/date-conversion";
 
 const paramsSchema = z.object({
   seasoningId: z.coerce.number().int().positive(),
 });
+
+const dateStringSchema = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .refine((value) => isValidDateString(value), {
+    message: "無効な日付です",
+  });
 
 const updateBodySchema = z
   .object({
     name: z.string().min(1).max(SEASONING_NAME_MAX_LENGTH).optional(),
     typeId: z.number().int().positive().optional(),
     imageId: z.number().int().positive().nullable().optional(),
-    bestBeforeAt: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/)
-      .nullable()
-      .optional(),
-    expiresAt: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/)
-      .nullable()
-      .optional(),
-    purchasedAt: z
-      .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/)
-      .nullable()
-      .optional(),
+    bestBeforeAt: dateStringSchema.nullable().optional(),
+    expiresAt: dateStringSchema.nullable().optional(),
+    purchasedAt: dateStringSchema.nullable().optional(),
   })
   .strict();
 
