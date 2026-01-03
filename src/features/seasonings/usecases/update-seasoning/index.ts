@@ -8,6 +8,7 @@ import type {
   ISeasoningImageRepository,
 } from "@/infrastructure/database/interfaces";
 import { NotFoundError } from "@/domain/errors";
+import { Seasoning } from "@/domain/entities/seasoning/seasoning";
 import type { UpdateSeasoningInput, UpdateSeasoningOutput } from "./dto";
 import { UpdateSeasoningMapper } from "./mapper";
 
@@ -45,14 +46,47 @@ export class UpdateSeasoningUseCase {
     }
 
     const repositoryInput = UpdateSeasoningMapper.toRepositoryInput(input);
-    await this.seasoningRepository.update(input.seasoningId, repositoryInput);
+    if (Object.keys(repositoryInput).length === 0) {
+      return UpdateSeasoningMapper.toOutput(existingSeasoning);
+    }
 
-    const updatedSeasoning = await this.seasoningRepository.findById(
-      input.seasoningId
+    const updateResult = await this.seasoningRepository.update(
+      input.seasoningId,
+      repositoryInput
     );
-    if (!updatedSeasoning) {
+    if (updateResult.affectedRows === 0) {
       throw new NotFoundError("seasoning", input.seasoningId);
     }
+
+    const updatedSeasoning = new Seasoning({
+      id: existingSeasoning.id,
+      name:
+        repositoryInput.name !== undefined
+          ? repositoryInput.name
+          : existingSeasoning.name,
+      typeId:
+        repositoryInput.typeId !== undefined
+          ? repositoryInput.typeId
+          : existingSeasoning.typeId,
+      imageId:
+        repositoryInput.imageId !== undefined
+          ? repositoryInput.imageId
+          : existingSeasoning.imageId,
+      bestBeforeAt:
+        repositoryInput.bestBeforeAt !== undefined
+          ? repositoryInput.bestBeforeAt
+          : existingSeasoning.bestBeforeAt,
+      expiresAt:
+        repositoryInput.expiresAt !== undefined
+          ? repositoryInput.expiresAt
+          : existingSeasoning.expiresAt,
+      purchasedAt:
+        repositoryInput.purchasedAt !== undefined
+          ? repositoryInput.purchasedAt
+          : existingSeasoning.purchasedAt,
+      createdAt: existingSeasoning.createdAt,
+      updatedAt: updateResult.updatedAt,
+    });
 
     return UpdateSeasoningMapper.toOutput(updatedSeasoning);
   }

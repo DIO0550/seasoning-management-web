@@ -89,14 +89,14 @@ beforeEach(() => {
 
 test("正常系: 名前のみを更新した場合、更新後のデータを返す", async () => {
   const originalEntity = createSeasoningEntity();
-  const updatedEntity = createSeasoningEntity({ name: "濃口醤油" });
+  const updatedAt = new Date("2025-11-11T00:00:00.000Z");
 
-  vi.mocked(mockSeasoningRepository.findById)
-    .mockResolvedValueOnce(originalEntity)
-    .mockResolvedValueOnce(updatedEntity);
+  vi.mocked(mockSeasoningRepository.findById).mockResolvedValueOnce(
+    originalEntity
+  );
   vi.mocked(mockSeasoningRepository.update).mockResolvedValue({
     affectedRows: 1,
-    updatedAt: new Date(),
+    updatedAt,
   });
 
   const input: UpdateSeasoningInput = {
@@ -111,24 +111,22 @@ test("正常系: 名前のみを更新した場合、更新後のデータを返
   expect(mockSeasoningRepository.update).toHaveBeenCalledWith(1, {
     name: "濃口醤油",
   });
+  expect(mockSeasoningRepository.findById).toHaveBeenCalledTimes(1);
 });
 
 test("正常系: 複数フィールドを同時に更新した場合、更新後のデータを返す", async () => {
   const originalEntity = createSeasoningEntity();
-  const updatedEntity = createSeasoningEntity({
-    name: "濃口醤油",
-    bestBeforeAt: new Date("2026-06-01T00:00:00.000Z"),
-  });
+  const updatedAt = new Date("2025-11-11T00:00:00.000Z");
 
-  vi.mocked(mockSeasoningRepository.findById)
-    .mockResolvedValueOnce(originalEntity)
-    .mockResolvedValueOnce(updatedEntity);
+  vi.mocked(mockSeasoningRepository.findById).mockResolvedValueOnce(
+    originalEntity
+  );
   vi.mocked(mockSeasoningTypeRepository.findById).mockResolvedValue(
     createSeasoningTypeEntity()
   );
   vi.mocked(mockSeasoningRepository.update).mockResolvedValue({
     affectedRows: 1,
-    updatedAt: new Date(),
+    updatedAt,
   });
 
   const input: UpdateSeasoningInput = {
@@ -143,18 +141,19 @@ test("正常系: 複数フィールドを同時に更新した場合、更新後
   expect(result.id).toBe(1);
   expect(result.name).toBe("濃口醤油");
   expect(result.bestBeforeAt).toBe("2026-06-01");
+  expect(mockSeasoningRepository.findById).toHaveBeenCalledTimes(1);
 });
 
 test("正常系: imageIdをnullに更新した場合、画像が削除される", async () => {
   const originalEntity = createSeasoningEntity();
-  const updatedEntity = createSeasoningEntity({ imageId: null });
+  const updatedAt = new Date("2025-11-11T00:00:00.000Z");
 
-  vi.mocked(mockSeasoningRepository.findById)
-    .mockResolvedValueOnce(originalEntity)
-    .mockResolvedValueOnce(updatedEntity);
+  vi.mocked(mockSeasoningRepository.findById).mockResolvedValueOnce(
+    originalEntity
+  );
   vi.mocked(mockSeasoningRepository.update).mockResolvedValue({
     affectedRows: 1,
-    updatedAt: new Date(),
+    updatedAt,
   });
 
   const input: UpdateSeasoningInput = {
@@ -168,15 +167,16 @@ test("正常系: imageIdをnullに更新した場合、画像が削除される"
   expect(mockSeasoningRepository.update).toHaveBeenCalledWith(1, {
     imageId: null,
   });
+  expect(mockSeasoningRepository.findById).toHaveBeenCalledTimes(1);
 });
 
 test("正常系: imageIdを新しい値に更新した場合、画像が変更される", async () => {
   const originalEntity = createSeasoningEntity();
-  const updatedEntity = createSeasoningEntity({ imageId: 20 });
+  const updatedAt = new Date("2025-11-11T00:00:00.000Z");
 
-  vi.mocked(mockSeasoningRepository.findById)
-    .mockResolvedValueOnce(originalEntity)
-    .mockResolvedValueOnce(updatedEntity);
+  vi.mocked(mockSeasoningRepository.findById).mockResolvedValueOnce(
+    originalEntity
+  );
   vi.mocked(mockSeasoningImageRepository.findById).mockResolvedValue(
     new SeasoningImage({
       id: 20,
@@ -188,7 +188,7 @@ test("正常系: imageIdを新しい値に更新した場合、画像が変更�
   );
   vi.mocked(mockSeasoningRepository.update).mockResolvedValue({
     affectedRows: 1,
-    updatedAt: new Date(),
+    updatedAt,
   });
 
   const input: UpdateSeasoningInput = {
@@ -199,6 +199,7 @@ test("正常系: imageIdを新しい値に更新した場合、画像が変更�
   const result = await useCase.execute(input);
 
   expect(result.imageId).toBe(20);
+  expect(mockSeasoningRepository.findById).toHaveBeenCalledTimes(1);
 });
 
 test("異常系: 存在しない調味料IDの場合、NotFoundErrorをスローする", async () => {
