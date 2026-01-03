@@ -268,3 +268,37 @@ test("PATCH異常系: 未知のフィールドがある場合、400を返す", a
   const json = await res.json();
   expect(json.code).toBe("VALIDATION_ERROR");
 });
+
+test("PATCH異常系: 存在しないtypeIdを指定した場合、404エラーが返される", async () => {
+  updateExecuteMock.mockRejectedValue(new NotFoundError("seasoning-type", 999));
+
+  const req = new NextRequest("http://localhost/api/seasonings/1", {
+    method: "PATCH",
+    body: JSON.stringify({ typeId: 999 }),
+    headers: { "Content-Type": "application/json" },
+  });
+  const params = Promise.resolve({ seasoningId: "1" });
+  const res = await PATCH(req, { params });
+
+  expect(res.status).toBe(404);
+  const json = await res.json();
+  expect(json.code).toBe("NOT_FOUND");
+});
+
+test("PATCH異常系: 存在しないimageIdを指定した場合、404エラーが返される", async () => {
+  updateExecuteMock.mockRejectedValue(
+    new NotFoundError("seasoning-image", 999)
+  );
+
+  const req = new NextRequest("http://localhost/api/seasonings/1", {
+    method: "PATCH",
+    body: JSON.stringify({ imageId: 999 }),
+    headers: { "Content-Type": "application/json" },
+  });
+  const params = Promise.resolve({ seasoningId: "1" });
+  const res = await PATCH(req, { params });
+
+  expect(res.status).toBe(404);
+  const json = await res.json();
+  expect(json.code).toBe("NOT_FOUND");
+});
