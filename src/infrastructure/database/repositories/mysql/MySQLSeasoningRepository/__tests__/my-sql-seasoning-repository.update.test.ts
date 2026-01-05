@@ -78,3 +78,63 @@ test("[update] 異常系: 存在しないIDへの更新でaffectedRows: 0が返�
   expect(updateSpy).toHaveBeenCalledTimes(1);
   expect(result.affectedRows).toBe(0);
 });
+
+test("[update] 正常系: imageIdをnullに更新", async () => {
+  const updateSpy = vi.spyOn(conn, "query").mockResolvedValueOnce({
+    rows: [],
+    rowsAffected: 1,
+    insertId: null,
+  });
+
+  const result = await repo.update(1, { imageId: null });
+
+  expect(updateSpy).toHaveBeenCalledTimes(1);
+  const [sql, params] = updateSpy.mock.calls[0];
+  expect(String(sql)).toContain(
+    "UPDATE seasoning SET image_id = ?, updated_at = ? WHERE id = ?"
+  );
+  expect(params).toEqual([null, expect.any(Date), 1]);
+  expect(result.affectedRows).toBe(1);
+});
+
+test("[update] 正常系: bestBeforeAtをnullに更新", async () => {
+  const updateSpy = vi.spyOn(conn, "query").mockResolvedValueOnce({
+    rows: [],
+    rowsAffected: 1,
+    insertId: null,
+  });
+
+  const result = await repo.update(1, { bestBeforeAt: null });
+
+  expect(updateSpy).toHaveBeenCalledTimes(1);
+  const [sql, params] = updateSpy.mock.calls[0];
+  expect(String(sql)).toContain(
+    "UPDATE seasoning SET best_before_at = ?, updated_at = ? WHERE id = ?"
+  );
+  expect(params).toEqual([null, expect.any(Date), 1]);
+  expect(result.affectedRows).toBe(1);
+});
+
+test("[update] 正常系: 複数のnullableフィールドを同時にnullに更新", async () => {
+  const updateSpy = vi.spyOn(conn, "query").mockResolvedValueOnce({
+    rows: [],
+    rowsAffected: 1,
+    insertId: null,
+  });
+
+  const result = await repo.update(1, {
+    imageId: null,
+    bestBeforeAt: null,
+    expiresAt: null,
+    purchasedAt: null,
+  });
+
+  expect(updateSpy).toHaveBeenCalledTimes(1);
+  const [sql, params] = updateSpy.mock.calls[0];
+  expect(String(sql)).toContain("image_id = ?");
+  expect(String(sql)).toContain("best_before_at = ?");
+  expect(String(sql)).toContain("expires_at = ?");
+  expect(String(sql)).toContain("purchased_at = ?");
+  expect(params).toEqual([null, null, null, null, expect.any(Date), 1]);
+  expect(result.affectedRows).toBe(1);
+});
