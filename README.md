@@ -16,8 +16,8 @@
 
 ### 前提条件
 
-- Node.js (v20.x 以上)
-- npm (v10.x 以上)
+- Node.js (v22.x 以上)
+- pnpm (v10.x 以上) ※ Corepack 経由で自動インストール
 
 ### インストール方法
 
@@ -28,19 +28,27 @@ git clone https://github.com/DIO0550/seasoning-management-web.git
 cd seasoning-management-web
 ```
 
-2. 依存関係のインストール
+2. Corepack の有効化と pnpm のセットアップ
 
 ```bash
-npm install
+corepack enable pnpm
 ```
 
-3. 開発サーバーの起動
+3. 依存関係のインストール
 
 ```bash
-npm run dev
+pnpm install
 ```
 
-4. ブラウザで http://localhost:3000 にアクセス
+4. 開発サーバーの起動
+
+```bash
+pnpm run dev
+```
+
+5. ブラウザで http://localhost:3000 にアクセス
+
+> **注意**: このプロジェクトでは npm/yarn の使用は禁止されています。必ず pnpm を使用してください。
 
 ### テストの実行
 
@@ -48,13 +56,13 @@ npm run dev
 
 ```bash
 # すべてのテストを実行
-npm test
+pnpm test
 
 # テストをウォッチモードで実行
-npm run test:watch
+pnpm run test:watch
 
 # テストカバレッジレポートの生成
-npm run test:coverage
+pnpm run test:coverage
 ```
 
 ## 機能
