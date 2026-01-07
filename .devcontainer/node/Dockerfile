@@ -24,6 +24,17 @@ RUN apt-get update && \
     locale-gen ja_JP.UTF-8 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+
+RUN npm config set ignore-scripts true
+
+# Enable pnpm via Corepack and configure global settings
+RUN corepack enable pnpm && \
+    pnpm config set --global minimum-release-age 7200
+    
+
+# Install Aikido Safe Chain (supply chain security tool)
+RUN curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh
+
 # Copy the built MCP server binary
 COPY --from=builder /tmp/github-mcp-server/github-mcp-server /usr/local/bin/
 

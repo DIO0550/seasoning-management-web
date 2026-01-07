@@ -8,7 +8,7 @@ applyTo: "**"
 
 - **作業開始時**: 必ず `prompt-mcp-server` (特に `get_implementation_workflow`) で最新ルールを確認してください。ユーザーから「ルールを確認して」と指示された場合も同様です。
 - **ブランチ**: main ブランチでの作業は禁止。目的に応じた新ブランチを作成してください。
-- **CLI**: `npx` は使用せず、必ず `npm run <script> -- [args]` 形式で実行してください。
+- **CLI**: `npx` は使用せず、必ず `pnpm run <script> -- [args]` 形式で実行してください。npm/yarn は禁止です。
 - **セキュリティ**: 機密情報は `.env.local` に限定し、ログ等に残さないでください。
 - **Linter**: `eslint-disable` や `any` 型の使用は禁止。コード修正で解決してください。
 
@@ -24,11 +24,11 @@ applyTo: "**"
 
 ## 開発コマンド
 
-- `npm run dev`: 開発サーバー起動
-- `npm run build` / `start`: ビルド・検証
-- `npm run lint` / `check`: 静的解析
-- `npm test`: 単体テスト (部分実行: `npm run test -- <path>`)
-- `npm run storybook`: UI カタログ
+- `pnpm run dev`: 開発サーバー起動
+- `pnpm run build` / `start`: ビルド・検証
+- `pnpm run lint` / `check`: 静的解析
+- `pnpm test`: 単体テスト (部分実行: `pnpm run test -- <path>`)
+- `pnpm run storybook`: UI カタログ
 
 ## コーディング規約
 

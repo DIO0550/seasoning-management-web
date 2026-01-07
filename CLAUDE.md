@@ -11,50 +11,51 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Setup & Development
 
 ```bash
-npm install              # 依存関係のインストール
-npm run dev             # 開発サーバー起動 (http://localhost:3000、Turbopack使用)
-npm run build           # プロダクションビルド
-npm start               # プロダクションサーバー起動
+pnpm install              # 依存関係のインストール
+pnpm run dev             # 開発サーバー起動 (http://localhost:3000、Turbopack使用)
+pnpm run build           # プロダクションビルド
+pnpm start               # プロダクションサーバー起動
 ```
 
 ### Testing
 
 ```bash
-npm test                # すべてのテストを実行 (Vitest)
-npm run test:watch      # ウォッチモードでテスト実行
-npm run test:coverage   # カバレッジレポート生成
+pnpm test                # すべてのテストを実行 (Vitest)
+pnpm run test:watch      # ウォッチモードでテスト実行
+pnpm run test:coverage   # カバレッジレポート生成
 ```
 
 #### 部分テスト（例）
 
 ```bash
-# 単一ファイルを実行（npm scripts に引数を渡す）
-npm run test -- src/infrastructure/database/repositories/mysql/MySQLSeasoningRepository/__tests__/MySQLSeasoningRepository.test.ts
+# 単一ファイルを実行（pnpm scripts に引数を渡す）
+pnpm run test -- src/infrastructure/database/repositories/mysql/MySQLSeasoningRepository/__tests__/MySQLSeasoningRepository.test.ts
 
 # パターン指定（watch）
-npm run test:watch -- src/**/MySQLSeasoningRepository.*.test.ts
+pnpm run test:watch -- src/**/MySQLSeasoningRepository.*.test.ts
 ```
 
 ### Quality Checks
 
 ```bash
-npm run lint            # ESLint実行
-npm run check           # TypeScript型チェック (tsc --noEmit)
+pnpm run lint            # ESLint実行
+pnpm run check           # TypeScript型チェック (tsc --noEmit)
 ```
 
 ### Storybook
 
 ```bash
-npm run storybook       # Storybook起動 (port 6006)
-npm run build-storybook # Storybookビルド
+pnpm run storybook       # Storybook起動 (port 6006)
+pnpm run build-storybook # Storybookビルド
 ```
 
 ## CLI 実行ポリシー（重要）
 
-- npx は使用しないでください。必ず package.json の npm scripts を経由してコマンドを実行します。
+- npx は使用しないでください。必ず package.json の pnpm scripts を経由してコマンドを実行します。
   - 理由: 半自動インストールによる環境差分の発生、ロックファイルの一貫性低下、CI の再現性劣化を防ぐためです。
-  - 必要なコマンドは scripts に追加し、`npm run <script> -- [args]` で引数を渡してください。
+  - 必要なコマンドは scripts に追加し、`pnpm run <script> -- [args]` で引数を渡してください。
   - 単発ユーティリティの実行が必要な場合も、scripts に明示的に追加してから実行します。
+- npm/yarn は使用禁止です。必ず pnpm を使用してください。
 
 ## Architecture
 

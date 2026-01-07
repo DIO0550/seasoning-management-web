@@ -6,7 +6,7 @@
 
 - **作業開始時**: 必ず `prompt-mcp-server` (特に `get_implementation_workflow`) で最新ルールを確認してください。ユーザーから「ルールを確認して」と指示された場合も同様です。
 - **ブランチ**: main ブランチでの作業は禁止。目的に応じた新ブランチを作成してください。
-- **CLI**: `npx` は使用せず、必ず `npm run <script> -- [args]` 形式で実行してください。
+- **CLI**: `npx` は使用せず、必ず `pnpm run <script> -- [args]` 形式で実行してください。npm/yarn は禁止です。
 - **セキュリティ**: 機密情報は `.env.local` に限定し、ログ等に残さないでください。
 - **Linter**: `eslint-disable` や `any` 型の使用は禁止。コード修正で解決してください。
 
@@ -22,11 +22,11 @@
 
 ## 開発コマンド
 
-- `npm run dev`: 開発サーバー起動
-- `npm run build` / `start`: ビルド・検証
-- `npm run lint` / `check`: 静的解析
-- `npm test`: 単体テスト (部分実行: `npm run test -- <path>`)
-- `npm run storybook`: UI カタログ
+- `pnpm run dev`: 開発サーバー起動
+- `pnpm run build` / `start`: ビルド・検証
+- `pnpm run lint` / `check`: 静的解析
+- `pnpm test`: 単体テスト (部分実行: `pnpm run test -- <path>`)
+- `pnpm run storybook`: UI カタログ
 
 ## コーディング規約
 
@@ -97,7 +97,7 @@
   - 手順:
     1. main 以外のブランチで実行していることを確認。
     2. `mcp__github__get_pull_request_review_comments` で未解決コメントを取得し、類似内容はグルーピング。
-    3. グループごとに修正を実施し、`npm run test -- <対象パス>` / `npm run lint -- <対象パス>` など必要最小限の検証を実行（npx 禁止）。
+    3. グループごとに修正を実施し、`pnpm run test -- <対象パス>` / `pnpm run lint -- <対象パス>` など必要最小限の検証を実行（npx 禁止）。
     4. コミット前に `general/commit.prompt.md` を取得してルールを遵守。原則「指摘 1 件=1 コミット」、ただし類似指摘は 1 コミットにまとめて良い。
     5. 失敗した場合は処理を止め、ログと未完リストを出力。
   - 入出力例:
