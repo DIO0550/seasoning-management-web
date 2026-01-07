@@ -4,6 +4,7 @@ import { ConnectionManager } from "@/infrastructure/database/connection-manager"
 import { RepositoryFactory } from "@/infrastructure/di/repository-factory";
 import { GetSeasoningUseCase } from "@/features/seasonings/usecases/get-seasoning";
 import { UpdateSeasoningUseCase } from "@/features/seasonings/usecases/update-seasoning";
+import { DeleteSeasoningUseCase } from "@/features/seasonings/usecases/delete-seasoning";
 import { errorMapper } from "@/utils/api/error-mapper";
 import { SEASONING_NAME_MAX_LENGTH } from "@/constants/validation/name-validation";
 import { isValidDateString } from "@/utils/date-conversion";
@@ -148,6 +149,54 @@ export async function PATCH(
       console.error("調味料更新エラー:", error);
     } else {
       console.error("調味料更新エラー:", {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        name: error instanceof Error ? error.name : undefined,
+      });
+    }
+    const { status, body } = errorMapper.toHttpResponse(error);
+    return NextResponse.json(body, { status });
+  }
+}
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ seasoningId: string }> }
+) {
+  try {
+    const resolvedParams = await params;
+    const validationResult = paramsSchema.safeParse(resolvedParams);
+
+    if (!validationResult.success) {
+      return NextResponse.json(
+        {
+          code: "INVALID_PARAMETER",
+          message: "無効なパラメータです",
+          details: validationResult.error.errors.map((err) => ({
+            field: err.path.join("."),
+            message: err.message,
+          })),
+        },
+        { status: 400 }
+      );
+    }
+
+    const { seasoningId } = validationResult.data;
+
+    const connectionManager = ConnectionManager.getInstance();
+    const repositoryFactory = new RepositoryFactory(connectionManager);
+    const seasoningRepository =
+      await repositoryFactory.createSeasoningRepository();
+
+    const useCase = new DeleteSeasoningUseCase(seasoningRepository);
+    await useCase.execute({ seasoningId });
+
+    return new NextResponse(null, { status: 204 });
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.error("調味料削除エラー:", error);
+    } else {
+      console.error("調味料削除エラー:", {
         message: error instanceof Error ? error.message : String(error),
         stack: error instanceof Error ? error.stack : undefined,
         name: error instanceof Error ? error.name : undefined,
