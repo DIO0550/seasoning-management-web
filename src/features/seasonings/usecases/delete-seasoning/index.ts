@@ -24,7 +24,7 @@ export class DeleteSeasoningUseCase {
     );
 
     if (!seasoning) {
-      throw new NotFoundError("Seasoning", input.seasoningId);
+      throw new NotFoundError("seasoning", input.seasoningId);
     }
 
     await this.seasoningRepository.delete(input.seasoningId);
