@@ -1,10 +1,11 @@
 import { beforeEach, expect, test, vi } from "vitest";
 import { NextRequest } from "next/server";
-import { GET, PATCH } from "@/app/api/seasonings/[seasoningId]/route";
+import { GET, PATCH, DELETE } from "@/app/api/seasonings/[seasoningId]/route";
 import { NotFoundError } from "@/domain/errors/not-found-error";
 
 const getExecuteMock = vi.fn();
 const updateExecuteMock = vi.fn();
+const deleteExecuteMock = vi.fn();
 
 vi.mock("@/features/seasonings/usecases/get-seasoning", () => ({
   GetSeasoningUseCase: vi.fn().mockImplementation(() => ({
@@ -15,6 +16,12 @@ vi.mock("@/features/seasonings/usecases/get-seasoning", () => ({
 vi.mock("@/features/seasonings/usecases/update-seasoning", () => ({
   UpdateSeasoningUseCase: vi.fn().mockImplementation(() => ({
     execute: updateExecuteMock,
+  })),
+}));
+
+vi.mock("@/features/seasonings/usecases/delete-seasoning", () => ({
+  DeleteSeasoningUseCase: vi.fn().mockImplementation(() => ({
+    execute: deleteExecuteMock,
   })),
 }));
 
@@ -35,6 +42,7 @@ vi.mock("@/infrastructure/di/repository-factory", () => ({
 beforeEach(() => {
   getExecuteMock.mockReset();
   updateExecuteMock.mockReset();
+  deleteExecuteMock.mockReset();
   vi.clearAllMocks();
 });
 
@@ -331,4 +339,55 @@ test("PATCH異常系: 存在しないimageIdを指定した場合、404エラー
   expect(res.status).toBe(404);
   const json = await res.json();
   expect(json.code).toBe("NOT_FOUND");
+});
+
+test("DELETE正常系: 存在するIDの場合、204を返す", async () => {
+  deleteExecuteMock.mockResolvedValue(undefined);
+
+  const req = new NextRequest("http://localhost/api/seasonings/1", {
+    method: "DELETE",
+  });
+  const params = Promise.resolve({ seasoningId: "1" });
+  const res = await DELETE(req, { params });
+
+  expect(res.status).toBe(204);
+  expect(deleteExecuteMock).toHaveBeenCalledWith({ seasoningId: 1 });
+});
+
+test("DELETE異常系: 存在しないIDの場合、404を返す", async () => {
+  deleteExecuteMock.mockRejectedValue(new NotFoundError("seasoning", 999));
+
+  const req = new NextRequest("http://localhost/api/seasonings/999", {
+    method: "DELETE",
+  });
+  const params = Promise.resolve({ seasoningId: "999" });
+  const res = await DELETE(req, { params });
+
+  expect(res.status).toBe(404);
+  const json = await res.json();
+  expect(json.code).toBe("NOT_FOUND");
+});
+
+test("DELETE異常系: 無効なID（文字列）の場合、400を返す", async () => {
+  const req = new NextRequest("http://localhost/api/seasonings/abc", {
+    method: "DELETE",
+  });
+  const params = Promise.resolve({ seasoningId: "abc" });
+  const res = await DELETE(req, { params });
+
+  expect(res.status).toBe(400);
+  const json = await res.json();
+  expect(json.code).toBe("INVALID_PARAMETER");
+});
+
+test("DELETE異常系: 無効なID（負数）の場合、400を返す", async () => {
+  const req = new NextRequest("http://localhost/api/seasonings/-1", {
+    method: "DELETE",
+  });
+  const params = Promise.resolve({ seasoningId: "-1" });
+  const res = await DELETE(req, { params });
+
+  expect(res.status).toBe(400);
+  const json = await res.json();
+  expect(json.code).toBe("INVALID_PARAMETER");
 });
