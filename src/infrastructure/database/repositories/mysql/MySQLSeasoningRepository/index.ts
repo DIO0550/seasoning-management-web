@@ -248,9 +248,11 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
   /**
    * 調味料を削除
    */
-  async delete(_id: number): Promise<DeleteResult> {
-    // 最小限の実装
-    throw new Error("Method not implemented.");
+  async delete(id: number): Promise<DeleteResult> {
+    const sql = "DELETE FROM seasoning WHERE id = ?";
+    const result = await this.connection.query(sql, [id]);
+
+    return { affectedRows: result.rowsAffected };
   }
 
   /**
