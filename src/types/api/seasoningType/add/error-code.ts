@@ -1,4 +1,4 @@
-import { ZodError, ZodIssue, ZodIssueCode } from "zod";
+import { ZodError, ZodIssue } from "zod";
 
 // フィールド名の型定義
 type FieldName = "name";
@@ -23,13 +23,11 @@ export const SeasoningTypeAddErrorCode = {
    * @returns 対応するSeasoningTypeAddErrorCode
    */
   fromValidationError: (zodError: ZodError): SeasoningTypeAddErrorCode => {
-    // ガード節: issuesが空の場合は早期return
     if (!zodError.issues || zodError.issues.length === 0) {
       return SeasoningTypeAddErrorCode.DEFAULT;
     }
 
-    // 変数のインライン化: 中間変数を削除して直接変換
-    return issueToErrorCode(zodError.issues[0]);
+    return issuesToErrorCode(zodError.issues);
   },
 
   /**
@@ -48,27 +46,12 @@ export const SeasoningTypeAddErrorCode = {
 /**
  * nameフィールドのZodエラーコードに対応する調味料種類APIエラーコード
  */
-const nameFieldErrorCode = (
-  zodErrorCode: ZodIssueCode
-): SeasoningTypeAddErrorCode => {
-  switch (zodErrorCode) {
-    case "too_small":
-      return SeasoningTypeAddErrorCode.NAME_REQUIRED;
-    case "too_big":
-      return SeasoningTypeAddErrorCode.NAME_TOO_LONG;
-    case "custom":
-      return SeasoningTypeAddErrorCode.NAME_INVALID_FORMAT;
-    default:
-      return SeasoningTypeAddErrorCode.NAME_REQUIRED;
-  }
-};
-
 /**
  * フィールド名が指定されたFieldName型の値と一致するかチェック
  */
 const isFieldName = (
   path: (string | number)[],
-  fieldName: FieldName
+  fieldName: FieldName,
 ): boolean => {
   return path.includes(fieldName);
 };
@@ -76,12 +59,30 @@ const isFieldName = (
 /**
  * ZodIssueをSeasoningTypeAddErrorCodeに変換
  */
-const issueToErrorCode = (issue: ZodIssue): SeasoningTypeAddErrorCode => {
-  // 各フィールドの変換処理
-  if (isFieldName(issue.path, "name")) {
-    return nameFieldErrorCode(issue.code);
+const isRequiredIssue = (issue: ZodIssue): boolean =>
+  isFieldName(issue.path, "name") && issue.code === "too_small";
+
+const isTooLongIssue = (issue: ZodIssue): boolean =>
+  isFieldName(issue.path, "name") && issue.code === "too_big";
+
+const isInvalidFormatIssue = (issue: ZodIssue): boolean =>
+  isFieldName(issue.path, "name") &&
+  (issue.code === "invalid_type" || issue.code === "custom");
+
+const issuesToErrorCode = (
+  issues: readonly ZodIssue[],
+): SeasoningTypeAddErrorCode => {
+  if (issues.some(isRequiredIssue)) {
+    return SeasoningTypeAddErrorCode.NAME_REQUIRED;
   }
 
-  // ガード節: 未知のフィールドの場合
+  if (issues.some(isTooLongIssue)) {
+    return SeasoningTypeAddErrorCode.NAME_TOO_LONG;
+  }
+
+  if (issues.some(isInvalidFormatIssue)) {
+    return SeasoningTypeAddErrorCode.NAME_INVALID_FORMAT;
+  }
+
   return SeasoningTypeAddErrorCode.DEFAULT;
 };

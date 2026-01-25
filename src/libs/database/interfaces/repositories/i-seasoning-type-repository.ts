@@ -67,7 +67,7 @@ export interface ISeasoningTypeRepository {
    * @throws {RepositoryError} データベース操作でエラーが発生した場合
    */
   findAll(
-    options?: SeasoningTypeSearchOptions
+    options?: SeasoningTypeSearchOptions,
   ): Promise<PaginatedResult<SeasoningType>>;
 
   /**
@@ -89,7 +89,8 @@ export interface ISeasoningTypeRepository {
 
   /**
    * 名前で調味料種類を検索する
-   * @param name 検索する名前（部分一致）
+   * @param name 検索する名前（正規化済みの完全一致）
+   * @remarks データベースのコレーションに従い、大文字/小文字は区別しない
    * @returns 一致する調味料種類の配列
    * @throws {RepositoryError} データベース操作でエラーが発生した場合
    */

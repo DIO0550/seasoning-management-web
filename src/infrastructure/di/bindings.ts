@@ -11,20 +11,24 @@ import {
   createTestConnectionProvider,
 } from "./factories";
 import { RepositoryFactory } from "./repository-factory";
+import { ServiceLifetime } from "./types";
+import { ConnectionManager } from "@/infrastructure/database/connection-manager";
+import { MySQLUnitOfWork } from "@/infrastructure/database/unit-of-work/my-sql-unit-of-work";
+import { CreateSeasoningTypeUseCase } from "@/features/seasoning-types/usecases/create-seasoning-type";
 
 /**
  * 開発環境用のバインディング設定
  * @param container DIコンテナ
  */
 export const configureInfrastructureForDevelopment = async (
-  container: DIContainer
+  container: DIContainer,
 ): Promise<void> => {
   // データベース接続プロバイダーの設定（非同期初期化）
   const connectionProvider = await createDevelopmentConnectionProvider();
 
   container.register(
     INFRASTRUCTURE_IDENTIFIERS.DATABASE_CONNECTION_PROVIDER,
-    () => connectionProvider
+    () => connectionProvider,
   );
 
   // リポジトリファクトリーの登録
@@ -33,6 +37,16 @@ export const configureInfrastructureForDevelopment = async (
   container.register(INFRASTRUCTURE_IDENTIFIERS.REPOSITORY_FACTORY, () => {
     return repositoryFactory;
   });
+
+  container.register(
+    INFRASTRUCTURE_IDENTIFIERS.CREATE_SEASONING_TYPE_USE_CASE,
+    () => {
+      const connectionManager = ConnectionManager.getInstance();
+      const unitOfWork = new MySQLUnitOfWork(connectionManager);
+      return new CreateSeasoningTypeUseCase(unitOfWork);
+    },
+    ServiceLifetime.TRANSIENT,
+  );
 };
 
 /**
@@ -40,13 +54,13 @@ export const configureInfrastructureForDevelopment = async (
  * @param container DIコンテナ
  */
 export const configureInfrastructureForProduction = async (
-  container: DIContainer
+  container: DIContainer,
 ): Promise<void> => {
   const connectionProvider = await createProductionConnectionProvider();
 
   container.register(
     INFRASTRUCTURE_IDENTIFIERS.DATABASE_CONNECTION_PROVIDER,
-    () => connectionProvider
+    () => connectionProvider,
   );
 
   const repositoryFactory = new RepositoryFactory(connectionProvider);
@@ -54,6 +68,16 @@ export const configureInfrastructureForProduction = async (
   container.register(INFRASTRUCTURE_IDENTIFIERS.REPOSITORY_FACTORY, () => {
     return repositoryFactory;
   });
+
+  container.register(
+    INFRASTRUCTURE_IDENTIFIERS.CREATE_SEASONING_TYPE_USE_CASE,
+    () => {
+      const connectionManager = ConnectionManager.getInstance();
+      const unitOfWork = new MySQLUnitOfWork(connectionManager);
+      return new CreateSeasoningTypeUseCase(unitOfWork);
+    },
+    ServiceLifetime.TRANSIENT,
+  );
 };
 
 /**
@@ -61,13 +85,13 @@ export const configureInfrastructureForProduction = async (
  * @param container DIコンテナ
  */
 export const configureInfrastructureForTest = async (
-  container: DIContainer
+  container: DIContainer,
 ): Promise<void> => {
   const connectionProvider = await createTestConnectionProvider();
 
   container.register(
     INFRASTRUCTURE_IDENTIFIERS.DATABASE_CONNECTION_PROVIDER,
-    () => connectionProvider
+    () => connectionProvider,
   );
 
   const repositoryFactory = new RepositoryFactory(connectionProvider);
@@ -75,4 +99,14 @@ export const configureInfrastructureForTest = async (
   container.register(INFRASTRUCTURE_IDENTIFIERS.REPOSITORY_FACTORY, () => {
     return repositoryFactory;
   });
+
+  container.register(
+    INFRASTRUCTURE_IDENTIFIERS.CREATE_SEASONING_TYPE_USE_CASE,
+    () => {
+      const connectionManager = ConnectionManager.getInstance();
+      const unitOfWork = new MySQLUnitOfWork(connectionManager);
+      return new CreateSeasoningTypeUseCase(unitOfWork);
+    },
+    ServiceLifetime.TRANSIENT,
+  );
 };

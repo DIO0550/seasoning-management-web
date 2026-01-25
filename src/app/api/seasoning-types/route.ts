@@ -4,11 +4,13 @@ import { seasoningTypeListResponseSchema } from "@/types/api/seasoningType/list/
 import { SeasoningTypeAddErrorCode } from "@/types/api/seasoningType/add/error-code";
 import { ConnectionManager } from "@/infrastructure/database/connection-manager";
 import { RepositoryFactory } from "@/infrastructure/di/repository-factory";
+import {
+  createContainer,
+  INFRASTRUCTURE_IDENTIFIERS,
+} from "@/infrastructure/di";
 import { errorMapper } from "@/utils/api/error-mapper";
 import { DuplicateError, ValidationError } from "@/domain/errors";
 import { ConflictError } from "@/libs/database/errors";
-import { MySQLUnitOfWork } from "@/infrastructure/database/unit-of-work/my-sql-unit-of-work";
-import { CreateSeasoningTypeUseCase } from "@/features/seasoning-types/usecases/create-seasoning-type";
 
 /**
  * GET /api/seasoning-types
@@ -45,31 +47,47 @@ export async function GET() {
  * 調味料種類を追加する
  */
 export async function POST(request: NextRequest) {
+  let body: unknown;
   try {
-    const body = await request.json();
-    const validationResult = seasoningTypeAddRequestSchema.safeParse(body);
-
-    if (!validationResult.success) {
-      const errorCode = SeasoningTypeAddErrorCode.fromValidationError(
-        validationResult.error
-      );
-
-      return NextResponse.json(
-        {
-          code: errorCode,
-          message: "入力内容を確認してください",
-          details: validationResult.error.errors.map((err) => ({
-            field: err.path.join("."),
-            message: err.message,
-          })),
-        },
-        { status: 400 }
-      );
+    body = await request.json();
+  } catch (error) {
+    if (isJsonParseError(error)) {
+      return buildInvalidFormatResponse();
     }
+    throw error;
+  }
 
-    const connectionManager = ConnectionManager.getInstance();
-    const unitOfWork = new MySQLUnitOfWork(connectionManager);
-    const useCase = new CreateSeasoningTypeUseCase(unitOfWork);
+  if (!isPlainObject(body)) {
+    return buildInvalidFormatResponse();
+  }
+
+  const validationResult = seasoningTypeAddRequestSchema.safeParse(body);
+
+  if (!validationResult.success) {
+    const errorCode = SeasoningTypeAddErrorCode.fromValidationError(
+      validationResult.error,
+    );
+
+    return NextResponse.json(
+      {
+        code: errorCode,
+        message: "入力内容を確認してください",
+        details: validationResult.error.errors.map((err) => ({
+          field: err.path.join("."),
+          message: err.message,
+        })),
+      },
+      { status: 400 },
+    );
+  }
+
+  let container: Awaited<ReturnType<typeof createContainer>> | null = null;
+
+  try {
+    container = await createContainer();
+    const useCase = container.resolve(
+      INFRASTRUCTURE_IDENTIFIERS.CREATE_SEASONING_TYPE_USE_CASE,
+    );
     const result = await useCase.execute(validationResult.data);
 
     return NextResponse.json({ data: result }, { status: 201 });
@@ -79,12 +97,14 @@ export async function POST(request: NextRequest) {
     }
 
     if (error instanceof ValidationError) {
-      return buildValidationErrorResponse(error);
+      return buildDomainValidationErrorResponse(error);
     }
 
-    const { status, body } = errorMapper.toHttpResponse(error);
+    const { status, body: errorBody } = errorMapper.toHttpResponse(error);
 
-    return NextResponse.json(body, { status });
+    return NextResponse.json(errorBody, { status });
+  } finally {
+    container?.clear();
   }
 }
 
@@ -97,13 +117,24 @@ const buildDuplicateNameResponse = () =>
       code: SeasoningTypeAddErrorCode.DUPLICATE_NAME,
       message: "入力内容を確認してください",
     },
-    { status: 409 }
+    { status: 400 },
   );
 
-const buildValidationErrorResponse = (error: ValidationError) =>
+const buildInvalidFormatResponse = () =>
   NextResponse.json(
     {
-      code: SeasoningTypeAddErrorCode.DEFAULT,
+      code: SeasoningTypeAddErrorCode.NAME_INVALID_FORMAT,
+      message: "入力内容を確認してください",
+    },
+    { status: 400 },
+  );
+
+const buildDomainValidationErrorResponse = (error: ValidationError) => {
+  const code = resolveValidationErrorCode(error);
+
+  return NextResponse.json(
+    {
+      code,
       message: "入力内容を確認してください",
       details: [
         {
@@ -112,5 +143,26 @@ const buildValidationErrorResponse = (error: ValidationError) =>
         },
       ],
     },
-    { status: 400 }
+    { status: 400 },
   );
+};
+
+const resolveValidationErrorCode = (
+  error: ValidationError,
+): SeasoningTypeAddErrorCode => {
+  if (error.message.includes("必須")) {
+    return SeasoningTypeAddErrorCode.NAME_REQUIRED;
+  }
+
+  if (error.message.includes("文字以内")) {
+    return SeasoningTypeAddErrorCode.NAME_TOO_LONG;
+  }
+
+  return SeasoningTypeAddErrorCode.NAME_INVALID_FORMAT;
+};
+
+const isPlainObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null && !Array.isArray(value);
+
+const isJsonParseError = (error: unknown): boolean =>
+  error instanceof SyntaxError || error instanceof TypeError;

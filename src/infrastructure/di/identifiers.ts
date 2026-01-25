@@ -6,6 +6,7 @@
 import type { ServiceIdentifier } from "./types";
 import type { IDatabaseConnectionProvider } from "@/infrastructure/database/interfaces";
 import type { RepositoryFactory } from "./repository-factory";
+import type { CreateSeasoningTypeUseCase } from "@/features/seasoning-types/usecases/create-seasoning-type";
 
 /**
  * Infrastructure層のサービス識別子
@@ -13,12 +14,16 @@ import type { RepositoryFactory } from "./repository-factory";
 export const INFRASTRUCTURE_IDENTIFIERS = {
   // データベース接続プロバイダー
   DATABASE_CONNECTION_PROVIDER: Symbol(
-    "DatabaseConnectionProvider"
+    "DatabaseConnectionProvider",
   ) as ServiceIdentifier<IDatabaseConnectionProvider>,
 
   // リポジトリファクトリー
   // Note: 個別のリポジトリではなく、ファクトリーを登録
   REPOSITORY_FACTORY: Symbol(
-    "repository-factory"
+    "repository-factory",
   ) as ServiceIdentifier<RepositoryFactory>,
+
+  CREATE_SEASONING_TYPE_USE_CASE: Symbol(
+    "create-seasoning-type-use-case",
+  ) as ServiceIdentifier<CreateSeasoningTypeUseCase>,
 } as const;
