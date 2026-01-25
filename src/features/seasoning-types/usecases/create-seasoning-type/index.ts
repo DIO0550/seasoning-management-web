@@ -1,21 +1,26 @@
 import type { IUnitOfWork } from "@/domain/repositories/i-unit-of-work";
 import { DuplicateError } from "@/domain/errors";
 import { SeasoningTypeFactory } from "@/domain/entities/seasoning-type/seasoning-type-factory";
-import type { CreateSeasoningTypeInput, SeasoningTypeDetailDto } from "@/features/seasoning-types/usecases/create-seasoning-type/dto";
+import type {
+  CreateSeasoningTypeInput,
+  SeasoningTypeDetailDto,
+} from "@/features/seasoning-types/usecases/create-seasoning-type/dto";
 import { CreateSeasoningTypeMapper } from "@/features/seasoning-types/usecases/create-seasoning-type/mapper";
 
 export class CreateSeasoningTypeUseCase {
   constructor(private readonly unitOfWork: IUnitOfWork) {}
 
-  async execute(input: CreateSeasoningTypeInput): Promise<SeasoningTypeDetailDto> {
+  async execute(
+    input: CreateSeasoningTypeInput,
+  ): Promise<SeasoningTypeDetailDto> {
     const normalizedName = SeasoningTypeFactory.create(input.name);
 
     return this.unitOfWork.run(async (ctx) => {
       const seasoningTypeRepository = ctx.getSeasoningTypeRepository();
-      const isDuplicate =
-        await seasoningTypeRepository.existsByName(normalizedName);
+      const duplicates =
+        await seasoningTypeRepository.findByName(normalizedName);
 
-      if (isDuplicate) {
+      if (duplicates.length > 0) {
         throw new DuplicateError("name", normalizedName);
       }
 

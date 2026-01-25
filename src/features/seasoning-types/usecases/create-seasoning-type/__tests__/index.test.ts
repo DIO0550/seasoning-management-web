@@ -9,7 +9,7 @@ import { DuplicateError } from "@/domain/errors";
 
 type RepositoryMocks = {
   repository: ISeasoningTypeRepository;
-  existsByName: ReturnType<typeof vi.fn>;
+  findByName: ReturnType<typeof vi.fn>;
   create: ReturnType<typeof vi.fn>;
 };
 
@@ -24,7 +24,7 @@ const createMockConnection = (): IDatabaseConnection => ({
 });
 
 const createRepositoryMocks = (): RepositoryMocks => {
-  const existsByName = vi.fn();
+  const findByName = vi.fn();
   const create = vi.fn();
 
   const repository: ISeasoningTypeRepository = {
@@ -34,15 +34,17 @@ const createRepositoryMocks = (): RepositoryMocks => {
     findAll: vi.fn(),
     update: vi.fn(),
     delete: vi.fn(),
-    findByName: vi.fn(),
-    existsByName,
+    findByName,
+    existsByName: vi.fn(),
     count: vi.fn(),
   };
 
-  return { repository, existsByName, create };
+  return { repository, findByName, create };
 };
 
-const createUnitOfWork = (repository: ISeasoningTypeRepository): IUnitOfWork => ({
+const createUnitOfWork = (
+  repository: ISeasoningTypeRepository,
+): IUnitOfWork => ({
   run: async (work) =>
     work({
       getSeasoningTypeRepository: () => repository,
@@ -50,18 +52,16 @@ const createUnitOfWork = (repository: ISeasoningTypeRepository): IUnitOfWork => 
 });
 
 test("CreateSeasoningTypeUseCase: 調味料種類を作成できる", async () => {
-  const { repository, existsByName, create } = createRepositoryMocks();
+  const { repository, findByName, create } = createRepositoryMocks();
 
-  existsByName.mockResolvedValue(false);
+  findByName.mockResolvedValue([]);
   create.mockResolvedValue({ id: 1, createdAt: new Date("2024-01-01") });
 
-  const useCase = new CreateSeasoningTypeUseCase(
-    createUnitOfWork(repository)
-  );
+  const useCase = new CreateSeasoningTypeUseCase(createUnitOfWork(repository));
 
   const result = await useCase.execute({ name: "  液体調味料  " });
 
-  expect(existsByName).toHaveBeenCalledWith("液体調味料");
+  expect(findByName).toHaveBeenCalledWith("液体調味料");
   expect(result).toEqual({
     id: 1,
     name: "液体調味料",
@@ -71,15 +71,20 @@ test("CreateSeasoningTypeUseCase: 調味料種類を作成できる", async () =
 });
 
 test("CreateSeasoningTypeUseCase: 重複名の場合はDuplicateErrorを投げる", async () => {
-  const { repository, existsByName } = createRepositoryMocks();
+  const { repository, findByName } = createRepositoryMocks();
 
-  existsByName.mockResolvedValue(true);
+  findByName.mockResolvedValue([
+    {
+      id: 1,
+      name: "液体調味料",
+      createdAt: new Date("2024-01-01"),
+      updatedAt: new Date("2024-01-01"),
+    },
+  ]);
 
-  const useCase = new CreateSeasoningTypeUseCase(
-    createUnitOfWork(repository)
-  );
+  const useCase = new CreateSeasoningTypeUseCase(createUnitOfWork(repository));
 
   await expect(useCase.execute({ name: "液体調味料" })).rejects.toThrow(
-    DuplicateError
+    DuplicateError,
   );
 });

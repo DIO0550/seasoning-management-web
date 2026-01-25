@@ -70,7 +70,7 @@ export class MySQLSeasoningTypeRepository implements ISeasoningTypeRepository {
   }
 
   async findAll(
-    _options?: SeasoningTypeSearchOptions
+    _options?: SeasoningTypeSearchOptions,
   ): Promise<PaginatedResult<SeasoningType>> {
     const sql = "SELECT * FROM seasoning_type ORDER BY created_at DESC";
     const result = await this.connection.query<SeasoningTypeRow>(sql);
@@ -88,7 +88,7 @@ export class MySQLSeasoningTypeRepository implements ISeasoningTypeRepository {
 
   async update(
     _id: number,
-    _input: SeasoningTypeUpdateInput
+    _input: SeasoningTypeUpdateInput,
   ): Promise<UpdateResult> {
     // 最小限の実装
     throw new Error("Method not implemented.");
@@ -99,9 +99,11 @@ export class MySQLSeasoningTypeRepository implements ISeasoningTypeRepository {
     throw new Error("Method not implemented.");
   }
 
-  async findByName(_name: string): Promise<SeasoningType[]> {
-    // 最小限の実装
-    throw new Error("Method not implemented.");
+  async findByName(name: string): Promise<SeasoningType[]> {
+    const sql = "SELECT * FROM seasoning_type WHERE name = ?";
+    const result = await this.connection.query<SeasoningTypeRow>(sql, [name]);
+
+    return result.rows.map((row) => this.rowToEntity(row));
   }
 
   async existsByName(name: string, excludeId?: number): Promise<boolean> {
