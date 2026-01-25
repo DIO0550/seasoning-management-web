@@ -3,40 +3,52 @@ import { GET, POST } from "../route";
 import { NextRequest } from "next/server";
 import { ConnectionManager } from "@/infrastructure/database/connection-manager";
 import { RepositoryFactory } from "@/infrastructure/di/repository-factory";
+import { createContainer } from "@/infrastructure/di";
 import { DuplicateError } from "@/domain/errors";
+import { ConflictError } from "@/libs/database/errors";
 
 const executeMock = vi.fn();
 
 // モックの設定
 vi.mock("@/infrastructure/database/connection-manager");
 vi.mock("@/infrastructure/di/repository-factory");
-vi.mock("@/features/seasoning-types/usecases/create-seasoning-type", () => ({
-  CreateSeasoningTypeUseCase: vi.fn().mockImplementation(() => ({
-    execute: executeMock,
-  })),
+vi.mock("@/infrastructure/di", () => ({
+  createContainer: vi.fn(),
+  INFRASTRUCTURE_IDENTIFIERS: {
+    CREATE_SEASONING_TYPE_USE_CASE: Symbol("create-seasoning-type-use-case"),
+  },
 }));
 
 const mockSeasoningTypeRepository = {
   findAll: vi.fn(),
   create: vi.fn(),
   findById: vi.fn(),
-  existsByName: vi.fn(),
+  findByName: vi.fn(),
+};
+
+const containerMock = {
+  resolve: vi.fn(),
+  clear: vi.fn(),
 };
 
 beforeEach(() => {
   vi.clearAllMocks();
   executeMock.mockReset();
-  mockSeasoningTypeRepository.existsByName.mockResolvedValue(false);
   (ConnectionManager.getInstance as ReturnType<typeof vi.fn>).mockReturnValue(
-    {}
+    {},
   );
-  (
-    RepositoryFactory as unknown as ReturnType<typeof vi.fn>
-  ).mockImplementation(() => ({
-    createSeasoningTypeRepository: vi
-      .fn()
-      .mockResolvedValue(mockSeasoningTypeRepository),
-  }));
+  (RepositoryFactory as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+    () => ({
+      createSeasoningTypeRepository: vi
+        .fn()
+        .mockResolvedValue(mockSeasoningTypeRepository),
+    }),
+  );
+
+  (createContainer as ReturnType<typeof vi.fn>).mockResolvedValue(
+    containerMock,
+  );
+  containerMock.resolve.mockReturnValue({ execute: executeMock });
 });
 
 it("GET: 正常系: 調味料種類の一覧を取得できること", async () => {
@@ -111,6 +123,48 @@ it("POST: 異常系: バリデーションエラーの場合、400エラーを�
   expect(body.code).toBe("VALIDATION_ERROR_NAME_REQUIRED");
 });
 
+it("POST: 異常系: 不正なJSONの場合、400エラーを返すこと", async () => {
+  const request = new NextRequest("http://localhost/api/seasoning-types", {
+    method: "POST",
+    body: "{",
+  });
+
+  const response = await POST(request);
+  const body = await response.json();
+
+  expect(response.status).toBe(400);
+  expect(body.code).toBe("VALIDATION_ERROR_NAME_INVALID_FORMAT");
+  expect(body.details).toBeUndefined();
+});
+
+it("POST: 異常系: null の場合、400エラーを返すこと", async () => {
+  const request = new NextRequest("http://localhost/api/seasoning-types", {
+    method: "POST",
+    body: "null",
+  });
+
+  const response = await POST(request);
+  const body = await response.json();
+
+  expect(response.status).toBe(400);
+  expect(body.code).toBe("VALIDATION_ERROR_NAME_INVALID_FORMAT");
+  expect(body.details).toBeUndefined();
+});
+
+it("POST: 異常系: 配列の場合、400エラーを返すこと", async () => {
+  const request = new NextRequest("http://localhost/api/seasoning-types", {
+    method: "POST",
+    body: "[]",
+  });
+
+  const response = await POST(request);
+  const body = await response.json();
+
+  expect(response.status).toBe(400);
+  expect(body.code).toBe("VALIDATION_ERROR_NAME_INVALID_FORMAT");
+  expect(body.details).toBeUndefined();
+});
+
 it("POST: 異常系: DBエラーが発生した場合、500エラーを返すこと", async () => {
   const requestBody = { name: "新しい種類" };
   const request = new NextRequest("http://localhost/api/seasoning-types", {
@@ -121,11 +175,13 @@ it("POST: 異常系: DBエラーが発生した場合、500エラーを返すこ
   executeMock.mockRejectedValue(new Error("DB Error"));
 
   const response = await POST(request);
+  const body = await response.json();
 
   expect(response.status).toBe(500);
+  expect(body.code).toBe("INTERNAL_ERROR");
 });
 
-it("POST: 異常系: 重複した名前の場合、409エラーを返すこと", async () => {
+it("POST: 異常系: 重複した名前の場合、400エラーを返すこと", async () => {
   const requestBody = { name: "既存の種類" };
   const request = new NextRequest("http://localhost/api/seasoning-types", {
     method: "POST",
@@ -137,6 +193,22 @@ it("POST: 異常系: 重複した名前の場合、409エラーを返すこと",
   const response = await POST(request);
   const body = await response.json();
 
-  expect(response.status).toBe(409);
+  expect(response.status).toBe(400);
+  expect(body.code).toBe("DUPLICATE_NAME");
+});
+
+it("POST: 異常系: ConflictErrorの場合、400エラーを返すこと", async () => {
+  const requestBody = { name: "既存の種類" };
+  const request = new NextRequest("http://localhost/api/seasoning-types", {
+    method: "POST",
+    body: JSON.stringify(requestBody),
+  });
+
+  executeMock.mockRejectedValue(new ConflictError("重複"));
+
+  const response = await POST(request);
+  const body = await response.json();
+
+  expect(response.status).toBe(400);
   expect(body.code).toBe("DUPLICATE_NAME");
 });
