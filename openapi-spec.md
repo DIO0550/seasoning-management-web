@@ -67,3 +67,48 @@
   "message": "システムエラーが発生しました"
 }
 ```
+
+## GET /api/seasoning-types/{typeId}
+
+### レスポンス
+
+#### 200 OK
+
+`seasoningTypeDetailResponseSchema` と同一の構造。
+
+```json
+{
+  "data": {
+    "id": 1,
+    "name": "液体調味料",
+    "createdAt": "2024-01-01T00:00:00.000Z",
+    "updatedAt": "2024-01-01T00:00:00.000Z"
+  }
+}
+```
+
+#### 400 Bad Request
+
+無効な `typeId` を指定した場合。
+
+```json
+{
+  "code": "INVALID_PARAMETER",
+  "message": "無効なパラメータです",
+  "details": [
+    {
+      "field": "typeId",
+      "message": "Expected number, received nan"
+    }
+  ]
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "code": "NOT_FOUND",
+  "message": "seasoning-type with id 999 not found"
+}
+```
