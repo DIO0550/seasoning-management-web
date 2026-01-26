@@ -1,7 +1,13 @@
-import type { ISeasoningTypeRepository } from "@/infrastructure/database/interfaces";
+import type {
+  ISeasoningRepository,
+  ISeasoningTemplateRepository,
+  ISeasoningTypeRepository,
+} from "@/infrastructure/database/interfaces";
 
 export interface TransactionContext {
   getSeasoningTypeRepository(): ISeasoningTypeRepository;
+  getSeasoningRepository(): ISeasoningRepository;
+  getSeasoningTemplateRepository(): ISeasoningTemplateRepository;
 }
 
 export interface IUnitOfWork {

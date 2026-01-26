@@ -7,6 +7,7 @@ import {
   ValidationError,
   NotFoundError,
   DuplicateError,
+  ConflictError,
   ForeignKeyViolationError,
 } from "@/domain/errors";
 
@@ -76,6 +77,17 @@ export class ErrorMapper {
         body: {
           code: "DUPLICATE_ERROR",
           message: error.message,
+        },
+      };
+    }
+
+    // ConflictError
+    if (error instanceof ConflictError) {
+      return {
+        status: 409,
+        body: {
+          code: "CONFLICT",
+          message: "関連データが存在するため削除できません",
         },
       };
     }

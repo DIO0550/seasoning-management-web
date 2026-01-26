@@ -7,6 +7,7 @@ import type { ServiceIdentifier } from "./types";
 import type { IDatabaseConnectionProvider } from "@/infrastructure/database/interfaces";
 import type { RepositoryFactory } from "./repository-factory";
 import type { CreateSeasoningTypeUseCase } from "@/features/seasoning-types/usecases/create-seasoning-type";
+import type { DeleteSeasoningTypeUseCase } from "@/features/seasoning-types/usecases/delete-seasoning-type";
 
 /**
  * Infrastructure層のサービス識別子
@@ -26,4 +27,8 @@ export const INFRASTRUCTURE_IDENTIFIERS = {
   CREATE_SEASONING_TYPE_USE_CASE: Symbol(
     "create-seasoning-type-use-case",
   ) as ServiceIdentifier<CreateSeasoningTypeUseCase>,
+
+  DELETE_SEASONING_TYPE_USE_CASE: Symbol(
+    "delete-seasoning-type-use-case",
+  ) as ServiceIdentifier<DeleteSeasoningTypeUseCase>,
 } as const;

@@ -81,7 +81,7 @@ export interface ISeasoningRepository {
    * @throws {RepositoryError} データベース操作でエラーが発生した場合
    */
   findAll(
-    options?: SeasoningSearchOptions
+    options?: SeasoningSearchOptions,
   ): Promise<PaginatedResult<Seasoning>>;
 
   /**
@@ -118,7 +118,7 @@ export interface ISeasoningRepository {
    */
   findByTypeId(
     typeId: number,
-    options?: SeasoningSearchOptions
+    options?: SeasoningSearchOptions,
   ): Promise<PaginatedResult<Seasoning>>;
 
   /**
@@ -135,6 +135,14 @@ export interface ISeasoningRepository {
    * @throws {RepositoryError} データベース操作でエラーが発生した場合
    */
   count(): Promise<number>;
+
+  /**
+   * 調味料種類IDで調味料の件数を取得する
+   * @param typeId 調味料種類ID
+   * @returns 件数
+   * @throws {RepositoryError} データベース操作でエラーが発生した場合
+   */
+  countByTypeId(typeId: number): Promise<number>;
 
   /**
    * 検索条件に一致する調味料の統計情報を取得する

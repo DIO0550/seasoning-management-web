@@ -1,4 +1,7 @@
-import type { IUnitOfWork, TransactionContext } from "@/domain/repositories/i-unit-of-work";
+import type {
+  IUnitOfWork,
+  TransactionContext,
+} from "@/domain/repositories/i-unit-of-work";
 import type {
   IDatabaseConnection,
   ITransaction,
@@ -6,12 +9,16 @@ import type {
   TransactionOptions,
 } from "@/infrastructure/database/interfaces";
 import type { ConnectionManager } from "@/infrastructure/database/connection-manager";
-import { MySQLSeasoningTypeRepository } from "@/infrastructure/database/repositories/mysql";
+import {
+  MySQLSeasoningRepository,
+  MySQLSeasoningTemplateRepository,
+  MySQLSeasoningTypeRepository,
+} from "@/infrastructure/database/repositories/mysql";
 
 class TransactionConnection implements IDatabaseConnection {
   constructor(
     private readonly connection: IDatabaseConnection,
-    private readonly transaction: ITransaction
+    private readonly transaction: ITransaction,
   ) {}
 
   async connect(): Promise<void> {
@@ -28,7 +35,7 @@ class TransactionConnection implements IDatabaseConnection {
 
   async query<T = unknown>(
     sql: string,
-    params?: unknown[]
+    params?: unknown[],
   ): Promise<QueryResult<T>> {
     return this.transaction.query<T>(sql, params);
   }
@@ -54,12 +61,16 @@ export class MySQLUnitOfWork implements IUnitOfWork {
     const transaction = await connection.beginTransaction();
     const transactionConnection = new TransactionConnection(
       connection,
-      transaction
+      transaction,
     );
 
     const context: TransactionContext = {
       getSeasoningTypeRepository: () =>
         new MySQLSeasoningTypeRepository(transactionConnection),
+      getSeasoningRepository: () =>
+        new MySQLSeasoningRepository(transactionConnection),
+      getSeasoningTemplateRepository: () =>
+        new MySQLSeasoningTemplateRepository(transactionConnection),
     };
 
     try {
