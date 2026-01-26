@@ -2,10 +2,7 @@ import { beforeEach, expect, test, vi } from "vitest";
 import { NextRequest } from "next/server";
 import type { RequestInit as NextRequestInit } from "next/dist/server/web/spec-extension/request";
 import { GET, POST } from "@/app/api/seasonings/route";
-import {
-  DuplicateError,
-  NotFoundError,
-} from "@/domain/errors";
+import { DuplicateError, NotFoundError } from "@/domain/errors";
 import type {
   ISeasoningRepository,
   ISeasoningTypeRepository,
@@ -44,21 +41,20 @@ const mockSeasoningRepository: ISeasoningRepository = {
   findByTypeId: vi.fn(),
   findExpiringSoon: vi.fn(),
   count: vi.fn(),
+  countByTypeId: vi.fn(),
 };
 
-const mockSeasoningTypeRepository =
-  {} as unknown as ISeasoningTypeRepository;
-const mockSeasoningImageRepository =
-  {} as unknown as ISeasoningImageRepository;
+const mockSeasoningTypeRepository = {} as unknown as ISeasoningTypeRepository;
+const mockSeasoningImageRepository = {} as unknown as ISeasoningImageRepository;
 
 vi.mock("@/infrastructure/di/repository-factory", () => ({
   RepositoryFactory: vi.fn().mockImplementation(() => ({
     createSeasoningRepository: vi.fn(async () => mockSeasoningRepository),
     createSeasoningTypeRepository: vi.fn(
-      async () => mockSeasoningTypeRepository
+      async () => mockSeasoningTypeRepository,
     ),
     createSeasoningImageRepository: vi.fn(
-      async () => mockSeasoningImageRepository
+      async () => mockSeasoningImageRepository,
     ),
   })),
 }));
@@ -128,15 +124,18 @@ test.concurrent("GET /api/seasonings は一覧を取得できる", async () => {
   expect(data.summary).toHaveProperty("totalCount", 0);
 });
 
-test.concurrent("GET /api/seasonings は meta/summary を含む空レスポンスを返す", async () => {
-  const request = createRequest({ method: "GET" });
-  const response = await GET(request);
-  const data = await response.json();
+test.concurrent(
+  "GET /api/seasonings は meta/summary を含む空レスポンスを返す",
+  async () => {
+    const request = createRequest({ method: "GET" });
+    const response = await GET(request);
+    const data = await response.json();
 
-  expect(data.data).toEqual([]);
-  expect(data.meta.totalItems).toBe(0);
-  expect(data.summary.expiringCount).toBe(0);
-});
+    expect(data.data).toEqual([]);
+    expect(data.meta.totalItems).toBe(0);
+    expect(data.summary.expiringCount).toBe(0);
+  },
+);
 
 // POST /api/seasonings
 
@@ -163,7 +162,7 @@ test("POST /api/seasonings - 正常に作成できる", async () => {
         name: "醤油",
         typeId: 2,
       },
-    })
+    }),
   );
 
   expect(response.status).toBe(201);
@@ -182,7 +181,7 @@ test("POST /api/seasonings - バリデーションエラー時は400と詳細を
         name: "",
         typeId: 1,
       },
-    })
+    }),
   );
 
   expect(response.status).toBe(400);
@@ -200,7 +199,7 @@ test("POST /api/seasonings - 日付形式が不正な場合はVALIDATION_ERROR_D
         typeId: 1,
         bestBeforeAt: "2025/12/01",
       },
-    })
+    }),
   );
 
   expect(response.status).toBe(400);
@@ -210,7 +209,7 @@ test("POST /api/seasonings - 日付形式が不正な場合はVALIDATION_ERROR_D
 
 test("POST /api/seasonings - DuplicateError は409とDUPLICATE_NAMEを返す", async () => {
   createUseCaseExecuteMock.mockRejectedValue(
-    new DuplicateError("name", "醤油")
+    new DuplicateError("name", "醤油"),
   );
 
   const response = await POST(
@@ -220,7 +219,7 @@ test("POST /api/seasonings - DuplicateError は409とDUPLICATE_NAMEを返す", a
         name: "醤油",
         typeId: 1,
       },
-    })
+    }),
   );
 
   expect(response.status).toBe(409);
@@ -230,7 +229,7 @@ test("POST /api/seasonings - DuplicateError は409とDUPLICATE_NAMEを返す", a
 
 test("POST /api/seasonings - SeasoningTypeが存在しない場合は404", async () => {
   createUseCaseExecuteMock.mockRejectedValue(
-    new NotFoundError("seasoning-type", 999)
+    new NotFoundError("seasoning-type", 999),
   );
 
   const response = await POST(
@@ -240,7 +239,7 @@ test("POST /api/seasonings - SeasoningTypeが存在しない場合は404", async
         name: "醤油",
         typeId: 999,
       },
-    })
+    }),
   );
 
   expect(response.status).toBe(404);
@@ -250,7 +249,7 @@ test("POST /api/seasonings - SeasoningTypeが存在しない場合は404", async
 
 test("POST /api/seasonings - SeasoningImageが存在しない場合は404", async () => {
   createUseCaseExecuteMock.mockRejectedValue(
-    new NotFoundError("seasoning-image", 55)
+    new NotFoundError("seasoning-image", 55),
   );
 
   const response = await POST(
@@ -261,7 +260,7 @@ test("POST /api/seasonings - SeasoningImageが存在しない場合は404", asyn
         typeId: 1,
         imageId: 55,
       },
-    })
+    }),
   );
 
   expect(response.status).toBe(404);

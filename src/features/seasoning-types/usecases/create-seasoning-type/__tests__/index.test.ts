@@ -48,6 +48,34 @@ const createUnitOfWork = (
   run: async (work) =>
     work({
       getSeasoningTypeRepository: () => repository,
+      getSeasoningRepository: () => ({
+        connection: createMockConnection(),
+        create: vi.fn(),
+        findById: vi.fn(),
+        findAll: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
+        findByName: vi.fn(),
+        findByTypeId: vi.fn(),
+        findExpiringSoon: vi.fn(),
+        count: vi.fn(),
+        countByTypeId: vi.fn(),
+        getStatistics: vi.fn(),
+      }),
+      getSeasoningTemplateRepository: () => ({
+        connection: createMockConnection(),
+        create: vi.fn(),
+        findById: vi.fn(),
+        findAll: vi.fn(),
+        update: vi.fn(),
+        delete: vi.fn(),
+        findByName: vi.fn(),
+        findByTypeId: vi.fn(),
+        createSeasoningFromTemplate: vi.fn(),
+        existsByName: vi.fn(),
+        count: vi.fn(),
+        countByTypeId: vi.fn(),
+      }),
     }),
 });
 

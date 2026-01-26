@@ -40,7 +40,7 @@ class MockSeasoningTemplateRepository implements ISeasoningTemplateRepository {
   }
 
   async findAll(
-    _options?: SeasoningTemplateSearchOptions
+    _options?: SeasoningTemplateSearchOptions,
   ): Promise<PaginatedResult<SeasoningTemplate>> {
     return {
       items: [],
@@ -53,7 +53,7 @@ class MockSeasoningTemplateRepository implements ISeasoningTemplateRepository {
 
   async update(
     _id: number,
-    _input: SeasoningTemplateUpdateInput
+    _input: SeasoningTemplateUpdateInput,
   ): Promise<UpdateResult> {
     return {
       updatedAt: new Date("2024-01-01"),
@@ -73,7 +73,7 @@ class MockSeasoningTemplateRepository implements ISeasoningTemplateRepository {
 
   async findByTypeId(
     _typeId: number,
-    _options?: SeasoningTemplateSearchOptions
+    _options?: SeasoningTemplateSearchOptions,
   ): Promise<PaginatedResult<SeasoningTemplate>> {
     return {
       items: [],
@@ -85,7 +85,7 @@ class MockSeasoningTemplateRepository implements ISeasoningTemplateRepository {
   }
 
   async createSeasoningFromTemplate(
-    _input: CreateSeasoningFromTemplateInput
+    _input: CreateSeasoningFromTemplateInput,
   ): Promise<CreateResult> {
     return {
       id: 1,
@@ -98,6 +98,10 @@ class MockSeasoningTemplateRepository implements ISeasoningTemplateRepository {
   }
 
   async count(): Promise<number> {
+    return 0;
+  }
+
+  async countByTypeId(_typeId: number): Promise<number> {
     return 0;
   }
 }

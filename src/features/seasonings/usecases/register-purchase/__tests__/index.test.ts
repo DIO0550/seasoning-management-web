@@ -72,6 +72,7 @@ beforeEach(() => {
     findByTypeId: vi.fn(),
     findExpiringSoon: vi.fn(),
     count: vi.fn(),
+    countByTypeId: vi.fn(),
     getStatistics: vi.fn(),
   };
 
@@ -104,16 +105,16 @@ beforeEach(() => {
   useCase = new RegisterPurchaseUseCase(
     mockSeasoningRepository,
     mockSeasoningTypeRepository,
-    mockSeasoningImageRepository
+    mockSeasoningImageRepository,
   );
 });
 
 test("必須項目のみで購入調味料を作成し、詳細DTOを返す", async () => {
   vi.mocked(mockSeasoningTypeRepository.findById).mockResolvedValue(
-    createSeasoningTypeEntity()
+    createSeasoningTypeEntity(),
   );
   vi.mocked(mockSeasoningRepository.create).mockResolvedValue(
-    createSeasoningEntityWithoutOptionalFields()
+    createSeasoningEntityWithoutOptionalFields(),
   );
 
   const input: RegisterPurchaseInput = {
@@ -149,13 +150,13 @@ test("必須項目のみで購入調味料を作成し、詳細DTOを返す", as
 
 test("全項目を指定して購入調味料を作成し、詳細DTOを返す", async () => {
   vi.mocked(mockSeasoningTypeRepository.findById).mockResolvedValue(
-    createSeasoningTypeEntity()
+    createSeasoningTypeEntity(),
   );
   vi.mocked(mockSeasoningImageRepository.findById).mockResolvedValue(
-    createSeasoningImageEntity()
+    createSeasoningImageEntity(),
   );
   vi.mocked(mockSeasoningRepository.create).mockResolvedValue(
-    createSeasoningEntity()
+    createSeasoningEntity(),
   );
 
   const input: RegisterPurchaseInput = {
@@ -204,7 +205,7 @@ test("存在しない調味料種類の場合、NotFoundErrorを投げる", asyn
 
 test("存在しない画像IDを指定した場合、NotFoundErrorを投げる", async () => {
   vi.mocked(mockSeasoningTypeRepository.findById).mockResolvedValue(
-    createSeasoningTypeEntity()
+    createSeasoningTypeEntity(),
   );
   vi.mocked(mockSeasoningImageRepository.findById).mockResolvedValue(null);
 
@@ -220,10 +221,10 @@ test("存在しない画像IDを指定した場合、NotFoundErrorを投げる",
 
 test("無効な日付文字列を渡した場合はエラーになる", async () => {
   vi.mocked(mockSeasoningTypeRepository.findById).mockResolvedValue(
-    createSeasoningTypeEntity()
+    createSeasoningTypeEntity(),
   );
   vi.mocked(mockSeasoningImageRepository.findById).mockResolvedValue(
-    createSeasoningImageEntity()
+    createSeasoningImageEntity(),
   );
 
   const input: RegisterPurchaseInput = {

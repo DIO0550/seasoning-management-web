@@ -8,6 +8,7 @@ import {
   ValidationError,
   NotFoundError,
   DuplicateError,
+  ConflictError,
   ForeignKeyViolationError,
 } from "@/domain/errors";
 import { ErrorMapper } from "../error-mapper";
@@ -50,6 +51,17 @@ test("ErrorMapper.toHttpResponse: DuplicateErrorを409レスポンスに変換�
   expect(response.body).toEqual({
     code: "DUPLICATE_ERROR",
     message: "Duplicate value for name: 醤油",
+  });
+});
+
+test("ErrorMapper.toHttpResponse: ConflictErrorを409レスポンスに変換する", () => {
+  const error = new ConflictError("関連データが存在するため削除できません");
+  const response = errorMapper.toHttpResponse(error);
+
+  expect(response.status).toBe(409);
+  expect(response.body).toEqual({
+    code: "CONFLICT",
+    message: "関連データが存在するため削除できません",
   });
 });
 
