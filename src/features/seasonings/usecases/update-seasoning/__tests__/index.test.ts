@@ -51,6 +51,7 @@ beforeEach(() => {
     findByTypeId: vi.fn(),
     findExpiringSoon: vi.fn(),
     count: vi.fn(),
+    countByTypeId: vi.fn(),
     getStatistics: vi.fn(),
   };
 
@@ -83,7 +84,7 @@ beforeEach(() => {
   useCase = new UpdateSeasoningUseCase(
     mockSeasoningRepository,
     mockSeasoningTypeRepository,
-    mockSeasoningImageRepository
+    mockSeasoningImageRepository,
   );
 });
 
@@ -129,7 +130,7 @@ test("正常系: 複数フィールドを同時に更新した場合、更新後
     .mockResolvedValueOnce(originalEntity)
     .mockResolvedValueOnce(updatedEntity);
   vi.mocked(mockSeasoningTypeRepository.findById).mockResolvedValue(
-    createSeasoningTypeEntity()
+    createSeasoningTypeEntity(),
   );
   vi.mocked(mockSeasoningRepository.update).mockResolvedValue({
     affectedRows: 1,
@@ -197,7 +198,7 @@ test("正常系: imageIdを新しい値に更新した場合、画像が変更�
       filename: "new-image.png",
       createdAt: new Date(),
       updatedAt: new Date(),
-    })
+    }),
   );
   vi.mocked(mockSeasoningRepository.update).mockResolvedValue({
     affectedRows: 1,

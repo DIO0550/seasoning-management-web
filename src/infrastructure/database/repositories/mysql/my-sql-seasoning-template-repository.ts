@@ -32,9 +32,7 @@ interface SeasoningTemplateRow {
 /**
  * MySQL用調味料テンプレートリポジトリ実装
  */
-export class MySQLSeasoningTemplateRepository
-  implements ISeasoningTemplateRepository
-{
+export class MySQLSeasoningTemplateRepository implements ISeasoningTemplateRepository {
   /**
    * コンストラクタでDB接続を注入
    * @param connection データベース接続
@@ -75,7 +73,7 @@ export class MySQLSeasoningTemplateRepository
   }
 
   async findAll(
-    _options?: SeasoningTemplateSearchOptions
+    _options?: SeasoningTemplateSearchOptions,
   ): Promise<PaginatedResult<SeasoningTemplate>> {
     const sql = "SELECT * FROM seasoning_template ORDER BY created_at DESC";
     const result = await this.connection.query<SeasoningTemplateRow>(sql);
@@ -93,7 +91,7 @@ export class MySQLSeasoningTemplateRepository
 
   async update(
     _id: number,
-    _input: SeasoningTemplateUpdateInput
+    _input: SeasoningTemplateUpdateInput,
   ): Promise<UpdateResult> {
     throw new Error("Method not implemented.");
   }
@@ -112,19 +110,27 @@ export class MySQLSeasoningTemplateRepository
 
   async findByTypeId(
     _typeId: number,
-    _options?: SeasoningTemplateSearchOptions
+    _options?: SeasoningTemplateSearchOptions,
   ): Promise<PaginatedResult<SeasoningTemplate>> {
     throw new Error("Method not implemented.");
   }
 
   async createSeasoningFromTemplate(
-    _input: CreateSeasoningFromTemplateInput
+    _input: CreateSeasoningFromTemplateInput,
   ): Promise<CreateResult> {
     throw new Error("Method not implemented.");
   }
 
   async existsByName(_name: string, _excludeId?: number): Promise<boolean> {
     throw new Error("Method not implemented.");
+  }
+
+  async countByTypeId(typeId: number): Promise<number> {
+    const sql =
+      "SELECT COUNT(*) AS cnt FROM seasoning_template WHERE type_id = ?";
+    const result = await this.connection.query<{ cnt: number }>(sql, [typeId]);
+    const row = result.rows[0];
+    return row ? Number(row.cnt) : 0;
   }
 
   async count(): Promise<number> {

@@ -1,19 +1,34 @@
 import { it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
-import { GET } from "../route";
+import { GET, DELETE } from "../route";
 import { ConnectionManager } from "@/infrastructure/database/connection-manager";
 import { RepositoryFactory } from "@/infrastructure/di/repository-factory";
 import { seasoningTypeDetailResponseSchema } from "@/types/api/seasoningType/detail/schemas";
+import { createContainer } from "@/infrastructure/di";
+import { ConflictError, NotFoundError } from "@/domain/errors";
 
 vi.mock("@/infrastructure/database/connection-manager");
 vi.mock("@/infrastructure/di/repository-factory");
+vi.mock("@/infrastructure/di", () => ({
+  createContainer: vi.fn(),
+  INFRASTRUCTURE_IDENTIFIERS: {
+    DELETE_SEASONING_TYPE_USE_CASE: Symbol("delete-seasoning-type-use-case"),
+  },
+}));
 
 const mockSeasoningTypeRepository = {
   findById: vi.fn(),
 };
 
+const executeMock = vi.fn();
+const containerMock = {
+  resolve: vi.fn(),
+  clear: vi.fn(),
+};
+
 beforeEach(() => {
   vi.clearAllMocks();
+  executeMock.mockReset();
   (ConnectionManager.getInstance as ReturnType<typeof vi.fn>).mockReturnValue(
     {},
   );
@@ -24,6 +39,10 @@ beforeEach(() => {
         .mockResolvedValue(mockSeasoningTypeRepository),
     }),
   );
+  (createContainer as ReturnType<typeof vi.fn>).mockResolvedValue(
+    containerMock,
+  );
+  containerMock.resolve.mockReturnValue({ execute: executeMock });
 });
 
 it("GET: 正常系: 調味料種類の詳細を取得できること", async () => {
@@ -86,6 +105,90 @@ it("GET: 異常系: 予期せぬエラーの場合、500エラーを返すこと
 
   const response = await GET(
     new NextRequest("http://localhost/api/seasoning-types/1"),
+    {
+      params: Promise.resolve({ typeId: "1" }),
+    },
+  );
+  const body = await response.json();
+
+  expect(response.status).toBe(500);
+  expect(body.code).toBe("INTERNAL_ERROR");
+});
+
+it("DELETE: 正常系: 調味料種類を削除できること", async () => {
+  executeMock.mockResolvedValue(undefined);
+
+  const response = await DELETE(
+    new NextRequest("http://localhost/api/seasoning-types/1", {
+      method: "DELETE",
+    }),
+    {
+      params: Promise.resolve({ typeId: "1" }),
+    },
+  );
+
+  expect(response.status).toBe(204);
+  expect(containerMock.clear).toHaveBeenCalled();
+});
+
+it("DELETE: 異常系: パラメータが不正な場合、400エラーを返すこと", async () => {
+  const response = await DELETE(
+    new NextRequest("http://localhost/api/seasoning-types/invalid", {
+      method: "DELETE",
+    }),
+    {
+      params: Promise.resolve({ typeId: "invalid" }),
+    },
+  );
+  const body = await response.json();
+
+  expect(response.status).toBe(400);
+  expect(body.code).toBe("INVALID_PARAMETER");
+});
+
+it("DELETE: 異常系: 存在しない場合、404エラーを返すこと", async () => {
+  executeMock.mockRejectedValue(new NotFoundError("seasoning-type", 999));
+
+  const response = await DELETE(
+    new NextRequest("http://localhost/api/seasoning-types/999", {
+      method: "DELETE",
+    }),
+    {
+      params: Promise.resolve({ typeId: "999" }),
+    },
+  );
+  const body = await response.json();
+
+  expect(response.status).toBe(404);
+  expect(body.code).toBe("NOT_FOUND");
+});
+
+it("DELETE: 異常系: 関連データが存在する場合、409エラーを返すこと", async () => {
+  executeMock.mockRejectedValue(
+    new ConflictError("関連データが存在するため削除できません"),
+  );
+
+  const response = await DELETE(
+    new NextRequest("http://localhost/api/seasoning-types/1", {
+      method: "DELETE",
+    }),
+    {
+      params: Promise.resolve({ typeId: "1" }),
+    },
+  );
+  const body = await response.json();
+
+  expect(response.status).toBe(409);
+  expect(body.code).toBe("CONFLICT");
+});
+
+it("DELETE: 異常系: 予期せぬエラーの場合、500エラーを返すこと", async () => {
+  executeMock.mockRejectedValue(new Error("DB Error"));
+
+  const response = await DELETE(
+    new NextRequest("http://localhost/api/seasoning-types/1", {
+      method: "DELETE",
+    }),
     {
       params: Promise.resolve({ typeId: "1" }),
     },

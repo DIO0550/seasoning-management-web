@@ -15,6 +15,7 @@ import { ServiceLifetime } from "./types";
 import { ConnectionManager } from "@/infrastructure/database/connection-manager";
 import { MySQLUnitOfWork } from "@/infrastructure/database/unit-of-work/my-sql-unit-of-work";
 import { CreateSeasoningTypeUseCase } from "@/features/seasoning-types/usecases/create-seasoning-type";
+import { DeleteSeasoningTypeUseCase } from "@/features/seasoning-types/usecases/delete-seasoning-type";
 
 /**
  * 開発環境用のバインディング設定
@@ -44,6 +45,16 @@ export const configureInfrastructureForDevelopment = async (
       const connectionManager = ConnectionManager.getInstance();
       const unitOfWork = new MySQLUnitOfWork(connectionManager);
       return new CreateSeasoningTypeUseCase(unitOfWork);
+    },
+    ServiceLifetime.TRANSIENT,
+  );
+
+  container.register(
+    INFRASTRUCTURE_IDENTIFIERS.DELETE_SEASONING_TYPE_USE_CASE,
+    () => {
+      const connectionManager = ConnectionManager.getInstance();
+      const unitOfWork = new MySQLUnitOfWork(connectionManager);
+      return new DeleteSeasoningTypeUseCase(unitOfWork);
     },
     ServiceLifetime.TRANSIENT,
   );
@@ -78,6 +89,16 @@ export const configureInfrastructureForProduction = async (
     },
     ServiceLifetime.TRANSIENT,
   );
+
+  container.register(
+    INFRASTRUCTURE_IDENTIFIERS.DELETE_SEASONING_TYPE_USE_CASE,
+    () => {
+      const connectionManager = ConnectionManager.getInstance();
+      const unitOfWork = new MySQLUnitOfWork(connectionManager);
+      return new DeleteSeasoningTypeUseCase(unitOfWork);
+    },
+    ServiceLifetime.TRANSIENT,
+  );
 };
 
 /**
@@ -106,6 +127,16 @@ export const configureInfrastructureForTest = async (
       const connectionManager = ConnectionManager.getInstance();
       const unitOfWork = new MySQLUnitOfWork(connectionManager);
       return new CreateSeasoningTypeUseCase(unitOfWork);
+    },
+    ServiceLifetime.TRANSIENT,
+  );
+
+  container.register(
+    INFRASTRUCTURE_IDENTIFIERS.DELETE_SEASONING_TYPE_USE_CASE,
+    () => {
+      const connectionManager = ConnectionManager.getInstance();
+      const unitOfWork = new MySQLUnitOfWork(connectionManager);
+      return new DeleteSeasoningTypeUseCase(unitOfWork);
     },
     ServiceLifetime.TRANSIENT,
   );

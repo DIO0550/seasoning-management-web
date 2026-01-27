@@ -59,6 +59,7 @@ beforeEach(() => {
     findByTypeId: vi.fn(),
     findExpiringSoon: vi.fn(),
     count: vi.fn(),
+    countByTypeId: vi.fn(),
     getStatistics: vi.fn(),
   };
 
@@ -91,7 +92,7 @@ beforeEach(() => {
   useCase = new CreateSeasoningUseCase(
     mockSeasoningRepository,
     mockSeasoningTypeRepository,
-    mockSeasoningImageRepository
+    mockSeasoningImageRepository,
   );
 });
 
@@ -99,13 +100,13 @@ describe("CreateSeasoningUseCase", () => {
   test("調味料を作成し、詳細DTOを返す", async () => {
     vi.mocked(mockSeasoningRepository.findByName).mockResolvedValue([]);
     vi.mocked(mockSeasoningTypeRepository.findById).mockResolvedValue(
-      createSeasoningTypeEntity()
+      createSeasoningTypeEntity(),
     );
     vi.mocked(mockSeasoningImageRepository.findById).mockResolvedValue(
-      createSeasoningImageEntity()
+      createSeasoningImageEntity(),
     );
     vi.mocked(mockSeasoningRepository.create).mockResolvedValue(
-      createSeasoningEntity()
+      createSeasoningEntity(),
     );
 
     const input: CreateSeasoningInput = {
@@ -168,7 +169,7 @@ describe("CreateSeasoningUseCase", () => {
   test("存在しない画像IDを指定した場合、NotFoundErrorを投げる", async () => {
     vi.mocked(mockSeasoningRepository.findByName).mockResolvedValue([]);
     vi.mocked(mockSeasoningTypeRepository.findById).mockResolvedValue(
-      createSeasoningTypeEntity()
+      createSeasoningTypeEntity(),
     );
     vi.mocked(mockSeasoningImageRepository.findById).mockResolvedValue(null);
 
@@ -184,10 +185,10 @@ describe("CreateSeasoningUseCase", () => {
   test("無効な日付文字列を渡した場合はエラーになる", async () => {
     vi.mocked(mockSeasoningRepository.findByName).mockResolvedValue([]);
     vi.mocked(mockSeasoningTypeRepository.findById).mockResolvedValue(
-      createSeasoningTypeEntity()
+      createSeasoningTypeEntity(),
     );
     vi.mocked(mockSeasoningImageRepository.findById).mockResolvedValue(
-      createSeasoningImageEntity()
+      createSeasoningImageEntity(),
     );
 
     const input: CreateSeasoningInput = {

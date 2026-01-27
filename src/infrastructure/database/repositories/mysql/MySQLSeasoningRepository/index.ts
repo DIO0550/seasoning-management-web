@@ -109,7 +109,7 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
 
   private async findByIdWithExecutor(
     executor: Pick<ITransaction, "query">,
-    id: number
+    id: number,
   ): Promise<Seasoning> {
     const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning WHERE id = ?`;
     const result = await executor.query<SeasoningRow>(sql, [id]);
@@ -139,7 +139,7 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
    * すべての調味料を取得
    */
   async findAll(
-    options?: SeasoningSearchOptions
+    options?: SeasoningSearchOptions,
   ): Promise<PaginatedResult<Seasoning>> {
     const params: unknown[] = [];
     const whereClauses: string[] = [];
@@ -167,7 +167,7 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
     const countSql = `SELECT COUNT(*) AS cnt FROM seasoning ${whereClause}`;
     const countResult = await this.connection.query<{ cnt: number }>(
       countSql,
-      params
+      params,
     );
     const total = Number(countResult.rows[0]?.cnt ?? 0);
 
@@ -271,7 +271,7 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
    */
   async findByTypeId(
     typeId: number,
-    _options?: SeasoningSearchOptions
+    _options?: SeasoningSearchOptions,
   ): Promise<PaginatedResult<Seasoning>> {
     const sql = `SELECT ${SELECT_COLUMNS} FROM seasoning WHERE type_id = ? ORDER BY created_at DESC`;
     const result = await this.connection.query<SeasoningRow>(sql, [typeId]);
@@ -300,6 +300,16 @@ export class MySQLSeasoningRepository implements ISeasoningRepository {
   async count(): Promise<number> {
     const sql = "SELECT COUNT(*) AS cnt FROM seasoning";
     const result = await this.connection.query<{ cnt: number }>(sql);
+    const row = result.rows[0];
+    return row ? Number(row.cnt) : 0;
+  }
+
+  /**
+   * 調味料種類IDで調味料の件数を取得
+   */
+  async countByTypeId(typeId: number): Promise<number> {
+    const sql = "SELECT COUNT(*) AS cnt FROM seasoning WHERE type_id = ?";
+    const result = await this.connection.query<{ cnt: number }>(sql, [typeId]);
     const row = result.rows[0];
     return row ? Number(row.cnt) : 0;
   }

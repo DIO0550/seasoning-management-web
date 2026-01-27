@@ -7,6 +7,7 @@ import {
   ValidationError,
   NotFoundError,
   DuplicateError,
+  ConflictError,
   ForeignKeyViolationError,
 } from "@/domain/errors";
 
@@ -75,6 +76,17 @@ export class ErrorMapper {
         status: 409,
         body: {
           code: "DUPLICATE_ERROR",
+          message: error.message,
+        },
+      };
+    }
+
+    // ConflictError
+    if (error instanceof ConflictError) {
+      return {
+        status: 409,
+        body: {
+          code: "CONFLICT",
           message: error.message,
         },
       };

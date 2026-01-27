@@ -95,8 +95,10 @@ export class MySQLSeasoningTypeRepository implements ISeasoningTypeRepository {
   }
 
   async delete(_id: number): Promise<DeleteResult> {
-    // 最小限の実装
-    throw new Error("Method not implemented.");
+    const sql = "DELETE FROM seasoning_type WHERE id = ?";
+    const result = await this.connection.query(sql, [_id]);
+
+    return { affectedRows: result.rowsAffected };
   }
 
   async findByName(name: string): Promise<SeasoningType[]> {

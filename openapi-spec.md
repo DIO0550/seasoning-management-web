@@ -112,3 +112,55 @@
   "message": "seasoning-type with id 999 not found"
 }
 ```
+
+## DELETE /api/seasoning-types/{typeId}
+
+### レスポンス
+
+#### 204 No Content
+
+レスポンスボディはありません。
+
+#### 400 Bad Request
+
+無効な `typeId` を指定した場合。
+
+```json
+{
+  "code": "INVALID_PARAMETER",
+  "message": "無効なパラメータです",
+  "details": [
+    {
+      "field": "typeId",
+      "message": "Expected number, received nan"
+    }
+  ]
+}
+```
+
+#### 404 Not Found
+
+```json
+{
+  "code": "NOT_FOUND",
+  "message": "seasoning-type with id 999 not found"
+}
+```
+
+#### 409 Conflict
+
+```json
+{
+  "code": "CONFLICT",
+  "message": "関連データが存在するため削除できません"
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "code": "INTERNAL_ERROR",
+  "message": "システムエラーが発生しました"
+}
+```

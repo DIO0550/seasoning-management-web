@@ -73,6 +73,7 @@ beforeEach(() => {
     findByTypeId: vi.fn(),
     findExpiringSoon: vi.fn(),
     count: vi.fn(),
+    countByTypeId: vi.fn(),
     getStatistics: vi.fn(),
   };
 
@@ -92,7 +93,7 @@ beforeEach(() => {
 
   useCase = new DuplicateSeasoningUseCase(
     mockSeasoningRepository,
-    mockSeasoningImageRepository
+    mockSeasoningImageRepository,
   );
 });
 
@@ -186,7 +187,7 @@ test("imageIdを上書きできる", async () => {
   vi.mocked(mockSeasoningRepository.findById).mockResolvedValue(original);
   vi.mocked(mockSeasoningRepository.findByName).mockResolvedValue([]);
   vi.mocked(mockSeasoningImageRepository.findById).mockResolvedValue(
-    createSeasoningImageEntity()
+    createSeasoningImageEntity(),
   );
   vi.mocked(mockSeasoningRepository.create).mockResolvedValue(duplicated);
 
@@ -200,7 +201,7 @@ test("imageIdを上書きできる", async () => {
 
   expect(mockSeasoningImageRepository.findById).toHaveBeenCalledWith(20);
   expect(mockSeasoningRepository.create).toHaveBeenCalledWith(
-    expect.objectContaining({ imageId: 20 })
+    expect.objectContaining({ imageId: 20 }),
   );
 });
 
@@ -225,7 +226,7 @@ test("imageIdをnullに設定できる", async () => {
 
   expect(mockSeasoningImageRepository.findById).not.toHaveBeenCalled();
   expect(mockSeasoningRepository.create).toHaveBeenCalledWith(
-    expect.objectContaining({ imageId: null })
+    expect.objectContaining({ imageId: null }),
   );
 });
 
@@ -307,6 +308,6 @@ test("日付フィールドをnullに設定できる", async () => {
     expect.objectContaining({
       bestBeforeAt: null,
       expiresAt: null,
-    })
+    }),
   );
 });

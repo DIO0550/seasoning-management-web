@@ -25,6 +25,7 @@ beforeEach(() => {
     findByTypeId: vi.fn(),
     findExpiringSoon: vi.fn(),
     count: vi.fn(),
+    countByTypeId: vi.fn(),
     getStatistics: vi.fn(),
   };
 
@@ -114,7 +115,7 @@ test("ListSeasoningsUseCase.execute: typeIdでフィルタリングする", asyn
   expect(mockRepository.findAll).toHaveBeenCalledWith(
     expect.objectContaining({
       typeId: 1,
-    })
+    }),
   );
 });
 
@@ -144,7 +145,7 @@ test("ListSeasoningsUseCase.execute: searchでフィルタリングする", asyn
   expect(mockRepository.findAll).toHaveBeenCalledWith(
     expect.objectContaining({
       search: "醤油",
-    })
+    }),
   );
 });
 
@@ -234,7 +235,7 @@ test("ListSeasoningsUseCase.execute: ページネーションを正しく処理�
         purchasedAt: null,
         createdAt: new Date(),
         updatedAt: new Date(),
-      })
+      }),
   );
 
   vi.mocked(mockRepository.findAll).mockResolvedValue({
