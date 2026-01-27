@@ -87,7 +87,7 @@ export class ErrorMapper {
         status: 409,
         body: {
           code: "CONFLICT",
-          message: "関連データが存在するため削除できません",
+          message: error.message,
         },
       };
     }
