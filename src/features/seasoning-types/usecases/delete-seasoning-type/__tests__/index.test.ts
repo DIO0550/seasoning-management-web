@@ -183,30 +183,27 @@ test("DeleteSeasoningTypeUseCase: 関連調味料がある場合はConflictError
   expect(deleteById).not.toHaveBeenCalled();
 });
 
-test(
-  "DeleteSeasoningTypeUseCase: 関連テンプレートがある場合はConflictErrorを投げる",
-  async () => {
-    const { repository, findById, deleteById } =
-      createSeasoningTypeRepositoryMocks();
-    const seasoningRepository = createSeasoningRepositoryMocks();
-    const seasoningTemplateRepository = createSeasoningTemplateRepositoryMocks();
+test("DeleteSeasoningTypeUseCase: 関連テンプレートがある場合はConflictErrorを投げる", async () => {
+  const { repository, findById, deleteById } =
+    createSeasoningTypeRepositoryMocks();
+  const seasoningRepository = createSeasoningRepositoryMocks();
+  const seasoningTemplateRepository = createSeasoningTemplateRepositoryMocks();
 
-    findById.mockResolvedValue(createSeasoningType());
-    seasoningRepository.countByTypeId.mockResolvedValue(0);
-    seasoningTemplateRepository.countByTypeId.mockResolvedValue(1);
+  findById.mockResolvedValue(createSeasoningType());
+  seasoningRepository.countByTypeId.mockResolvedValue(0);
+  seasoningTemplateRepository.countByTypeId.mockResolvedValue(1);
 
-    const useCase = new DeleteSeasoningTypeUseCase(
-      createUnitOfWork(
-        repository,
-        seasoningRepository.repository,
-        seasoningTemplateRepository.repository,
-      ),
-    );
+  const useCase = new DeleteSeasoningTypeUseCase(
+    createUnitOfWork(
+      repository,
+      seasoningRepository.repository,
+      seasoningTemplateRepository.repository,
+    ),
+  );
 
-    await expect(useCase.execute({ typeId: 1 })).rejects.toThrow(ConflictError);
-    expect(deleteById).not.toHaveBeenCalled();
-  },
-);
+  await expect(useCase.execute({ typeId: 1 })).rejects.toThrow(ConflictError);
+  expect(deleteById).not.toHaveBeenCalled();
+});
 
 test("DeleteSeasoningTypeUseCase: 外部キー制約違反はConflictErrorに変換する", async () => {
   const { repository, findById, deleteById } =
