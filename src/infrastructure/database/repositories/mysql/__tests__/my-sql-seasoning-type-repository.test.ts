@@ -93,3 +93,74 @@ test("指定した名前で調味料種類を取得できる", async () => {
     ["塩"],
   );
 });
+
+test("update: 正常に更新できる場合、affectedRows と updatedAt を返す", async () => {
+  const connection = createMockConnection(async () => ({
+    rows: [],
+    rowsAffected: 1,
+    insertId: null,
+  }));
+  const repository = new MySQLSeasoningTypeRepository(connection);
+
+  const result = await repository.update(1, { name: "醤油" });
+
+  expect(result.affectedRows).toBe(1);
+  expect(result.updatedAt).toBeInstanceOf(Date);
+  expect(connection.query).toHaveBeenCalledWith(
+    "UPDATE seasoning_type SET name = ?, updated_at = ? WHERE id = ?",
+    ["醤油", expect.any(Date), 1],
+  );
+});
+
+test("update: 存在しないIDの場合、affectedRows が 0 を返す", async () => {
+  const connection = createMockConnection(async () => ({
+    rows: [],
+    rowsAffected: 0,
+    insertId: null,
+  }));
+  const repository = new MySQLSeasoningTypeRepository(connection);
+
+  const result = await repository.update(999, { name: "醤油" });
+
+  expect(result.affectedRows).toBe(0);
+});
+
+test("update: input.name が undefined の場合、クエリを実行せず affectedRows: 0 を返す", async () => {
+  const connection = createMockConnection(async () => ({
+    rows: [],
+    rowsAffected: 0,
+    insertId: null,
+  }));
+  const repository = new MySQLSeasoningTypeRepository(connection);
+
+  const result = await repository.update(1, {});
+
+  expect(result.affectedRows).toBe(0);
+  expect(connection.query).not.toHaveBeenCalled();
+});
+
+test("update: input.name が空文字の場合、エラーをスローする", async () => {
+  const connection = createMockConnection(async () => ({
+    rows: [],
+    rowsAffected: 0,
+    insertId: null,
+  }));
+  const repository = new MySQLSeasoningTypeRepository(connection);
+
+  await expect(repository.update(1, { name: "" })).rejects.toThrow(
+    "調味料種類名は必須です",
+  );
+});
+
+test("update: input.name が空白のみの場合、エラーをスローする", async () => {
+  const connection = createMockConnection(async () => ({
+    rows: [],
+    rowsAffected: 0,
+    insertId: null,
+  }));
+  const repository = new MySQLSeasoningTypeRepository(connection);
+
+  await expect(repository.update(1, { name: "   " })).rejects.toThrow(
+    "調味料種類名は必須です",
+  );
+});
