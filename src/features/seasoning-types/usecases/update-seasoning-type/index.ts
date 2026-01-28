@@ -38,6 +38,10 @@ export class UpdateSeasoningTypeUseCase {
         name: normalizedName,
       });
 
+      if (updateResult.affectedRows === 0) {
+        throw new NotFoundError("seasoning-type", input.typeId);
+      }
+
       const updatedEntity = seasoningType.updateName(
         normalizedName,
         updateResult.updatedAt,
