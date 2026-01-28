@@ -95,7 +95,7 @@ export class MySQLSeasoningTypeRepository implements ISeasoningTypeRepository {
     }
 
     if (!input.name || input.name.trim() === "") {
-      throw new Error("name cannot be empty");
+      throw new Error("調味料種類名は必須です");
     }
 
     const updatedAt = new Date();
