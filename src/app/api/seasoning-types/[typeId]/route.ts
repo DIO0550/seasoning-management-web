@@ -25,9 +25,7 @@ const paramsSchema = z.object({
   typeId: z.coerce.number().int().positive(),
 });
 
-const updateParamsSchema = z.object({
-  typeId: z.coerce.number().int().positive(),
-});
+const updateParamsSchema = paramsSchema;
 
 export async function GET(
   _request: NextRequest,
