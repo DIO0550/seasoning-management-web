@@ -87,11 +87,27 @@ export class MySQLSeasoningTypeRepository implements ISeasoningTypeRepository {
   }
 
   async update(
-    _id: number,
-    _input: SeasoningTypeUpdateInput,
+    id: number,
+    input: SeasoningTypeUpdateInput,
   ): Promise<UpdateResult> {
-    // 最小限の実装
-    throw new Error("Method not implemented.");
+    if (input.name === undefined) {
+      return { affectedRows: 0, updatedAt: new Date() };
+    }
+
+    if (!input.name || input.name.trim() === "") {
+      throw new Error("調味料種類名は必須です");
+    }
+
+    const updatedAt = new Date();
+    const sql =
+      "UPDATE seasoning_type SET name = ?, updated_at = ? WHERE id = ?";
+    const result = await this.connection.query(sql, [
+      input.name,
+      updatedAt,
+      id,
+    ]);
+
+    return { affectedRows: result.rowsAffected, updatedAt };
   }
 
   async delete(_id: number): Promise<DeleteResult> {

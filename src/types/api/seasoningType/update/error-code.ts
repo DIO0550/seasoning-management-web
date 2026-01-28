@@ -1,7 +1,7 @@
 import { ZodError, ZodIssue, ZodIssueCode } from "zod";
 
 // フィールド名の型定義
-type FieldName = "id" | "name";
+type FieldName = "id" | "typeId" | "name";
 
 /**
  * 調味料種類更新APIのエラーコード
@@ -59,7 +59,7 @@ export const SeasoningTypeUpdateErrorCode = {
  * idフィールドのZodエラーコードに対応する調味料種類更新APIエラーコード
  */
 const idFieldErrorCode = (
-  zodErrorCode: ZodIssueCode
+  zodErrorCode: ZodIssueCode,
 ): SeasoningTypeUpdateErrorCode => {
   switch (zodErrorCode) {
     case "invalid_type":
@@ -74,7 +74,7 @@ const idFieldErrorCode = (
  * nameフィールドのZodエラーコードに対応する調味料種類更新APIエラーコード
  */
 const nameFieldErrorCode = (
-  zodErrorCode: ZodIssueCode
+  zodErrorCode: ZodIssueCode,
 ): SeasoningTypeUpdateErrorCode => {
   switch (zodErrorCode) {
     case "too_small":
@@ -93,7 +93,7 @@ const nameFieldErrorCode = (
  */
 const isFieldName = (
   path: (string | number)[],
-  fieldName: FieldName
+  fieldName: FieldName,
 ): boolean => {
   return path.includes(fieldName);
 };
@@ -103,7 +103,7 @@ const isFieldName = (
  */
 const issueToErrorCode = (issue: ZodIssue): SeasoningTypeUpdateErrorCode => {
   // 各フィールドの変換処理
-  if (isFieldName(issue.path, "id")) {
+  if (isFieldName(issue.path, "id") || isFieldName(issue.path, "typeId")) {
     return idFieldErrorCode(issue.code);
   }
 

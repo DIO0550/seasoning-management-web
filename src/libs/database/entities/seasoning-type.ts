@@ -46,4 +46,13 @@ export class SeasoningType {
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
   }
+
+  updateName(name: string, updatedAt: Date = new Date()): SeasoningType {
+    return new SeasoningType({
+      id: this.id,
+      name,
+      createdAt: this.createdAt,
+      updatedAt,
+    });
+  }
 }
