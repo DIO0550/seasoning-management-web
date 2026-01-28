@@ -26,7 +26,7 @@ const paramsSchema = z.object({
 });
 
 const updateParamsSchema = z.object({
-  id: z.coerce.number().int().positive(),
+  typeId: z.coerce.number().int().positive(),
 });
 
 export async function GET(
@@ -115,7 +115,7 @@ export async function PATCH(
 ) {
   const resolvedParams = await params;
   const paramsValidation = updateParamsSchema.safeParse({
-    id: resolvedParams.typeId,
+    typeId: resolvedParams.typeId,
   });
 
   if (!paramsValidation.success) {
@@ -178,7 +178,7 @@ export async function PATCH(
       INFRASTRUCTURE_IDENTIFIERS.UPDATE_SEASONING_TYPE_USE_CASE,
     );
     const result = await useCase.execute({
-      typeId: paramsValidation.data.id,
+      typeId: paramsValidation.data.typeId,
       ...bodyValidation.data,
     });
 
