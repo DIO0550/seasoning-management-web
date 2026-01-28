@@ -320,3 +320,54 @@ it("PATCH: 異常系: ConflictErrorの場合、400エラーを返すこと", asy
   expect(response.status).toBe(400);
   expect(body.code).toBe("DUPLICATE_NAME");
 });
+
+it("PATCH: 異常系: 不正なJSONの場合、400エラーを返すこと", async () => {
+  const response = await PATCH(
+    new NextRequest("http://localhost/api/seasoning-types/1", {
+      method: "PATCH",
+      body: "{",
+    }),
+    {
+      params: Promise.resolve({ typeId: "1" }),
+    },
+  );
+  const body = await response.json();
+
+  expect(response.status).toBe(400);
+  expect(body.code).toBe("VALIDATION_ERROR_NAME_INVALID_FORMAT");
+  expect(body.details).toBeUndefined();
+});
+
+it("PATCH: 異常系: null の場合、400エラーを返すこと", async () => {
+  const response = await PATCH(
+    new NextRequest("http://localhost/api/seasoning-types/1", {
+      method: "PATCH",
+      body: "null",
+    }),
+    {
+      params: Promise.resolve({ typeId: "1" }),
+    },
+  );
+  const body = await response.json();
+
+  expect(response.status).toBe(400);
+  expect(body.code).toBe("VALIDATION_ERROR_NAME_INVALID_FORMAT");
+  expect(body.details).toBeUndefined();
+});
+
+it("PATCH: 異常系: 配列の場合、400エラーを返すこと", async () => {
+  const response = await PATCH(
+    new NextRequest("http://localhost/api/seasoning-types/1", {
+      method: "PATCH",
+      body: "[]",
+    }),
+    {
+      params: Promise.resolve({ typeId: "1" }),
+    },
+  );
+  const body = await response.json();
+
+  expect(response.status).toBe(400);
+  expect(body.code).toBe("VALIDATION_ERROR_NAME_INVALID_FORMAT");
+  expect(body.details).toBeUndefined();
+});
