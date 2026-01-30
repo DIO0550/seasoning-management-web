@@ -25,7 +25,6 @@ export const seasoningTemplateListQuerySchema = z.object({
     .int()
     .min(1, "ページサイズは1以上である必要があります")
     .max(100, "ページサイズは100以下である必要があります")
-    .refine(Number.isFinite, "ページサイズは数値である必要があります")
     .default(20),
   search: z
     .preprocess(
