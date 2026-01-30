@@ -1,7 +1,7 @@
 import { beforeEach, expect, test, vi } from "vitest";
 import { NextRequest } from "next/server";
 import type { RequestInit as NextRequestInit } from "next/dist/server/web/spec-extension/request";
-import { GET } from "@/app/api/seasoning-templates";
+import { GET } from "@/app/api/seasoning-templates/route";
 import { SeasoningTemplate } from "@/libs/database/entities/seasoning-template";
 import type { ISeasoningTemplateRepository } from "@/infrastructure/database/interfaces";
 import type { IDatabaseConnection } from "@/libs/database/interfaces/core/i-database-connection";
