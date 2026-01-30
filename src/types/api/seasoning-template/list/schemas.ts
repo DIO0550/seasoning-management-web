@@ -26,13 +26,17 @@ export const seasoningTemplateListQuerySchema = z.object({
     .min(1, "ページサイズは1以上である必要があります")
     .max(100, "ページサイズは100以下である必要があります")
     .default(20),
-  search: z
-    .preprocess(
-      (value) => (typeof value === "string" ? value.trim() : value),
-      z
-        .string()
-        .max(50, "検索文字列は50文字以下である必要があります")
-        .optional(),
-    )
-    .transform((value) => (value === "" ? undefined : value)),
+  search: z.preprocess(
+    (value) => {
+      if (typeof value !== "string") {
+        return value;
+      }
+      const trimmed = value.trim();
+      return trimmed === "" ? undefined : trimmed;
+    },
+    z
+      .string()
+      .max(50, "検索文字列は50文字以下である必要があります")
+      .optional(),
+  ),
 });
