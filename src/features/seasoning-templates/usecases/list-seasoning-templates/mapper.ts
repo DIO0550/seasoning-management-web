@@ -13,7 +13,7 @@ export class ListSeasoningTemplatesMapper {
       id: entity.id,
       name: entity.name,
       typeId: entity.typeId,
-      imageId: entity.imageId ?? null,
+      imageId: entity.imageId,
       createdAt: entity.createdAt.toISOString(),
       updatedAt: entity.updatedAt.toISOString(),
     };
