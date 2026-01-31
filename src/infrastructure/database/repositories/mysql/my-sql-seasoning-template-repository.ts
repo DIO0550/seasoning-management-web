@@ -18,6 +18,15 @@ import type {
 import { SeasoningTemplate } from "@/libs/database/entities/seasoning-template";
 
 /**
+ * LIKE 検索用のパターンをエスケープする。
+ *
+ * この関数は LIKE のワイルドカード記号のみをエスケープする責務を持ち、
+ * SQL インジェクション対策としては必ずプレースホルダー付きクエリと組み合わせて使用する。
+ */
+const escapeLikePattern = (value: string): string =>
+  value.replace(/([\\%_])/g, "\\$1");
+
+/**
  * データベースから取得した生データの型定義
  */
 interface SeasoningTemplateRow {
@@ -73,19 +82,51 @@ export class MySQLSeasoningTemplateRepository implements ISeasoningTemplateRepos
   }
 
   async findAll(
-    _options?: SeasoningTemplateSearchOptions,
+    options?: SeasoningTemplateSearchOptions,
   ): Promise<PaginatedResult<SeasoningTemplate>> {
-    const sql = "SELECT * FROM seasoning_template ORDER BY created_at DESC";
-    const result = await this.connection.query<SeasoningTemplateRow>(sql);
+    const conditions: string[] = [];
+    const params: Array<string | number> = [];
+
+    if (options?.search) {
+      const sanitized = escapeLikePattern(options.search);
+      conditions.push("name LIKE ? ESCAPE '\\'");
+      params.push(`%${sanitized}%`);
+    }
+
+    const whereClause =
+      conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+    const countSql = `SELECT COUNT(*) AS cnt FROM seasoning_template${
+      whereClause ? ` ${whereClause}` : ""
+    }`;
+    const countResult = await this.connection.query<{ cnt: number }>(
+      countSql,
+      params,
+    );
+    const total = Number(countResult.rows[0]?.cnt ?? 0);
+
+    const page = options?.pagination?.page ?? 1;
+    const limit = options?.pagination?.limit ?? 20;
+    const offset = (page - 1) * limit;
+    const totalPages = limit > 0 ? Math.ceil(total / limit) : 0;
+
+    const sql = `SELECT * FROM seasoning_template${
+      whereClause ? ` ${whereClause}` : ""
+    } ORDER BY created_at DESC LIMIT ? OFFSET ?`;
+    const result = await this.connection.query<SeasoningTemplateRow>(sql, [
+      ...params,
+      limit,
+      offset,
+    ]);
 
     const seasoningTemplates = result.rows.map((row) => this.rowToEntity(row));
 
     return {
       items: seasoningTemplates,
-      total: seasoningTemplates.length,
-      page: 1,
-      limit: seasoningTemplates.length,
-      totalPages: 1,
+      total,
+      page,
+      limit,
+      totalPages,
     };
   }
 

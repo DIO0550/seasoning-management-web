@@ -164,3 +164,70 @@
   "message": "システムエラーが発生しました"
 }
 ```
+
+## GET /api/seasoning-templates
+
+### リクエスト
+
+#### クエリパラメータ
+
+| パラメータ | 型 | 必須 | 説明 |
+| --- | --- | --- | --- |
+| page | number | 任意 | ページ番号（1以上） |
+| pageSize | number | 任意 | 1ページあたりの件数（1〜100） |
+| search | string | 任意 | 検索キーワード（50文字以内） |
+
+### レスポンス
+
+#### 200 OK
+
+`seasoningTemplateListResponseSchema` と同一の構造。
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "name": "だし醤油",
+      "typeId": 2,
+      "imageId": null,
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "updatedAt": "2024-01-02T00:00:00.000Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "pageSize": 20,
+    "totalItems": 1,
+    "totalPages": 1,
+    "hasNext": false,
+    "hasPrevious": false
+  }
+}
+```
+
+#### 400 Bad Request
+
+バリデーションエラー。
+
+```json
+{
+  "code": "VALIDATION_ERROR_PAGE_INVALID",
+  "message": "入力内容を確認してください",
+  "details": [
+    {
+      "field": "page",
+      "message": "ページ番号は1以上である必要があります"
+    }
+  ]
+}
+```
+
+#### 500 Internal Server Error
+
+```json
+{
+  "code": "INTERNAL_ERROR",
+  "message": "システムエラーが発生しました"
+}
+```
