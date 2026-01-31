@@ -55,7 +55,7 @@ test("findAll: 検索条件とページネーションを反映して取得す�
 
   expect(queryMock).toHaveBeenNthCalledWith(
     1,
-    "SELECT COUNT(*) AS cnt FROM seasoning_template WHERE name LIKE ? ESCAPE '\\\\'",
+    "SELECT COUNT(*) AS cnt FROM seasoning_template WHERE name LIKE ? ESCAPE '\\'",
     ["%醤油%"],
   );
   expect(queryMock).toHaveBeenNthCalledWith(
@@ -89,7 +89,7 @@ test("findAll: % を含む検索文字列をエスケープする", async () => 
 
   expect(queryMock).toHaveBeenNthCalledWith(
     1,
-    "SELECT COUNT(*) AS cnt FROM seasoning_template WHERE name LIKE ? ESCAPE '\\\\'",
+    "SELECT COUNT(*) AS cnt FROM seasoning_template WHERE name LIKE ? ESCAPE '\\'",
     ["%\\%%"],
   );
 });
@@ -114,7 +114,7 @@ test("findAll: _ を含む検索文字列をエスケープする", async () => 
 
   expect(queryMock).toHaveBeenNthCalledWith(
     1,
-    "SELECT COUNT(*) AS cnt FROM seasoning_template WHERE name LIKE ? ESCAPE '\\\\'",
+    "SELECT COUNT(*) AS cnt FROM seasoning_template WHERE name LIKE ? ESCAPE '\\'",
     ["%\\_%"],
   );
 });
@@ -139,7 +139,7 @@ test("findAll: \\\\ を含む検索文字列をエスケープする", async () 
 
   expect(queryMock).toHaveBeenNthCalledWith(
     1,
-    "SELECT COUNT(*) AS cnt FROM seasoning_template WHERE name LIKE ? ESCAPE '\\\\'",
+    "SELECT COUNT(*) AS cnt FROM seasoning_template WHERE name LIKE ? ESCAPE '\\'",
     ["%\\\\%"],
   );
 });

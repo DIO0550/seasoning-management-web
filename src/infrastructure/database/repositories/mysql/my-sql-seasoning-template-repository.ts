@@ -89,7 +89,7 @@ export class MySQLSeasoningTemplateRepository implements ISeasoningTemplateRepos
 
     if (options?.search) {
       const sanitized = escapeLikePattern(options.search);
-      conditions.push("name LIKE ? ESCAPE '\\\\'");
+      conditions.push("name LIKE ? ESCAPE '\\'");
       params.push(`%${sanitized}%`);
     }
 
