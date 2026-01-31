@@ -133,6 +133,22 @@ test("GET /api/seasoning-templates は空白のみの検索文字列を無視す
   });
 });
 
+test("GET /api/seasoning-templates は検索文字列が有効な場合に検索条件を渡す", async () => {
+  const response = await GET(
+    createRequest({
+      searchParams: {
+        search: "醤",
+      },
+    }),
+  );
+
+  expect(response.status).toBe(200);
+  expect(findAllMock).toHaveBeenCalledWith({
+    search: "醤",
+    pagination: { page: 1, limit: 20 },
+  });
+});
+
 test("GET /api/seasoning-templates はpage超過時も空配列を返す", async () => {
   findAllMock.mockResolvedValue({
     items: [],
