@@ -26,8 +26,8 @@ const listSeasoningTemplates = async (
     ListSeasoningTemplatesMapper.toSeasoningTemplateListItemDto(item),
   );
 
-  const hasNext = result.totalPages > 0 && result.page < result.totalPages;
-  const hasPrevious = result.totalPages > 0 && result.page > 1;
+  const hasNext = result.page < result.totalPages;
+  const hasPrevious = result.page > 1;
 
   const meta: PaginationMeta = {
     page: result.page,
