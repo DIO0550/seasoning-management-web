@@ -23,6 +23,35 @@ const createCountResult = (cnt: number): QueryResult<{ cnt: number }> => ({
   insertId: null,
 });
 
+test("findAll: オプションなしの場合はデフォルトのページネーションで取得する", async () => {
+  const queryMock = vi
+    .fn()
+    .mockResolvedValueOnce(createCountResult(0))
+    .mockResolvedValueOnce({
+      rows: [],
+      rowsAffected: 0,
+      insertId: null,
+    });
+
+  const connection = createMockConnection(queryMock);
+  const repository = new MySQLSeasoningTemplateRepository(connection);
+
+  const result = await repository.findAll();
+
+  expect(queryMock).toHaveBeenNthCalledWith(
+    1,
+    "SELECT COUNT(*) AS cnt FROM seasoning_template",
+    [],
+  );
+  expect(queryMock).toHaveBeenNthCalledWith(
+    2,
+    expect.stringContaining("SELECT * FROM seasoning_template"),
+    [20, 0],
+  );
+  expect(result.page).toBe(1);
+  expect(result.limit).toBe(20);
+});
+
 test("findAll: 検索条件とページネーションを反映して取得する", async () => {
   const createdAt = new Date("2024-01-01T00:00:00.000Z");
   const updatedAt = new Date("2024-01-02T00:00:00.000Z");
