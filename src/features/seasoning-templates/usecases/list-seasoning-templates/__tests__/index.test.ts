@@ -9,7 +9,6 @@ import { SeasoningTemplate } from "@/libs/database/entities/seasoning-template";
 import { ListSeasoningTemplatesUseCase } from "@/features/seasoning-templates/usecases/list-seasoning-templates";
 import type { ListSeasoningTemplatesInput } from "@/features/seasoning-templates/usecases/list-seasoning-templates/dto";
 
-let useCase: ListSeasoningTemplatesUseCase;
 let mockRepository: ISeasoningTemplateRepository;
 
 beforeEach(() => {
@@ -28,7 +27,6 @@ beforeEach(() => {
     countByTypeId: vi.fn(),
   };
 
-  useCase = new ListSeasoningTemplatesUseCase(mockRepository);
 });
 
 test("ListSeasoningTemplatesUseCase.execute: テンプレート一覧をDTOに変換して返す", async () => {
@@ -66,7 +64,10 @@ test("ListSeasoningTemplatesUseCase.execute: テンプレート一覧をDTOに�
     pageSize: 20,
   };
 
-  const output = await useCase.execute(input);
+  const output = await ListSeasoningTemplatesUseCase.execute(
+    mockRepository,
+    input,
+  );
 
   expect(output.data).toHaveLength(2);
   expect(output.data[0]).toEqual({
@@ -95,7 +96,7 @@ test("ListSeasoningTemplatesUseCase.execute: searchでフィルタリングす�
     search: "醤油",
   };
 
-  await useCase.execute(input);
+  await ListSeasoningTemplatesUseCase.execute(mockRepository, input);
 
   expect(mockRepository.findAll).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -118,7 +119,10 @@ test("ListSeasoningTemplatesUseCase.execute: ページネーションメタ情�
     pageSize: 2,
   };
 
-  const output = await useCase.execute(input);
+  const output = await ListSeasoningTemplatesUseCase.execute(
+    mockRepository,
+    input,
+  );
 
   expect(output.meta.page).toBe(2);
   expect(output.meta.pageSize).toBe(2);
@@ -142,7 +146,10 @@ test("ListSeasoningTemplatesUseCase.execute: 総件数が0の場合はhasNext/ha
     pageSize: 20,
   };
 
-  const output = await useCase.execute(input);
+  const output = await ListSeasoningTemplatesUseCase.execute(
+    mockRepository,
+    input,
+  );
 
   expect(output.meta.totalItems).toBe(0);
   expect(output.meta.totalPages).toBe(0);
@@ -164,7 +171,10 @@ test("ListSeasoningTemplatesUseCase.execute: pageが総ページ数を超過し�
     pageSize: 1,
   };
 
-  const output = await useCase.execute(input);
+  const output = await ListSeasoningTemplatesUseCase.execute(
+    mockRepository,
+    input,
+  );
 
   expect(output.data).toEqual([]);
   expect(output.meta.hasNext).toBe(false);

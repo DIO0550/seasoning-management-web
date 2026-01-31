@@ -43,11 +43,10 @@ export async function GET(request: NextRequest) {
     const seasoningTemplateRepository =
       await repositoryFactory.createSeasoningTemplateRepository();
 
-    const useCase = new ListSeasoningTemplatesUseCase(
+    const output = await ListSeasoningTemplatesUseCase.execute(
       seasoningTemplateRepository,
+      validationResult.data,
     );
-
-    const output = await useCase.execute(validationResult.data);
 
     const response: SeasoningTemplateListResponse = {
       data: output.data,

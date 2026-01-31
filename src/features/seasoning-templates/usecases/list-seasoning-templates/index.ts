@@ -10,36 +10,37 @@ import type {
 } from "@/features/seasoning-templates/usecases/list-seasoning-templates/dto";
 import { ListSeasoningTemplatesMapper } from "@/features/seasoning-templates/usecases/list-seasoning-templates/mapper";
 
-export class ListSeasoningTemplatesUseCase {
-  constructor(private readonly repository: ISeasoningTemplateRepository) {}
+const listSeasoningTemplates = async (
+  repository: ISeasoningTemplateRepository,
+  input: ListSeasoningTemplatesInput,
+): Promise<ListSeasoningTemplatesOutput> => {
+  const result = await repository.findAll({
+    search: input.search,
+    pagination: {
+      page: input.page,
+      limit: input.pageSize,
+    },
+  });
 
-  async execute(
-    input: ListSeasoningTemplatesInput,
-  ): Promise<ListSeasoningTemplatesOutput> {
-    const result = await this.repository.findAll({
-      search: input.search,
-      pagination: {
-        page: input.page,
-        limit: input.pageSize,
-      },
-    });
+  const data = result.items.map((item) =>
+    ListSeasoningTemplatesMapper.toSeasoningTemplateListItemDto(item),
+  );
 
-    const data = result.items.map((item) =>
-      ListSeasoningTemplatesMapper.toSeasoningTemplateListItemDto(item),
-    );
+  const hasNext = result.totalPages > 0 && result.page < result.totalPages;
+  const hasPrevious = result.totalPages > 0 && result.page > 1;
 
-    const hasNext = result.totalPages > 0 && result.page < result.totalPages;
-    const hasPrevious = result.totalPages > 0 && result.page > 1;
+  const meta: PaginationMeta = {
+    page: result.page,
+    pageSize: result.limit,
+    totalItems: result.total,
+    totalPages: result.totalPages,
+    hasNext,
+    hasPrevious,
+  };
 
-    const meta: PaginationMeta = {
-      page: result.page,
-      pageSize: result.limit,
-      totalItems: result.total,
-      totalPages: result.totalPages,
-      hasNext,
-      hasPrevious,
-    };
+  return { data, meta };
+};
 
-    return { data, meta };
-  }
-}
+export const ListSeasoningTemplatesUseCase = {
+  execute: listSeasoningTemplates,
+};
