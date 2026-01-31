@@ -17,6 +17,12 @@ import type {
 } from "@/infrastructure/database/interfaces";
 import { SeasoningTemplate } from "@/libs/database/entities/seasoning-template";
 
+/**
+ * LIKE 検索用のパターンをエスケープする。
+ *
+ * この関数は LIKE のワイルドカード記号のみをエスケープする責務を持ち、
+ * SQL インジェクション対策としては必ずプレースホルダー付きクエリと組み合わせて使用する。
+ */
 const escapeLikePattern = (value: string): string =>
   value.replace(/([\\%_])/g, "\\$1");
 
