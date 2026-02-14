@@ -1,13 +1,14 @@
 {
-  "enabledMcpjsonServers": [
-    "playwright",
-    "prompt-mcp-server",
-    "github",
-    "lsmcp"
-  ],
   "permissions": {
     "allow": [
       "mcp__plugin_cc-plugin_prompt-mcp-server__get_implementation_workflow"
     ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "prompt-mcp-server"
+  ],
+  "enabledPlugins": {
+    "orchestrator-plugin@d-market": true
   }
 }

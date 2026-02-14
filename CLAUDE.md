@@ -132,11 +132,6 @@ src/
 
 ## Code Guidelines
 
-### 重要な開発ルール
-
-1. **最初の指示時**: ツール名「get_implementation_workflow」を利用して開発ルールを読み込む
-2. **コミット/PR 作成時**: ツール「prompt-mcp-server」でルールを再確認
-
 ### TypeScript 規約
 
 - ESLint/Prettier の標準ルールに準拠 (保存時に必ずフォーマット)
