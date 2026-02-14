@@ -2,19 +2,12 @@
 
 変更をリモートにプッシュし、Pull Request (PR) を作成する際は、以下の手順に従ってください。
 
-## 1. PR 作成ルールの確認（必須）
-
-PR を作成する前に、必ず `prompt-mcp-server` を使用して最新の PR 作成ルールを確認してください。
-
-- **使用ツール**: `get_prompt`
-- **引数**: `filename: "pull-request.prompt.md"`
-
-## 2. Push の実行
+## 1. Push の実行
 
 - 現在のブランチが正しいか確認してください（`main` ブランチからの Push は禁止）。
 - `git push origin <branch-name>` を実行してください。
 
-## 3. Pull Request の作成
+## 2. Pull Request の作成
 
 - 確認したルールに基づいて、PR を作成してください。
 - **タイトル**: コミットメッセージの 1 行目と同じ形式（`<絵文字> [<Type>]: <Subject>`）

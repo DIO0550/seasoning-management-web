@@ -62,3 +62,7 @@ fix_imports.sh
 
 # work notes and commands
 .codex-commands.md
+.orchestrator
+.pnpm-store
+.specs
+.github/agents
